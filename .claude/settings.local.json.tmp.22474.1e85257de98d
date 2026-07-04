@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pkill -f \"next dev\")",
+      "Bash(npm run *)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_wait_for",
+      "WebFetch(domain:atcoder.jp)",
+      "Bash(grep -vE \"Retrying [0-9]/3|^\\\\s*$\")",
+      "Bash(pkill -f \"next-server\\\\|next dev\")",
+      "Bash(grep -viE \"^\\\\s*$|Retrying\" /tmp/claude-1000/-home-jaman-Documents-jaman-portfolio/34b7c6de-6410-4741-ab3e-5bf9e64e3a5b/tasks/bufun2xqe.output)",
+      "Bash(pkill -9 -f \"next-server\")",
+      "Bash(pkill -9 -f \"next dev\")",
+      "Bash(pkill -9 -f \"\\\\.bin/next\")",
+      "mcp__playwright__browser_click",
+      "Bash(node *)",
+      "Bash(curl -s -o /dev/null -w \"3000=%{http_code}\\\\n\" http://localhost:3000)",
+      "WebFetch(domain:shifahealthtech.com)",
+      "mcp__playwright__browser_network_requests",
+      "Read(//home/jaman/SP_COMPANY_LTD/**)",
+      "Bash(find . -maxdepth 2 -type f \\\\\\( -name \"README*\" -o -name \"package.json\" -o -name \"requirements*.txt\" -o -name \"pyproject.toml\" -o -name \"go.mod\" -o -name \"composer.json\" -o -name \"docker-compose*\" -o -name \".env.example\" -o -name \"*.env.example\" -o -name \"env.sample\" -o -name \"Dockerfile*\" \\\\\\) -not -path \"*/node_modules/*\")",
+      "Bash(head -50 src/shared/infrastructure/currency/exchange_client.py)",
+      "Bash(head -40 src/modules/identity_verification/domain/gateways/kyc_gateway_port.py)",
+      "Bash(head -70 src/modules/auction/application/use_cases/place_bid_use_case.py)",
+      "Bash(head -30 src/modules/auction_lot/infrastructure/clients/avto_client.py)",
+      "Bash(grep -oE '\"[A-Za-z _]+\"|[A-Z_]{4,} *=' src/main/java/com/aidev/alshifa/shared/constants/UserTypeConstants.java)",
+      "mcp__playwright__browser_press_key",
+      "Bash(file public/images/*.jpg)",
+      "Bash(grep -rniE '#[0-9a-f]{3,8}\\\\b' src/components src/lib src/app src/hooks)",
+      "Bash(grep -viE '\\\\.\\(md\\)$')",
+      "Bash(pdfimages -list Md._Nuruzzaman_CV.pdf)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

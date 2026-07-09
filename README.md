@@ -1,44 +1,47 @@
-# Jaman Khan — Portfolio
+# Md Nuruzzaman — Portfolio
 
-World-class personal portfolio for **MD. Nuruzzaman (Jaman Khan)** — Software Engineer & Competitive Programmer.
+Personal portfolio for **Md Nuruzzaman** — Software Engineer & Competitive Programmer. Single-page site: Hero, TrustMarquee, About, Experience, Projects (with detail modal), Competitive Programming, Skills, Contact.
 
-> **Status:** Scaffold complete (P0). Development not yet started. See `docs/` for the full plan.
+> **Status:** Built. Pending final inputs (some live project URLs, final domain) — see `docs/05_NEXT_STEPS.md`.
 
 ## Stack
-Next.js 15 (App Router, TS) · Tailwind CSS · Framer Motion · Lenis · Vercel.
+Next.js 15 (App Router, TS) · React 19 · Tailwind CSS · Framer Motion · Lenis · Vercel.
 Design: dark premium + neon (cyan/violet), glassmorphism, gradient-mesh hero, glow/tilt/magnetic interactions.
 
-## Docs (read in order)
-| File | What |
-|---|---|
-| `docs/01_PROFILE_RESEARCH.md` | All researched facts (CV + LinkedIn + GitHub), source-of-truth content |
-| `docs/02_DESIGN_SYSTEM.md` | Colors, type, tokens, components, a11y |
-| `docs/03_PROJECT_PLAN.md` | Architecture, sections, build phases, directory map |
-| `docs/04_ANIMATION_SPEC.md` | Exact motion/interaction catalogue ("premium" defined) |
-| `docs/05_NEXT_STEPS.md` | What's pending from Jaman + build checklist |
-
-## Getting started (when ready to build)
+## Getting started
 ```bash
-cd /home/jaman/Documents/jaman-portfolio
-npm install          # installs deps (not run yet)
+npm install
 npm run dev          # localhost:3000
 ```
+
+Other scripts: `npm run build` · `npm run start` · `npm run lint` · `npm run format`.
+
+Set `NEXT_PUBLIC_SITE_URL` in production — it drives metadata, sitemap, robots, and JSON-LD (fallback: `https://jamankhan.dev`).
 
 ## Structure
 ```
 src/
-  app/          layout.tsx, page.tsx, globals (via styles/)
-  components/   layout · sections · ui · animations  (to build P1–P3)
+  app/          layout.tsx, page.tsx, opengraph-image, sitemap, robots, 404, loading
+  components/   layout · sections · ui · animations
   data/         profile · experience · projects · competitive · skills  (real content, typed)
-  hooks/ lib/   utils, metadata, custom hooks
-  styles/       globals.css (tokens)
+  hooks/ lib/   utils, metadata, constants, media-query hooks
+  styles/       globals.css (tokens, .text-gradient, .glass)
 public/
   resume/       Md._Nuruzzaman_CV.pdf
-  images/       project shots, og.png, headshot  (pending)
+  images/       project screenshots, headshot
 ```
 
 ## Content data
-All copy lives in `src/data/*` (typed). Edit there — sections render from it. No CMS for v1.
+All copy lives in `src/data/*` (typed). Edit there — sections render from it. No CMS.
 
-## Pending inputs
-See `docs/05_NEXT_STEPS.md` — live project URLs, screenshots, headshot, final domain.
+## Docs
+| File | What |
+|---|---|
+| `docs/CONTRACTS.md` | Component & data API reference — exact props for ui/animation primitives |
+| `docs/01_PROFILE_RESEARCH.md` | All researched facts (CV + LinkedIn + GitHub), source-of-truth content |
+| `docs/02_DESIGN_SYSTEM.md` | Colors, type, tokens, components, a11y |
+| `docs/03_PROJECT_PLAN.md` | Architecture, sections, build phases, directory map |
+| `docs/04_ANIMATION_SPEC.md` | Exact motion/interaction catalogue |
+| `docs/05_NEXT_STEPS.md` | Pending inputs + checklist |
+
+Docs predate the finished build — where a doc contradicts the code, the code wins.

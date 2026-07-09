@@ -4,9 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Personal portfolio for **MD. Nuruzzaman (Jaman Khan)** — single-page marketing site. Next.js 15 (App Router) + React 19 + TypeScript, Tailwind, Framer Motion, Lenis (smooth scroll). Deploys to Vercel. (GSAP/ScrollTrigger was planned in `docs/` but is not currently used — re-add if you wire pinned sequences.)
-
-**Status: scaffold (P0) only.** `src/app/page.tsx` is a placeholder shell; components in `src/components/{layout,sections,ui,animations}` are empty (`.gitkeep`). Deps are declared in `package.json` but not yet installed. Run `npm install` before the first `npm run dev`.
+Personal portfolio for **Md Nuruzzaman** (display name everywhere is "Md Nuruzzaman", not "Jaman Khan") — single-page marketing site, fully built. Next.js 15 (App Router) + React 19 + TypeScript, Tailwind, Framer Motion, Lenis (smooth scroll). Deploys to Vercel.
 
 ## Commands
 
@@ -18,43 +16,55 @@ npm run lint     # next lint (eslint-config-next + typescript rules)
 npm run format   # prettier --write src/**/*.{ts,tsx,css}
 ```
 
-No test framework is configured.
+No test framework is configured (`@playwright/test` is in devDependencies but there is no config or test suite — it was used ad hoc for QA).
 
 ## Architecture
 
-**Content is data, not markup.** All real copy lives in typed modules under `src/data/*` (`profile`, `experience`, `projects`, `skills`, `competitive`). Sections render *from* these — to change site content, edit the data file, not a component. No CMS. Each data file exports a typed const/array (e.g. `IProject`, `IExperience`, `IPlatform`); `profile.ts` is `as const`.
+**Content is data, not markup.** All real copy lives in typed modules under `src/data/*` (`profile`, `experience`, `projects`, `skills`, `competitive`). Sections render *from* these — to change site content, edit the data file, not a component. Each data file exports a typed const/array (`IProject`, `IExperience`, `IPlatform`, `ISkillCategory`); `profile.ts` is `as const`.
 
-**Page composition.** Single page, anchored nav. `src/app/page.tsx` composes sections in order: Hero → TrustMarquee → About → Experience → Projects → CompetitiveProgramming → Skills → CaseStudy → Contact. Build these in `src/components/sections/`.
+**Page composition.** Single page, anchored nav. `src/app/page.tsx` composes 8 sections in order: Hero → TrustMarquee → About → Experience → Projects → CompetitiveProgramming → Skills → Contact (no CaseStudy section — docs that mention one are stale). Nav anchor ids come from `NAV_LINKS` in `src/lib/constants.ts` (`about`, `experience`, `projects`, `cp`, `skills`, `contact`) and must match each `<Section id>`.
 
-**Component layers** (build order per `docs/03_PROJECT_PLAN.md §4`):
-- `components/ui/` — primitives: Button, Card, Chip, GradientText, Container, Section.
-- `components/layout/` — Navbar, Footer, SmoothScroll (Lenis wrapper).
-- `components/animations/` — Reveal, TextReveal, CountUp, Parallax, Magnetic, TiltCard, Marquee, CursorGlow.
-- `components/sections/` — the 9 page sections, wired to `src/data`.
+**Layout shell** (`src/app/layout.tsx`): fonts (Space Grotesk / Inter / JetBrains Mono via `next/font` CSS vars) → inline JSON-LD `<script>` → skip-to-content link → `<MotionProvider>` wrapping `<CursorGlow>`, `<Navbar>`, and `<SmoothScroll>{children}<Footer></SmoothScroll>`.
 
-**Metadata / SEO.** `src/lib/metadata.ts` builds `siteMetadata` (Metadata) and `personJsonLd` (schema.org Person) from `profile`. `layout.tsx` has TODOs to inject the JSON-LD via `next/script` and wrap children in `<SmoothScroll>` + `<CursorGlow />`. Update the `url` const in `metadata.ts` when the final domain is set.
+**Framer Motion is lazy + strict.** `MotionProvider` uses `LazyMotion` with `domMax` and `strict` — always import `m` from framer-motion (`<m.div>`), never `motion.*`; `motion.*` throws in dev. `src/lib/constants.ts` exports the easing tokens (`EASE_EXPO`, `EASE_SMOOTH`, `SPRING`).
+
+**Smooth scroll.** `SmoothScroll` (Lenis wrapper) intercepts in-page `a[href^="#"]` clicks and scrolls with `-80px` offset for the fixed navbar. It disables itself entirely under `prefers-reduced-motion` (native scroll). All animation components respect reduced motion via `usePrefersReducedMotion()` from `src/hooks/useMediaQuery`.
+
+**Component layers:**
+- `components/ui/` — primitives: `Button`, `Card`, `Chip`, `GradientText`, `Container`, `Section`, `ExperienceStat`.
+- `components/layout/` — `Navbar`, `Footer`, `MotionProvider`, `SmoothScroll`, `CursorGlow`.
+- `components/animations/` — `Reveal`/`RevealGroup`/`RevealItem`, `TextReveal`, `CountUp`, `Parallax`, `Magnetic`, `TiltCard`, `Marquee`.
+- `components/sections/` — the page sections. `Projects` holds `useState<IProject|null>` and opens `ProjectModal` (a `createPortal` dialog with focus trap, gallery, and AT-hiding of the background page).
+
+**`docs/CONTRACTS.md` is the component API reference** — exact props for every ui/animation primitive and the shape of every data export. Read it before writing or modifying a section; import primitives exactly as specified, don't invent props.
+
+**SEO / meta.** `src/lib/metadata.ts` builds `siteMetadata` and `personJsonLd` from `profile` + `SITE_URL`. `SITE_URL` comes from `NEXT_PUBLIC_SITE_URL` env (fallback `https://jamankhan.dev`) and feeds metadata, `sitemap.ts`, `robots.ts`, and JSON-LD. OG image is generated by `src/app/opengraph-image.tsx` (next/og); `apple-icon.tsx`, `not-found.tsx`, and `loading.tsx` also exist.
+
+**Missing assets are expected.** Some `projects[].links` entries are intentionally empty and images may be absent — cards render a gradient poster fallback and only show live/repo buttons when the link exists. Pending inputs tracked in `docs/05_NEXT_STEPS.md`.
 
 **Utils.** `src/lib/utils.ts` exports `cn()` (clsx + tailwind-merge) — use for conditional class composition everywhere.
 
 ## Design system
 
 Dark premium + neon (cyan/violet), glassmorphism, gradient-mesh hero. Tokens are the source of truth — do not hardcode hex; use Tailwind theme tokens from `tailwind.config.ts`:
-- Colors: `bg`, `surface`, `border`, `content` (+ `.muted`/`.dim`), `accent` (cyan `.DEFAULT`, violet `.2`, blue `.3`, `.pink`).
-- Fonts (via CSS vars set in `layout.tsx`): `font-display`/`font-heading` (Space Grotesk), `font-sans` (Inter), `font-mono` (JetBrains Mono).
-- Type scale: `text-display`, `text-h1`, `text-h2` (clamp-based fluid).
+- Colors: `bg` (+ `.elev`), `surface` (+ `.2`), `border` (+ `.glow`), `content` (+ `.muted`/`.dim`), `accent` (cyan `.DEFAULT`, violet `.2`, blue `.3`, `.pink`), `success`, `warning`.
+- Fonts: `font-display`/`font-heading` (Space Grotesk), `font-sans` (Inter), `font-mono` (JetBrains Mono).
+- Type scale: `text-display`, `text-h1`, `text-h2` (clamp-based fluid), `text-eyebrow`.
 - Layout: `max-w-container` (1200px), `max-w-wide` (1440px).
-- Effects: `bg-grad-primary`, `shadow-glow-cyan`, `shadow-glow-violet`, `ease-expo`/`ease-smooth`, `animate-marquee`, `animate-drift`.
-- `.text-gradient` helper class lives in `src/styles/globals.css`.
+- Effects: `bg-grad-primary`, `shadow-glow-cyan`, `shadow-glow-violet`, `ease-expo`/`ease-smooth`, `animate-marquee`, `animate-drift`; `.text-gradient` and `.glass` helper classes in `src/styles/globals.css`.
 
-Full spec: `docs/02_DESIGN_SYSTEM.md` (colors/type/a11y), `docs/04_ANIMATION_SPEC.md` (exact motion catalogue). Honor `prefers-reduced-motion`.
+Only animate `transform`/`opacity`. Honor `prefers-reduced-motion` (the shared animation components already do — use them rather than raw `m.*` where possible).
+
+Full spec: `docs/02_DESIGN_SYSTEM.md` (colors/type/a11y), `docs/04_ANIMATION_SPEC.md` (exact motion catalogue).
 
 ## Conventions
 
 - Import alias `@/*` → `src/*` (tsconfig). Use it, not relative `../../`.
 - Prettier: single quotes, semicolons, `printWidth: 120`, trailing commas `all`, `prettier-plugin-tailwindcss` (auto-sorts classes — run `npm run format`).
 - TS `strict` on.
-- Pending inputs (live project URLs, screenshots, headshot, OG image, final domain) are tracked in `docs/05_NEXT_STEPS.md`; several `projects[].links` are intentionally empty until provided.
+- Prefer server components; add `'use client'` only when the file itself uses hooks/state/framer-motion (importing a client component from a server component is fine).
+- Sections export a named function matching the file (`export function Hero() {}`).
 
-## Docs (read in order)
+## Docs
 
-`docs/01_PROFILE_RESEARCH.md` (content source-of-truth) · `02_DESIGN_SYSTEM.md` · `03_PROJECT_PLAN.md` (architecture + build phases P0–P4) · `04_ANIMATION_SPEC.md` · `05_NEXT_STEPS.md`.
+`docs/CONTRACTS.md` (component/data API — read first when touching sections) · `01_PROFILE_RESEARCH.md` (content source-of-truth) · `02_DESIGN_SYSTEM.md` · `03_PROJECT_PLAN.md` · `04_ANIMATION_SPEC.md` · `05_NEXT_STEPS.md` (pending inputs). Docs predate the finished build — where a doc contradicts the code (e.g. CaseStudy section, GSAP, "scaffold" status), the code wins.

@@ -16,7 +16,7 @@ npm run dev          # localhost:3000
 
 Other scripts: `npm run build` · `npm run start` · `npm run lint` · `npm run format`.
 
-Set `NEXT_PUBLIC_SITE_URL` in production — it drives metadata, sitemap, robots, and JSON-LD (fallback: `https://jamankhan.dev`).
+Set `NEXT_PUBLIC_SITE_URL` in production — it drives metadata, sitemap, robots, and JSON-LD (fallback: `https://md-nuruzzaman-portfolio.vercel.app`).
 
 ## Structure
 ```

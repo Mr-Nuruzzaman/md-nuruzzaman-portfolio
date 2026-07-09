@@ -1,4 +1,4 @@
-# Profile Research — MD. Nuruzzaman (Jaman Khan)
+# Profile Research — MD. Nuruzzaman (Md Nuruzzaman)
 
 > Source-of-truth dossier. Compiled 2026-06-28 from CV PDF, GitHub (profile + Pages site), and authenticated LinkedIn scrape. Where sources disagree, **CV + LinkedIn win** (most current); the old GitHub Pages site is stale.
 
@@ -9,7 +9,7 @@
 | Field | Value |
 |---|---|
 | Full name | MD. Nuruzzaman |
-| Display / brand name | Jaman Khan |
+| Display / brand name | Md Nuruzzaman |
 | Title | Software Engineer |
 | Location | Dhaka, Bangladesh |
 | Email (primary, professional) | nuruzzaman.prog@gmail.com |
@@ -134,7 +134,7 @@ This dual identity is the differentiator. Most portfolios are one or the other. 
 3. **RestoZen** — Restaurant Management SaaS: multi-company, QR table ordering, real-time tracking, branch/employee mgmt, promotions, financial reporting. React, Spring Boot, MySQL, AWS. *(has Live Link in CV)*
 4. **Zentopos** — Inventory & POS: multi-company, real-time stock, barcode generation, sales tracking, low-stock alerts. React, Spring Boot, MySQL, AWS. *(has Live Link in CV)*
 
-> ACTION NEEDED FROM JAMAN: provide live URLs + screenshots/repos for RestoZen, Zentopos, and the Vehicle Marketplace (if shareable). These are the strongest projects but currently have no public links captured.
+> ACTION NEEDED FROM MD NURUZZAMAN: provide live URLs + screenshots/repos for RestoZen, Zentopos, and the Vehicle Marketplace (if shareable). These are the strongest projects but currently have no public links captured.
 
 ---
 
@@ -145,7 +145,7 @@ This dual identity is the differentiator. Most portfolios are one or the other. 
 
 ---
 
-## 10. Gaps / open questions for Jaman
+## 10. Gaps / open questions for Md Nuruzzaman
 1. Live URLs + screenshots for RestoZen, Zentopos, Vehicle Marketplace?
 2. Professional headshot photo for hero/about?
 3. Preferred primary email to display — `nuruzzaman.prog@gmail.com` (recommended) vs personal?

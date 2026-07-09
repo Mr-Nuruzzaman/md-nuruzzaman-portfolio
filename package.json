@@ -1,8 +1,8 @@
 {
-  "name": "jaman-portfolio",
+  "name": "md-nuruzzaman-portfolio",
   "version": "0.1.0",
   "private": true,
-  "description": "Portfolio of MD. Nuruzzaman (Jaman Khan) — Software Engineer & Competitive Programmer",
+  "description": "Portfolio of Md Nuruzzaman — Software Engineer & Competitive Programmer",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

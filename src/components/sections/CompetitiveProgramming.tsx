@@ -27,7 +27,7 @@ export function CompetitiveProgramming() {
             <span className="h-3 w-3 rounded-full bg-accent-pink/70" aria-hidden />
             <span className="h-3 w-3 rounded-full bg-warning/70" aria-hidden />
             <span className="h-3 w-3 rounded-full bg-success/70" aria-hidden />
-            <span className="ml-3 font-mono text-small text-content-dim">~/jaman — algorithms</span>
+            <span className="ml-3 font-mono text-small text-content-dim">~/md-nuruzzaman — algorithms</span>
           </div>
           <div className="px-4 py-5 font-mono text-sm break-words sm:px-5 sm:py-6 sm:text-lg">
             <span className="text-accent">&gt;</span>{' '}

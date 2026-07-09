@@ -15,7 +15,7 @@
 
 ## 2. Directory structure
 ```
-jaman-portfolio/
+md-nuruzzaman-portfolio/
 ├── docs/                       # this documentation
 ├── public/
 │   ├── images/                 # project shots, og image, headshot

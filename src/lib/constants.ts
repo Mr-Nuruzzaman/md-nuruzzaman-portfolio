@@ -1,5 +1,5 @@
 /** Production site URL — single source for metadata, sitemap, robots, JSON-LD. Set NEXT_PUBLIC_SITE_URL in prod. */
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://jamankhan.dev';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://md-nuruzzaman-portfolio.vercel.app';
 
 /** Anchored nav sections — id must match the <Section id> rendered on the page. */
 export const NAV_LINKS = [

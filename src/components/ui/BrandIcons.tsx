@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { cn } from '@/lib/utils';
 
 /**
@@ -79,6 +80,13 @@ export function LinkedInIcon({ size, className, ...props }: IconProps) {
 
 /** Codeforces — official three-bar mark (gold / blue / red gradients). Rest brightened for legibility. */
 export function CodeforcesIcon({ size, className, ...props }: IconProps) {
+  // The icon renders several times per page (hero, rails, footer, CP cards). SVG gradient
+  // references resolve document-wide by id, and if the first matching def sits in a
+  // display:none instance the bars won't paint — so every instance gets unique ids.
+  const uid = useId().replace(/:/g, '');
+  const gold = `cfGold${uid}`;
+  const blue = `cfBlue${uid}`;
+  const red = `cfRed${uid}`;
   return (
     <Base
       box="0 0 147.8 115.4"
@@ -88,29 +96,29 @@ export function CodeforcesIcon({ size, className, ...props }: IconProps) {
       {...props}
     >
       <defs>
-        <linearGradient id="cfGold" gradientUnits="userSpaceOnUse" x1="0" y1="74.08" x2="39.38" y2="74.08">
+        <linearGradient id={gold} gradientUnits="userSpaceOnUse" x1="0" y1="74.08" x2="39.38" y2="74.08">
           <stop offset="0" stopColor="#F6C43D" />
           <stop offset="1" stopColor="#FCD975" />
         </linearGradient>
-        <linearGradient id="cfBlue" gradientUnits="userSpaceOnUse" x1="54.25" y1="57.75" x2="93.63" y2="57.75">
+        <linearGradient id={blue} gradientUnits="userSpaceOnUse" x1="54.25" y1="57.75" x2="93.63" y2="57.75">
           <stop offset="0" stopColor="#1480C4" />
           <stop offset="1" stopColor="#1C99D4" />
         </linearGradient>
-        <linearGradient id="cfRed" gradientUnits="userSpaceOnUse" x1="108.37" y1="80.28" x2="147.74" y2="80.28">
+        <linearGradient id={red} gradientUnits="userSpaceOnUse" x1="108.37" y1="80.28" x2="147.74" y2="80.28">
           <stop offset="0" stopColor="#B11E26" />
           <stop offset="1" stopColor="#C21C24" />
         </linearGradient>
       </defs>
       <path
-        fill="url(#cfGold)"
+        fill={`url(#${gold})`}
         d="M30.3 32.7H9c-5 0-9 4.1-9 9v64.7c0 5 4.1 9 9 9h21.3c5 0 9-4.1 9-9V41.7c0-5-4.1-9-9-9z"
       />
       <path
-        fill="url(#cfBlue)"
+        fill={`url(#${blue})`}
         d="M84.6 0H63.3c-5 0-9 4.1-9 9v97.4c0 5 4.1 9 9 9h21.3c5 0 9-4.1 9-9V9c0-4.9-4-9-9-9z"
       />
       <path
-        fill="url(#cfRed)"
+        fill={`url(#${red})`}
         d="M138.7 45.1h-21.3c-5 0-9 4.1-9 9v52.3c0 5 4.1 9 9 9h21.3c5 0 9-4.1 9-9V54.1c0-5-4-9-9-9z"
       />
     </Base>

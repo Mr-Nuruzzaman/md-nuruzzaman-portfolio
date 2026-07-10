@@ -9,6 +9,7 @@ import { NAV_LINKS, EASE_SMOOTH } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { useIsDesktop, usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { Button } from '@/components/ui/Button';
+import { LogoMark } from '@/components/ui/LogoMark';
 
 const FOCUSABLE = 'button, a[href], input, [tabindex]:not([tabindex="-1"])';
 
@@ -114,9 +115,10 @@ export function Navbar() {
         <a
           href={onHome ? '#top' : '/'}
           onClick={() => setOpen(false)}
-          className="font-display text-xl italic text-content transition-colors hover:text-accent-2"
+          aria-label={`${profile.brandName} — home`}
+          className="group inline-flex items-center"
         >
-          {profile.brandName}
+          <LogoMark />
         </a>
 
         {/* Desktop links */}

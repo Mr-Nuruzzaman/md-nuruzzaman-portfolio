@@ -1,11 +1,14 @@
 import { profile } from '@/data/profile';
 import { Container } from '@/components/ui/Container';
-import { CodeforcesIcon, GitHubIcon, LinkedInIcon } from '@/components/ui/BrandIcons';
+import { AtCoderIcon, CodeChefIcon, CodeforcesIcon, GitHubIcon, LeetCodeIcon, LinkedInIcon } from '@/components/ui/BrandIcons';
 
 const SOCIALS = [
   { href: profile.socials.github, label: 'GitHub', Icon: GitHubIcon },
   { href: profile.socials.linkedin, label: 'LinkedIn', Icon: LinkedInIcon },
   { href: profile.socials.codeforces, label: 'Codeforces', Icon: CodeforcesIcon },
+  { href: profile.socials.codechef, label: 'CodeChef', Icon: CodeChefIcon },
+  { href: profile.socials.leetcode, label: 'LeetCode', Icon: LeetCodeIcon },
+  { href: profile.socials.atcoder, label: 'AtCoder', Icon: AtCoderIcon },
 ];
 
 export function Footer() {

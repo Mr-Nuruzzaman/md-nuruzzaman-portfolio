@@ -117,7 +117,7 @@ export function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Md Nuruzzaman on ${site}`}
-                    className="inline-grid h-11 w-11 place-items-center rounded-md border border-border bg-surface text-content-muted transition-all duration-200 ease-smooth hover:-translate-y-px hover:border-accent hover:text-accent-2 active:scale-[0.97]"
+                    className="group inline-grid h-11 w-11 place-items-center rounded-md border border-border bg-surface text-content-muted transition-all duration-200 ease-smooth hover:-translate-y-px hover:border-border-glow active:scale-[0.97]"
                   >
                     <Icon size={20} />
                   </a>

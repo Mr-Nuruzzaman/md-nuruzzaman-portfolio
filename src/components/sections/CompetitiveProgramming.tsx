@@ -72,7 +72,7 @@ export function CompetitiveProgramming() {
                     {Icon && (
                       <Icon
                         size={20}
-                        className="shrink-0 text-content-muted transition-colors duration-300 ease-smooth group-hover:text-accent-2"
+                        className="shrink-0 text-content-muted transition-colors duration-300 ease-smooth"
                       />
                     )}
                     <div className="min-w-0">

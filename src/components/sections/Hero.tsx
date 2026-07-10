@@ -148,7 +148,7 @@ export function Hero() {
           <div className="flex flex-wrap items-center gap-2 sm:shrink-0 sm:flex-nowrap">
             {socials.map((s) => (
               <Magnetic key={s.key} strength={8}>
-                <Button href={s.href} variant="icon" aria-label={`Md Nuruzzaman on ${s.label}`}>
+                <Button href={s.href} variant="icon" className="group" aria-label={`Md Nuruzzaman on ${s.label}`}>
                   {s.icon}
                 </Button>
               </Magnetic>

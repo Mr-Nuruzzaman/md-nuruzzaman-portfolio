@@ -23,7 +23,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="grid h-11 w-11 place-items-center text-content-muted transition-colors hover:text-accent-2"
+              className="group grid h-11 w-11 place-items-center text-content-muted transition-colors"
             >
               <Icon size={18} />
             </a>

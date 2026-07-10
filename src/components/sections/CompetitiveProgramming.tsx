@@ -4,10 +4,18 @@ import { Section } from '@/components/ui/Section';
 import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
 import { GradientText } from '@/components/ui/GradientText';
+import { CodeforcesIcon, CodeChefIcon, LeetCodeIcon, AtCoderIcon } from '@/components/ui/BrandIcons';
 import { Reveal, RevealGroup, RevealItem } from '@/components/animations/Reveal';
 import { CountUp } from '@/components/animations/CountUp';
 import { platforms, cpStats, contests } from '@/data/competitive';
 import { cn } from '@/lib/utils';
+
+const PLATFORM_ICONS: Record<string, (props: { size?: number; className?: string }) => React.ReactElement> = {
+  Codeforces: CodeforcesIcon,
+  CodeChef: CodeChefIcon,
+  LeetCode: LeetCodeIcon,
+  AtCoder: AtCoderIcon,
+};
 
 export function CompetitiveProgramming() {
   return (
@@ -48,35 +56,39 @@ export function CompetitiveProgramming() {
 
       {/* Platforms — brand color muted to a dot; achievement label leads, rating is metadata */}
       <RevealGroup stagger={0.08} className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-        {platforms.map((p) => (
-          <RevealItem key={p.name}>
-            <a
-              href={p.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${p.name} profile — ${p.handle}, ${p.label}, rating ${p.rating}`}
-              className="block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-            >
-              <Card className="flex h-full items-center justify-between gap-4 p-5 sm:p-6">
-                <div className="flex min-w-0 items-center gap-3">
-                  <span
-                    className="h-2.5 w-2.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: p.color }}
-                    aria-hidden
-                  />
-                  <div className="min-w-0">
-                    <p className="font-heading text-xl leading-tight text-content">{p.name}</p>
-                    <p className="truncate font-mono text-small text-content-dim">@{p.handle}</p>
+        {platforms.map((p) => {
+          const Icon = PLATFORM_ICONS[p.name];
+          return (
+            <RevealItem key={p.name}>
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${p.name} profile — @${p.handle}`}
+                className="group block h-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+              >
+                <Card className="flex h-full items-center justify-between gap-4 p-5 sm:p-6">
+                  <div className="flex min-w-0 items-center gap-3">
+                    {Icon && (
+                      <Icon
+                        size={20}
+                        className="shrink-0 text-content-muted transition-colors duration-300 ease-smooth group-hover:text-accent-2"
+                      />
+                    )}
+                    <div className="min-w-0">
+                      <p className="font-heading text-xl leading-tight text-content">{p.name}</p>
+                      <p className="truncate font-mono text-small text-content-dim">@{p.handle}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="font-sans text-small font-medium leading-tight text-content">{p.label}</p>
-                  <p className="mt-0.5 font-mono text-small tabular-nums text-content-dim">{p.rating}</p>
-                </div>
-              </Card>
-            </a>
-          </RevealItem>
-        ))}
+                  <div className="shrink-0 text-right">
+                    <p className="font-sans text-small font-medium leading-tight text-content">{p.label}</p>
+                    <p className="mt-0.5 font-mono text-small tabular-nums text-content-dim">{p.rating}</p>
+                  </div>
+                </Card>
+              </a>
+            </RevealItem>
+          );
+        })}
       </RevealGroup>
 
       {/* Contest log — lead with placement/rank */}

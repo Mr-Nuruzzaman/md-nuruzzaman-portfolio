@@ -2,10 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { m } from 'framer-motion';
-import { ArrowRight, ChevronDown, FileDown, Github, Linkedin } from 'lucide-react';
+import { ArrowRight, ChevronDown, FileDown } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { GradientText } from '@/components/ui/GradientText';
+import {
+  AtCoderIcon,
+  CodeChefIcon,
+  CodeforcesIcon,
+  GitHubIcon,
+  LeetCodeIcon,
+  LinkedInIcon,
+} from '@/components/ui/BrandIcons';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { CountUp } from '@/components/animations/CountUp';
 import { Magnetic } from '@/components/animations/Magnetic';
@@ -46,13 +54,13 @@ export function Hero() {
     show: { y: '0%', transition: { duration: 0.7, ease: EASE_EXPO } },
   };
 
-  const iconSocials = [
-    { key: 'github', href: profile.socials.github, label: 'GitHub', icon: <Github className="h-5 w-5" /> },
-    { key: 'linkedin', href: profile.socials.linkedin, label: 'LinkedIn', icon: <Linkedin className="h-5 w-5" /> },
-  ];
-  const badgeSocials = [
-    { key: 'codeforces', href: profile.socials.codeforces, label: 'Codeforces', badge: 'CF' },
-    { key: 'leetcode', href: profile.socials.leetcode, label: 'LeetCode', badge: 'LC' },
+  const socials = [
+    { key: 'github', href: profile.socials.github, label: 'GitHub', icon: <GitHubIcon size={20} /> },
+    { key: 'linkedin', href: profile.socials.linkedin, label: 'LinkedIn', icon: <LinkedInIcon size={20} /> },
+    { key: 'codeforces', href: profile.socials.codeforces, label: 'Codeforces', icon: <CodeforcesIcon size={20} /> },
+    { key: 'codechef', href: profile.socials.codechef, label: 'CodeChef', icon: <CodeChefIcon size={20} /> },
+    { key: 'leetcode', href: profile.socials.leetcode, label: 'LeetCode', icon: <LeetCodeIcon size={20} /> },
+    { key: 'atcoder', href: profile.socials.atcoder, label: 'AtCoder', icon: <AtCoderIcon size={20} /> },
   ];
 
   return (
@@ -137,18 +145,11 @@ export function Hero() {
             ))}
           </ul>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {iconSocials.map((s) => (
+          <div className="flex flex-wrap items-center gap-2 sm:shrink-0 sm:flex-nowrap">
+            {socials.map((s) => (
               <Magnetic key={s.key} strength={8}>
-                <Button href={s.href} variant="icon" aria-label={s.label}>
+                <Button href={s.href} variant="icon" aria-label={`Md Nuruzzaman on ${s.label}`}>
                   {s.icon}
-                </Button>
-              </Magnetic>
-            ))}
-            {badgeSocials.map((s) => (
-              <Magnetic key={s.key} strength={8}>
-                <Button href={s.href} variant="icon" aria-label={s.label}>
-                  <span className="font-mono text-small font-semibold">{s.badge}</span>
                 </Button>
               </Magnetic>
             ))}

@@ -1,10 +1,18 @@
 'use client';
 
 import { useActionState, useState } from 'react';
-import { Check, Code2, Copy, Github, Linkedin, Mail, Send, Terminal } from 'lucide-react';
+import { Check, Copy, Mail, Send } from 'lucide-react';
 import { Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
 import { GradientText } from '@/components/ui/GradientText';
+import {
+  AtCoderIcon,
+  CodeChefIcon,
+  CodeforcesIcon,
+  GitHubIcon,
+  LeetCodeIcon,
+  LinkedInIcon,
+} from '@/components/ui/BrandIcons';
 import { Reveal } from '@/components/animations/Reveal';
 import { submitContact } from '@/app/actions/contact';
 import { initialContactState } from '@/app/actions/contact-state';
@@ -12,10 +20,12 @@ import { profile } from '@/data/profile';
 import { cn } from '@/lib/utils';
 
 const socialLinks = [
-  { label: 'GitHub', href: profile.socials.github, Icon: Github },
-  { label: 'LinkedIn', href: profile.socials.linkedin, Icon: Linkedin },
-  { label: 'Codeforces', href: profile.socials.codeforces, Icon: Code2 },
-  { label: 'LeetCode', href: profile.socials.leetcode, Icon: Terminal },
+  { site: 'GitHub', href: profile.socials.github, Icon: GitHubIcon },
+  { site: 'LinkedIn', href: profile.socials.linkedin, Icon: LinkedInIcon },
+  { site: 'Codeforces', href: profile.socials.codeforces, Icon: CodeforcesIcon },
+  { site: 'CodeChef', href: profile.socials.codechef, Icon: CodeChefIcon },
+  { site: 'LeetCode', href: profile.socials.leetcode, Icon: LeetCodeIcon },
+  { site: 'AtCoder', href: profile.socials.atcoder, Icon: AtCoderIcon },
 ] as const;
 
 const fieldClass =
@@ -100,11 +110,17 @@ export function Contact() {
               View résumé
             </Button>
             <ul className="flex flex-wrap items-center gap-2.5">
-              {socialLinks.map(({ label, href, Icon }) => (
-                <li key={label}>
-                  <Button href={href} variant="icon" aria-label={label}>
-                    <Icon className="h-5 w-5" strokeWidth={1.75} />
-                  </Button>
+              {socialLinks.map(({ site, href, Icon }) => (
+                <li key={site}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Md Nuruzzaman on ${site}`}
+                    className="inline-grid h-11 w-11 place-items-center rounded-md border border-border bg-surface text-content-muted transition-all duration-200 ease-smooth hover:-translate-y-px hover:border-accent hover:text-accent-2 active:scale-[0.97]"
+                  >
+                    <Icon size={20} />
+                  </a>
                 </li>
               ))}
             </ul>

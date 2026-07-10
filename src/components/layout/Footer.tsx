@@ -1,10 +1,11 @@
-import { Github, Linkedin } from 'lucide-react';
 import { profile } from '@/data/profile';
 import { Container } from '@/components/ui/Container';
+import { CodeforcesIcon, GitHubIcon, LinkedInIcon } from '@/components/ui/BrandIcons';
 
 const SOCIALS = [
-  { href: profile.socials.github, label: 'GitHub', Icon: Github },
-  { href: profile.socials.linkedin, label: 'LinkedIn', Icon: Linkedin },
+  { href: profile.socials.github, label: 'GitHub', Icon: GitHubIcon },
+  { href: profile.socials.linkedin, label: 'LinkedIn', Icon: LinkedInIcon },
+  { href: profile.socials.codeforces, label: 'Codeforces', Icon: CodeforcesIcon },
 ];
 
 export function Footer() {

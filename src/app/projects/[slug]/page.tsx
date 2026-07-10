@@ -9,6 +9,10 @@ import styles from './prose.module.css';
 
 const bySlug = (slug: string) => caseStudies.find((c) => c.slug === slug);
 
+// All studies are prerendered; unknown slugs must 404 at the router (a soft-404
+// with HTTP 200 leaks junk URLs into search indexes).
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return caseStudies.map((c) => ({ slug: c.slug }));
 }

@@ -1,0 +1,39 @@
+---
+title: Digital Brokerage — backend systems for a stock-brokerage platform
+summary: Backend work at BRAC EPL Stock Brokerage — a Spring Boot service built on Hexagonal Architecture, with automated PDF portfolio generation, scheduled email delivery, and Python-based NID extraction for e-KYC.
+role: Backend engineer — BRAC EPL Stock Brokerage Ltd.
+period: 2024 — 2025
+stack:
+  - Java
+  - Spring Boot
+  - Python
+  - MySQL
+---
+
+## The problem & my role
+
+A stock brokerage runs on documents and deadlines. Clients need portfolio statements they can trust, those statements need to reach them on a schedule without anyone pressing a button, and new clients can't be onboarded until their identity is verified against a national ID. I worked as a backend engineer at BRAC EPL Stock Brokerage on the internal systems behind those flows.
+
+This is an internal enterprise service with no public link, so this write-up stays at the level of what I actually built rather than screenshots or live numbers.
+
+## Approach & key decisions
+
+**Hexagonal architecture (ports and adapters).** The backend was built on a hexagonal structure — the brokerage's domain logic at the centre, with adapters at the edges for persistence, PDF generation, email and the identity-extraction service. The straightforward alternative would have been a conventional layered service with those concerns reached for directly from the business code. I favoured ports and adapters because the volatile parts of this system are precisely the edges: the document format, the mail transport, and especially the KYC extraction pipeline are the things most likely to be swapped or reworked. Keeping them behind ports meant the core portfolio and onboarding logic didn't have to change when an edge did.
+
+**A Python service for NID extraction.** e-KYC verification needs data pulled off a national ID, which is an image-processing and extraction problem rather than a business-logic one. Rather than force that into the JVM stack, it lives as a Python-based extraction step that the Spring Boot service calls through an adapter — the right tool for the extraction, cleanly bounded behind a port.
+
+## What shipped
+
+- **Automated PDF portfolio generation** for client statements.
+- **Scheduled, automated email delivery pipelines** so those statements go out on a cadence without manual intervention.
+- **Python-based NID extraction** feeding the e-KYC verification flow for client onboarding.
+
+All on a Spring Boot / Java backend over MySQL.
+
+## Impact
+
+Because this is an internal system, I don't have public metrics to point to, and I won't invent any. The substance of the contribution is that portfolio statements and client onboarding — two flows a brokerage cannot run without — were automated rather than manual, and structured so the parts most likely to change could change without disturbing the core.
+
+## What I'd do differently
+
+Working within an existing internal codebase, the thing I'd push on is making the seams the hexagonal structure creates pay off in tests — using the ports to drive the domain logic under test without the real PDF, mail or extraction adapters attached, so the core behaviour is verified in isolation from its most changeable edges.

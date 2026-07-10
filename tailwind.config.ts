@@ -6,43 +6,45 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Warm ink monochrome — depth comes from lightness shifts, not hue or glow.
         bg: {
-          DEFAULT: '#0A0A0F',
-          elev: '#111119',
+          DEFAULT: '#0E0D0B',
+          elev: '#14120F',
         },
         surface: {
-          DEFAULT: '#16161F',
-          2: '#1D1D2A',
+          DEFAULT: '#191713',
+          2: '#201D18',
         },
         border: {
-          DEFAULT: '#262633',
-          glow: '#3A3A55',
+          DEFAULT: '#2B2822',
+          glow: '#3B372F',
         },
         content: {
-          DEFAULT: '#ECECF1',
-          muted: '#A0A0B2',
-          dim: '#8A8AA0', // ≥4.5:1 on bg for AA text contrast
+          DEFAULT: '#EDE9E0',
+          muted: '#A9A296',
+          dim: '#8C8578', // ≥4.5:1 on bg for AA text contrast
         },
+        // Single ember accent family — tints/shades of one hue, never a second hue.
         accent: {
-          DEFAULT: '#22D3EE', // cyan
-          2: '#A855F7', // violet
-          3: '#3B82F6', // blue
-          pink: '#EC4899',
+          DEFAULT: '#E8582C', // ember
+          2: '#F2926B', // clay tint (accent text on dark)
+          3: '#B4441F', // deep ember
+          pink: '#C86A4A', // muted clay (legacy key)
         },
-        success: '#34D399',
-        warning: '#FBBF24',
+        success: '#86B378',
+        warning: '#D9A03F',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Space Grotesk', 'sans-serif'],
-        heading: ['var(--font-display)', 'Space Grotesk', 'sans-serif'],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
+        heading: ['var(--font-display)', 'Georgia', 'serif'],
         sans: ['var(--font-sans)', 'Inter', 'sans-serif'],
         mono: ['var(--font-mono)', 'JetBrains Mono', 'monospace'],
       },
       fontSize: {
-        display: ['clamp(3rem, 8vw, 7rem)', { lineHeight: '0.95', letterSpacing: '-0.03em' }],
-        h1: ['clamp(2.25rem, 5vw, 3.75rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
-        h2: ['clamp(1.75rem, 3.5vw, 2.75rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-        h3: ['1.5rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        display: ['clamp(3.5rem, 9vw, 8.5rem)', { lineHeight: '0.92', letterSpacing: '-0.015em' }],
+        h1: ['clamp(2.5rem, 5.5vw, 4.5rem)', { lineHeight: '1.02', letterSpacing: '-0.01em' }],
+        h2: ['clamp(2rem, 4vw, 3.25rem)', { lineHeight: '1.08', letterSpacing: '-0.01em' }],
+        h3: ['1.5rem', { lineHeight: '1.2', letterSpacing: '-0.005em' }],
         'body-lg': ['1.125rem', { lineHeight: '1.7' }],
         body: ['1rem', { lineHeight: '1.7' }],
         small: ['0.875rem', { lineHeight: '1.5' }],
@@ -53,16 +55,17 @@ const config: Config = {
         wide: '1440px',
       },
       borderRadius: {
-        sm: '8px',
-        md: '12px',
-        lg: '20px',
+        sm: '6px',
+        md: '10px',
+        lg: '14px',
       },
       backgroundImage: {
-        'grad-primary': 'linear-gradient(135deg, #22D3EE 0%, #3B82F6 45%, #A855F7 100%)',
+        'grad-primary': 'linear-gradient(135deg, #E8582C 0%, #F2926B 100%)',
       },
       boxShadow: {
-        'glow-cyan': '0 0 0 1px rgba(34,211,238,.3), 0 8px 32px -8px rgba(34,211,238,.35)',
-        'glow-violet': '0 0 40px -10px rgba(168,85,247,.45)',
+        // Legacy keys kept; values are now quiet elevation, not neon glow.
+        'glow-cyan': '0 1px 0 0 rgba(237,233,224,.04) inset, 0 12px 32px -12px rgba(0,0,0,.6)',
+        'glow-violet': '0 16px 48px -16px rgba(0,0,0,.55)',
       },
       transitionTimingFunction: {
         expo: 'cubic-bezier(0.16, 1, 0.3, 1)',

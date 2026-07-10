@@ -21,6 +21,19 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     };
     raf = requestAnimationFrame(loop);
 
+    // Honor a hash deep-link on initial load (e.g. /#projects from a case-study page) —
+    // Lenis takes over before the browser's native hash jump can land. Use native scrollTo
+    // (Lenis syncs to it); retry once after load in case late layout shifted the target.
+    const jumpToHash = () => {
+      if (!window.location.hash) return;
+      const target = document.querySelector(window.location.hash) as HTMLElement | null;
+      if (!target) return;
+      const top = target.getBoundingClientRect().top + window.scrollY - 12;
+      window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
+    };
+    const hashTimer = window.setTimeout(jumpToHash, 0);
+    const settleTimer = window.setTimeout(jumpToHash, 250);
+
     // Route in-page anchor clicks through Lenis for smooth section jumps.
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement)?.closest('a[href^="#"]') as HTMLAnchorElement | null;
@@ -30,13 +43,17 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       const el = document.querySelector(id);
       if (el) {
         e.preventDefault();
-        lenis.scrollTo(el as HTMLElement, { offset: -80 });
+        // Tiny offset only: sections carry their own top padding, and the navbar
+        // hides on scroll-down — a large offset just exposes the previous section.
+        lenis.scrollTo(el as HTMLElement, { offset: -12 });
       }
     };
     document.addEventListener('click', onClick);
 
     return () => {
       cancelAnimationFrame(raf);
+      window.clearTimeout(hashTimer);
+      window.clearTimeout(settleTimer);
       document.removeEventListener('click', onClick);
       lenis.destroy();
     };

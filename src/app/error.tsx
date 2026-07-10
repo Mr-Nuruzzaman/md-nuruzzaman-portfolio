@@ -1,7 +1,14 @@
+'use client';
+
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { GradientText } from '@/components/ui/GradientText';
 
-export default function NotFound() {
+export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
     <main className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 text-center">
       {/* Ambient ember bloom */}
@@ -9,26 +16,25 @@ export default function NotFound() {
         aria-hidden
         className="pointer-events-none absolute -top-1/4 left-1/2 h-[60vmax] w-[60vmax] -translate-x-1/2 rounded-full bg-accent-3 opacity-[0.08] blur-[120px]"
       />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 [background-image:linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_70%)]"
-      />
 
       <div className="relative flex flex-col items-center gap-6">
-        <p className="font-mono text-eyebrow text-accent">Error 404</p>
+        <p className="font-mono text-eyebrow uppercase text-accent-2">Something broke</p>
 
         <GradientText className="font-display text-display leading-none tracking-tight" aria-hidden>
-          404
+          Oops
         </GradientText>
 
-        <h1 className="font-heading text-h3 text-content">Page not found</h1>
+        <h1 className="font-heading text-h3 text-content">An unexpected error occurred</h1>
 
         <p className="max-w-md text-body text-content-muted">
-          The page you&rsquo;re looking for doesn&rsquo;t exist or has moved. Let&rsquo;s get you back on track.
+          This one&rsquo;s on me, not you. Try again — or head back to the start.
         </p>
 
-        <div className="mt-2">
-          <Button href="/">Back home</Button>
+        <div className="mt-2 flex gap-3">
+          <Button onClick={reset}>Try again</Button>
+          <Button href="/" variant="ghost">
+            Back home
+          </Button>
         </div>
       </div>
     </main>

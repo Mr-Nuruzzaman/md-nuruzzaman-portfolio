@@ -1,0 +1,47 @@
+---
+title: Grocery — a POS and inventory ERP with a mini-MRP built in
+summary: A live multi-company POS, inventory and light-manufacturing ERP (internally ZentoPOS) — purchases-to-sales with an approval chain, a Bill-of-Materials production pipeline with quality control, and daily-balance accounting, all in one company-scoped Spring Boot application.
+role: Full-stack engineer
+stack:
+  - Java 17
+  - Spring Boot 3
+  - React 18
+  - MySQL
+  - Spring Security (JWT)
+  - AWS S3
+  - GitHub Actions
+live: https://grocery.boniksheba.com
+---
+
+## The problem & my role
+
+A grocery operation that also produces its own goods has two systems fighting to be one. There's the retail side — buying stock, moving it to branches, selling it over a POS, handling returns — and there's a small factory: recipes, production runs, and quality checks that consume raw materials and yield sellable products. Keeping those in separate tools means stock is always wrong somewhere, because a production batch and a sale both draw down the same inventory. The brief was one ERP where making and selling share the same books.
+
+I built it full-stack — a Spring Boot 3 / Java 17 backend and a React 18 admin dashboard — deployed live for a grocery chain under the internal name ZentoPOS.
+
+## Approach & key decisions
+
+**The mini-MRP lives inside the POS monolith.** The manufacturing module — Bill of Materials with costed line items and draft/approved/archived states, production plans, orders, batches, material consumption, and a quality-control pipeline (visual/measurement/test checks with pass/fail/recheck results and severities) — runs in the *same* Spring Boot application as POS and inventory, sharing the same database and the same company/branch entities. I considered extracting manufacturing as its own service. I rejected it for the exact reason the product exists: production and sales draw down one shared stock, so splitting them across a service boundary would turn every batch and every sale into a distributed inventory update with all the consistency risk that implies. In one process against one schema, that's a local transaction.
+
+**UUID primary keys for domain entities.** A shared audited base entity gives every domain record a UUID string id; only the small seeded lookup tables (user types, payment methods) keep integer ids. The alternative, sequential auto-increment keys, leaks row counts and makes ids guessable and collision-prone across the merge/allocation flows the system runs. UUIDs cost a little index size for keys that are safe to expose and generate anywhere.
+
+**Company-scoped shared schema.** As with the rest of the platform, tenancy is a company foreign key on roughly 35 entities plus composite uniqueness (for example `(company_id, voucher_no)` on transactions), not a database per tenant — one schema, isolation enforced by constraints, with a branch dimension layered on top for stock, sales and daily balances.
+
+## What shipped
+
+- **A full POS-and-inventory lifecycle** — purchases entered against a staging table, an approval step (approve/reject with reason and audit fields), warehouse-to-branch allocation, branch stock, POS sales with VAT and discounts, and returns/exchanges that link back to the original sale line.
+- **A mini-MRP production pipeline** — Bills of Materials and formulas, production planning and batches, raw-material requisitions and consumption, and a quality-control stage with templated tests and corrective-action tracking.
+- **Accounting** — double-entry-style transactions with per-branch daily balance sheets (end balance, totals, sales) and auto-printed vouchers keyed by voucher number.
+- **Barcodes, QR and printable documents** — barcode and QR generation, react-pdf invoices, and a scan-to-order QR that deep-links by company/branch/table.
+- **RSA-signed JWT auth** (Nimbus) with BCrypt password hashing, method-level security, and an `AuditorAware` wiring so every record automatically captures who created and last modified it.
+- **Operational automation** — AWS S3 media, SMTP email with templates, Google Places autocomplete plus a nearest-branch endpoint, GitHub Actions rsync deploys, and scheduled production-alert and report-generation jobs on daily/weekly/monthly cadences.
+
+It is not an online store and has no live payment gateway — payment methods (cash, card, bKash) are internal labels on a sale, and I've kept the write-up honest about that.
+
+## Impact
+
+Grocery is deployed live at grocery.boniksheba.com running real retail and production operations for a grocery chain. I have no usage metrics to quote, so the honest impact statement is architectural: because manufacturing and retail share one schema and one transaction boundary, a production batch and a POS sale can never disagree about how much stock exists — the single-inventory guarantee that motivated the whole build is a property of the design, not something reconciled after the fact by a nightly job.
+
+## What I'd do differently
+
+Reporting is in an awkward in-between state: JasperReports is a configured dependency with a leftover template, but the actual invoices and vouchers are rendered client-side with react-pdf while the server-side Jasper path sits commented out. I'd commit to one — most likely finishing the client-side rendering and removing the dead Jasper wiring — so there isn't a half-abandoned reporting engine in the tree. And as with the sibling projects, I'd move the deploy from a single-server SSH/rsync script with no test gate toward a pipeline that at least builds and runs the suite before shipping.

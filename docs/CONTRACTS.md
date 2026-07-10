@@ -17,7 +17,6 @@ You are writing ONE section component for a Next.js 15 + Tailwind + Framer Motio
 - `<RevealGroup stagger?={number} className? >` + `<RevealItem y? className? >` — staggered list/grid entrance. Use RevealItem for each grid child.
 - `<TextReveal text={string} by?='char'|'word' onMount?={boolean} delay?={number} as?={ElementType} className? />` — mask-up split reveal. `by='char' onMount` = hero name. `by='word'` = headings/sublines.
 - `<CountUp to={number} suffix?={string} prefix?={string} duration?={number} className? />` — 0→to on scroll-in.
-- `<Parallax offset?={number} className? />` — subtle scroll translate.
 - `<Magnetic strength?={number} className? />` — cursor pull (wrap buttons).
 - `<TiltCard max?={number} className? />` — 3D tilt + cursor spotlight (wrap project/stat cards). Adds `.spotlight group` internally.
 - `<Marquee items={ReactNode[]} speed?={number} reverse?={boolean} pauseOnHover?={boolean} className? />` — infinite scroll.

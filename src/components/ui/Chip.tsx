@@ -10,7 +10,7 @@ export function Chip({ glow, className, children, ...props }: ChipProps) {
     <span
       className={cn(
         'inline-flex items-center rounded-full border border-border bg-surface-2 px-3 py-1 font-mono text-small text-content-muted transition-all duration-200 ease-smooth',
-        glow && 'hover:-translate-y-0.5 hover:border-accent hover:text-content hover:shadow-glow-cyan',
+        glow && 'hover:-translate-y-0.5 hover:border-accent hover:text-content',
         className,
       )}
       {...props}

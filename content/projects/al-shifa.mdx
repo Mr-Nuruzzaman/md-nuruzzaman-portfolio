@@ -1,0 +1,45 @@
+---
+title: Al-Shifa — one hospital API behind four portals and a native app
+summary: A multi-tenant hospital and appointment platform for the Bangladesh market — a single Spring Boot API with 16 RBAC roles and double-entry accounting, serving four React portals plus a Kotlin/Compose Android app.
+role: Full-stack engineer
+stack:
+  - Java 17
+  - Spring Boot 3
+  - React 18
+  - MySQL
+  - Kotlin
+  - Jetpack Compose
+  - JWT + OTP
+  - AWS S3
+live: https://shifahealthtech.com
+---
+
+## The problem & my role
+
+A hospital platform has to be many products at once. A patient wants to find a doctor, pick a slot and get a serial number. A doctor wants a consultation queue and a place to write prescriptions. A hospital's back office wants billing, a pharmacy, and books that actually balance. Building those as separate systems means duplicating auth, patients and appointments five times over and letting them drift out of sync. Al-Shifa's goal was the opposite: one source of truth, many front doors.
+
+I worked as a full-stack engineer across the Spring Boot 3 / Java 17 backend and the React portals, on a system where a single API — 82 JPA entities and 59 REST controllers — backs four separate web portals and a native Android app.
+
+## Approach & key decisions
+
+**One shared API, many portals — not a backend per portal.** Patient, doctor, hospital and admin are four distinct React 18 applications, and there's a Kotlin/Jetpack Compose Android app on top. But they all talk to the same domain-partitioned Spring Boot monolith (`admin`, `doctor`, `patient`, `hospital`, `pharmacy`, `shared`), namespaced by route (`/api/doctor/...`, `/api/hospital/accounts/...`). The alternative — a tailored backend behind each portal — would have meant re-implementing appointments, patients and RBAC in every one and reconciling them forever. A single API with domain packages keeps one definition of a booking or a bill and lets each portal be a thin, role-specific view. Multi-tenancy is enforced in-process: a shared base entity mandates a hospital-id on tenant-scoped records rather than isolating tenants across services.
+
+**Server-authoritative slot booking.** Serial numbers, slot intervals (a doctor's working hours divided by their patient capacity), next-available-slot search, and capacity limits are all computed and enforced on the server. The client submits a booking request; the server assigns the serial and time. I chose this over letting the client pick a slot precisely because two patients tapping the last slot at once is the normal case, not the edge case — arbitration has to live where the race can be resolved.
+
+**Real accounting, not a running total.** The finance module is genuine double-entry: a chart of accounts, journal entries that refuse to post unless debits equal credits, a general ledger with per-account running balances, and trial-balance / income-statement / balance-sheet reports. Reversals are done by swapping debit and credit rather than deleting history. For a system that hospitals run their money through, an auditable ledger was worth the extra modelling over a simpler `transactions` table.
+
+## What shipped
+
+- **A 16-role RBAC model** spanning system admin/manager/employee/assistant, doctor plus attendant and assistant, pharmacy and diagnostic manager/employee, hospital manager/employee, patient, and supplier manager/employee — mapped from a single signed JWT claim to Spring Security authorities.
+- **The full appointment lifecycle** — doctor discovery, schedule and working-time management, slot booking with server-assigned serials, a per-doctor consultation queue, and structured prescription authoring (diagnosis, complaints, on-examination findings, advice, investigations).
+- **Hospital ERP depth** — double-entry accounting with financial reports, billing and collections across hospital/doctor/test bills with payments, and a pharmacy module (purchases, sales, stock, suppliers, returns).
+- **Bangladesh-localized auth and messaging** — OTP over a pluggable SMS provider abstraction with real SSL Wireless and BulkSMSBD integrations (and a console provider for dev), production tokens RS256-signed with Nimbus, passwords BCrypt-hashed, and a Bangla/English patient portal.
+- **Independent deployment per app** — seven GitHub Actions workflows, each path-filtered so only the changed app redeploys, orchestrated by a top-level workflow with the frontends gated on the backend.
+
+## Impact
+
+Al-Shifa is live at shifahealthtech.com serving real hospital workflows across all four portals and the Android app from a single backend. I don't have production usage figures to quote, so I'll be honest about the shape of the win rather than invent a number: the payoff of the one-API decision is that a change to how a booking or a bill works is made once and every front end inherits it — the class of "the doctor portal and the admin portal disagree about this appointment" bug simply doesn't exist here.
+
+## What I'd do differently
+
+The hospital-level HRM and inventory packages are still stubs — staff management leans on employee entities elsewhere, and stock lives only inside the pharmacy module. If I were pacing the build again I'd either cut those from scope explicitly or finish them, rather than leave partially-scaffolded modules in the tree. I'd also wire the JaCoCo coverage that's configured in the build into CI as an actual gate, instead of leaving it as a local-only report — right now the deploy workflows only ship code, they don't verify it.

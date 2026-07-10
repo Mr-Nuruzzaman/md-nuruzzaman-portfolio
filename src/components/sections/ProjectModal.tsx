@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { AnimatePresence, m } from 'framer-motion';
-import { Check, ExternalLink, Github, X } from 'lucide-react';
+import { ArrowRight, Check, ExternalLink, Github, X } from 'lucide-react';
 import { Chip } from '@/components/ui/Chip';
 import { Button } from '@/components/ui/Button';
 import type { IProject } from '@/data/projects';
@@ -38,7 +38,9 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
     triggerRef.current = document.activeElement;
     const focusables = () =>
       panelRef.current
-        ? Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => !el.hasAttribute('disabled'))
+        ? Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+            (el) => !el.hasAttribute('disabled'),
+          )
         : [];
     const raf = requestAnimationFrame(() => focusables()[0]?.focus());
 
@@ -106,7 +108,7 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
           transition={{ duration: 0.2 }}
         >
           {/* Backdrop */}
-          <button aria-label="Close details" onClick={onClose} className="absolute inset-0 bg-bg/70 backdrop-blur-sm" />
+          <button aria-label="Close details" onClick={onClose} className="absolute inset-0 bg-bg/80" />
 
           {/* Panel */}
           <m.div
@@ -116,13 +118,13 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
             aria-labelledby="project-modal-title"
             {...panelMotion}
             transition={{ duration: 0.4, ease: EASE_EXPO }}
-            className="glass relative z-10 flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border-border-glow sm:rounded-2xl"
+            className="relative z-10 flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-border bg-bg-elev sm:rounded-2xl"
           >
             {/* Close */}
             <button
               onClick={onClose}
               aria-label="Close"
-              className="absolute right-4 top-4 z-20 grid h-11 w-11 place-items-center rounded-md border border-border bg-bg/60 text-content-muted backdrop-blur transition-colors hover:border-accent hover:text-accent"
+              className="absolute right-4 top-4 z-20 grid h-11 w-11 place-items-center rounded-md border border-border bg-surface text-content-muted transition-colors hover:border-border-glow hover:text-content"
             >
               <X size={18} />
             </button>
@@ -142,19 +144,21 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
                   />
                 ) : (
                   <div className="absolute inset-0 grid place-items-center">
-                    <div className="absolute inset-0 bg-grad-primary opacity-20" aria-hidden />
-                    <span className="relative select-none font-mono text-6xl font-bold tracking-tighter text-content/80" aria-hidden>
+                    <div
+                      className="absolute inset-0 bg-gradient-to-br from-accent-3/25 via-surface-2 to-bg"
+                      aria-hidden
+                    />
+                    <span
+                      className="relative select-none font-mono text-6xl tracking-tighter text-content/50"
+                      aria-hidden
+                    >
                       {initials(project.title)}
                     </span>
                   </div>
                 )}
                 <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-                  {project.badge && (
-                    <Chip glow className="border-accent/40 text-accent">
-                      {project.badge}
-                    </Chip>
-                  )}
-                  {project.status && <Chip className="bg-bg/60">{project.status}</Chip>}
+                  {project.badge && <Chip className="border-accent/40 bg-bg/80 text-accent-2">{project.badge}</Chip>}
+                  {project.status && <Chip className="bg-bg/80">{project.status}</Chip>}
                 </div>
               </div>
 
@@ -169,7 +173,7 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
                       aria-current={i === active}
                       className={cn(
                         'relative aspect-video h-14 shrink-0 overflow-hidden rounded-md border transition-all',
-                        i === active ? 'border-accent shadow-glow-cyan' : 'border-border opacity-60 hover:opacity-100',
+                        i === active ? 'border-accent-2 opacity-100' : 'border-border opacity-60 hover:opacity-100',
                       )}
                     >
                       <Image src={src} alt="" fill sizes="120px" className="object-cover" />
@@ -181,21 +185,23 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
               {/* Body */}
               <div className="flex flex-col gap-6 p-6 sm:p-8">
                 <div className="flex flex-col gap-2">
-                  <h3 id="project-modal-title" className="pr-10 font-heading text-h3 font-bold leading-tight text-content">
+                  <h3 id="project-modal-title" className="pr-10 font-heading text-h3 leading-tight text-content">
                     {project.title}
                   </h3>
-                  {project.role && <p className="font-mono text-small text-accent">{project.role}</p>}
+                  {project.role && <p className="font-mono text-small text-accent-2">{project.role}</p>}
                 </div>
 
                 <p className="text-body leading-relaxed text-content-muted">{project.description}</p>
 
                 {project.highlights && project.highlights.length > 0 && (
                   <div>
-                    <h4 className="mb-3 font-mono text-eyebrow uppercase tracking-widest text-content-dim">Highlights</h4>
+                    <h4 className="mb-3 font-mono text-eyebrow uppercase tracking-widest text-content-dim">
+                      Highlights
+                    </h4>
                     <ul className="flex flex-col gap-2">
                       {project.highlights.map((h) => (
                         <li key={h} className="flex gap-3 text-content-muted">
-                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" strokeWidth={2.5} aria-hidden />
+                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent-2" strokeWidth={2.5} aria-hidden />
                           <span className="text-small leading-relaxed sm:text-body">{h}</span>
                         </li>
                       ))}
@@ -205,7 +211,9 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
 
                 {project.integrations && project.integrations.length > 0 && (
                   <div>
-                    <h4 className="mb-3 font-mono text-eyebrow uppercase tracking-widest text-content-dim">Integrations</h4>
+                    <h4 className="mb-3 font-mono text-eyebrow uppercase tracking-widest text-content-dim">
+                      Integrations
+                    </h4>
                     <ul className="flex flex-wrap gap-2">
                       {project.integrations.map((i) => (
                         <li key={i}>
@@ -227,22 +235,26 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
                   </ul>
                 </div>
 
-                {(project.links.live || project.links.repo) && (
-                  <div className="flex flex-wrap gap-3 pt-1">
-                    {project.links.live && (
-                      <Button href={project.links.live} size="md">
-                        Visit live
-                        <ExternalLink className="h-4 w-4" aria-hidden />
-                      </Button>
-                    )}
-                    {project.links.repo && (
-                      <Button href={project.links.repo} variant="ghost" size="md">
-                        <Github className="h-4 w-4" aria-hidden />
-                        Code
-                      </Button>
-                    )}
-                  </div>
-                )}
+                <div className="flex flex-wrap gap-3 pt-1">
+                  {project.links.live && (
+                    <Button href={project.links.live} size="md">
+                      Visit live
+                      <ExternalLink className="h-4 w-4" aria-hidden />
+                    </Button>
+                  )}
+                  {project.slug && (
+                    <Button href={`/projects/${project.slug}`} variant="ghost" size="md">
+                      Read case study
+                      <ArrowRight className="h-4 w-4" aria-hidden />
+                    </Button>
+                  )}
+                  {project.links.repo && (
+                    <Button href={project.links.repo} variant="ghost" size="md">
+                      <Github className="h-4 w-4" aria-hidden />
+                      Code
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </m.div>

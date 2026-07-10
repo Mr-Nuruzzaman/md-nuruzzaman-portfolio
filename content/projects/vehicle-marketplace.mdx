@@ -1,0 +1,51 @@
+---
+title: SP Used Vehicles — a real-time auction marketplace for Japanese vehicle exports
+summary: A modular-monolith FastAPI marketplace for exporting Japanese used cars, heavy equipment and parts worldwide — with a server-authoritative live auction, bidder wallets, Stripe payments and Persona KYC.
+role: Full-stack engineer — built from scratch at Hedaya Global Solutions
+period: 2025 — Present
+stack:
+  - FastAPI
+  - Python
+  - Next.js 16
+  - React 19
+  - PostgreSQL
+  - Redis
+  - Socket.IO
+  - Stripe
+  - Clerk
+  - Persona
+  - AWS
+live: https://staging.spusedvehicles.com
+---
+
+## The problem & my role
+
+Exporting a used vehicle from Japan is a messy, high-trust transaction: buyers are overseas, listings run into the tens of thousands, money moves before anyone meets, and the most valuable inventory sells through time-boxed auctions where a lost second means a lost car. Hedaya Global Solutions wanted a single platform that could carry all of that — discovery, a live online auction, identity checks, payments, and RORO/container shipping — without the fragility of stitching a dozen services together on day one.
+
+I built the platform from scratch as the full-stack engineer: a FastAPI backend and a Next.js 16 / React 19 frontend, deployed on AWS with CI/CD. My remit covered the domain modelling, the real-time auction engine, the money-handling (wallets, Stripe, refunds), the KYC gating, and the search and shipping surfaces.
+
+## Approach & key decisions
+
+**A modular monolith, not microservices.** The backend is one deployable FastAPI application, but internally it is 49 domain modules — `auction`, `auction_account`, `payment`, `identity_verification`, `shipping`, `listing`, `order`, and so on — each with the same four Clean Architecture / DDD layers (`api`, `application`, `domain`, `infrastructure`). The tempting alternative was to split the auction and payments into separate services up front. I rejected it: with one small team and a product still finding its shape, network boundaries would have bought us distributed-transaction pain and deployment overhead in exchange for scaling we didn't yet need. The module seams are drawn cleanly enough that any one of them *could* be extracted later — but the cost of that split is deferred until there's a reason to pay it. The schema has grown to 276 Alembic migrations against PostgreSQL over the life of the project.
+
+**One ASGI process serves both REST and WebSockets.** Rather than stand up a separate real-time service, the app mounts Socket.IO and FastAPI on a single port (`socketio.ASGIApp(sio, other_asgi_app=create_app())`). Horizontal scale is handled instead by an `AsyncRedisManager` that fans bid events across workers and instances over Redis Pub/Sub. I chose Socket.IO over raw WebSockets specifically for that cross-worker manager and its automatic reconnection; the trade-off — the pinned Socket.IO version can't replay buffered messages after a drop — I handled by having the client re-fetch lot state over REST on reconnect rather than trusting a gap-free stream. Transports are pinned to WebSocket only, which keeps the load balancer free of sticky-session requirements.
+
+**The auction is server-authoritative.** Bidding is eBay-style proxy bidding: a bidder submits a maximum, and the server's resolution engine raises them only as far as it needs to beat the second-highest ceiling by one increment. All of it — increment enforcement, ceiling resolution, wallet locking, leader/outbid transitions — runs on the server; the browser only submits an amount and an optional max. That was a deliberate choice to never trust the client with auction outcomes, and the bid increment is duplicated to the frontend with a comment forcing the two to stay in lock-step.
+
+## What shipped
+
+- **A live proxy auction.** Bids emit an `auction:bid` event into a per-lot room and an admin firehose room; displaced leaders get an outbid notification; every bid writes an immutable history row (placed, auto-counter, outbid, won). A five-minute final-window flag marks bids landing in the closing moments so the UI can treat them with priority.
+- **Bidder wallets.** A full ledger — deposits, top-ups, bid-locks and releases, purchase-applied, refunds — with a withdrawal workflow that moves through pending → verified → approved → sent, plus reject/cancel, each transition holding or releasing funds correctly.
+- **Payments and identity, behind ports.** Stripe sits behind an abstract payment-gateway port with a factory, so a manual gateway can stand in beside it; SetupIntents, PaymentIntents, refunds and signed webhooks are all wired. Persona KYC runs behind its own gateway port and gates the sensitive actions — sign-in, auction deposits, order payment.
+- **Deep faceted search** over cars, heavy equipment and parts — repeatable make/model filters, mileage ranges, and dynamic vehicle specs (fuel type, drive, steering, transmission, colour) modelled as extensible specifications rather than fixed columns.
+- **Order and logistics tooling** — WeasyPrint-generated PDF invoices, RORO and container shipping-cost calculators driven by yard capabilities and per-method rates, USD as the settlement currency with live FX in quotes, and an EN/JA/FR/PT localized frontend.
+
+The codebase carries its own quality gates: 367 backend test files with a 90% coverage floor, and Ruff, mypy, Bandit and pip-audit enforced in Bitbucket Pipelines.
+
+## Impact
+
+The platform is live in staging ahead of launch, carrying the full auction, wallet, payment and shipping flows end to end. The most concrete number I can point to is on the operations side: by moving builds off the production EC2 box into CI, right-sizing instances, and adding Lambda + EventBridge auto-stop scheduling for non-production environments, I cut the monthly AWS bill by roughly 47% — from about \$176 to \$93 a month.
+
+## What I'd do differently
+
+I'd invest earlier in reconnection resilience for the auction stream. The REST-refetch-on-reconnect fallback works, but a bidder on a flaky connection during a soft close is exactly the moment the product can least afford ambiguity — I'd revisit enabling proper buffered replay (the config hook is already reserved for it) and add explicit client-side reconciliation UI so a reconnecting bidder always sees an unambiguous "you are leading / you were outbid" state rather than inferring it from a refetch.

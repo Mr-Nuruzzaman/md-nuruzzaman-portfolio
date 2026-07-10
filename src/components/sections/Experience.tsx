@@ -1,9 +1,25 @@
+import type { ReactNode } from 'react';
 import { Section } from '@/components/ui/Section';
-import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
 import { GradientText } from '@/components/ui/GradientText';
 import { Reveal } from '@/components/animations/Reveal';
 import { experience } from '@/data/experience';
+
+// Percentages and currency amounts get the ember treatment so quantified wins read first.
+const METRIC_SPLIT = /(\$\d[\d.,]*(?:\/mo)?|~?\d+(?:\.\d+)?%)/g;
+const METRIC = /^(?:\$\d[\d.,]*(?:\/mo)?|~?\d+(?:\.\d+)?%)$/;
+
+function highlightMetrics(text: string): ReactNode[] {
+  return text.split(METRIC_SPLIT).map((part, i) =>
+    METRIC.test(part) ? (
+      <span key={i} className="font-medium text-accent-2">
+        {part}
+      </span>
+    ) : (
+      <span key={i}>{part}</span>
+    ),
+  );
+}
 
 export function Experience() {
   return (
@@ -16,58 +32,36 @@ export function Experience() {
         </>
       }
     >
-      <ol className="relative space-y-8 sm:space-y-10">
-        {/* Vertical gradient rail — hidden on mobile */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute left-[7px] top-2 bottom-2 hidden w-px bg-grad-primary sm:block"
-        />
-
+      <ol className="flex flex-col">
         {experience.map((role, i) => (
-          <li key={`${role.company}-${role.start}`} className="relative sm:pl-14">
-            {/* Pulsing dot on the rail */}
-            <span
-              aria-hidden="true"
-              className="absolute left-0 top-2 hidden sm:block"
-            >
-              <span className="relative flex h-4 w-4 items-center justify-center">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-accent/40 motion-safe:animate-ping" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-grad-primary shadow-glow-cyan" />
-              </span>
-            </span>
-
+          <li key={`${role.company}-${role.start}`} className="border-t border-border first:border-t-0">
             <Reveal as="div" delay={i * 0.06}>
-              <Card className="p-5 sm:p-7">
-                <div className="flex flex-col gap-4">
-                  <header className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                    <div className="min-w-0 space-y-1">
-                      <h3 className="text-h3 font-heading font-semibold text-content break-words">
-                        {role.title}{' '}
-                        <span className="text-content-muted">@</span>{' '}
-                        <GradientText>{role.company}</GradientText>
-                      </h3>
-                      <p className="text-sm text-content-muted break-words">
-                        {role.type} <span className="text-content-dim">·</span>{' '}
-                        {role.mode} <span className="text-content-dim">·</span>{' '}
-                        {role.location}
-                      </p>
-                    </div>
-                    <p className="font-mono text-sm text-content-dim sm:shrink-0">
-                      {role.start} <span aria-hidden="true">–</span> {role.end}
-                    </p>
-                  </header>
+              <article className="grid gap-6 py-10 first:pt-0 md:grid-cols-[13rem_1fr] md:gap-10">
+                {/* Meta rail — dates and context in mono, no colored strip */}
+                <div className="flex flex-col gap-2">
+                  <p className="font-mono text-sm text-content">
+                    {role.start} <span aria-hidden="true">–</span> {role.end}
+                  </p>
+                  <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-content-dim">
+                    {role.type} · {role.mode}
+                  </p>
+                  <p className="break-words text-sm text-content-dim">{role.location}</p>
+                </div>
 
-                  <ul className="space-y-2.5">
+                <div className="flex min-w-0 flex-col gap-4">
+                  <h3 className="break-words font-heading text-h3 text-content">
+                    {role.title} <span className="font-display italic text-content-dim">at</span>{' '}
+                    <GradientText>{role.company}</GradientText>
+                  </h3>
+
+                  <ul className="flex flex-col gap-3">
                     {role.bullets.map((bullet) => (
                       <li
                         key={bullet}
-                        className="relative pl-5 text-sm leading-relaxed text-content-muted break-words"
+                        className="grid grid-cols-[auto_1fr] gap-3 break-words text-base leading-relaxed text-content-muted"
                       >
-                        <span
-                          aria-hidden="true"
-                          className="absolute left-0 top-[0.55em] h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-accent/70"
-                        />
-                        {bullet}
+                        <span aria-hidden="true" className="mt-[0.7em] h-px w-4 shrink-0 bg-border" />
+                        <span>{highlightMetrics(bullet)}</span>
                       </li>
                     ))}
                   </ul>
@@ -80,7 +74,7 @@ export function Experience() {
                     ))}
                   </ul>
                 </div>
-              </Card>
+              </article>
             </Reveal>
           </li>
         ))}

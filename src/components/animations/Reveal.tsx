@@ -54,7 +54,15 @@ export function RevealGroup({
 }
 
 /** Child item for RevealGroup — inherits the parent's stagger timeline. */
-export function RevealItem({ y = 24, className, children }: { y?: number; className?: string; children: React.ReactNode }) {
+export function RevealItem({
+  y = 24,
+  className,
+  children,
+}: {
+  y?: number;
+  className?: string;
+  children: React.ReactNode;
+}) {
   const reduced = usePrefersReducedMotion();
   return (
     <m.div

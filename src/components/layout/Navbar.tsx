@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, m } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { profile } from '@/data/profile';
@@ -9,7 +10,9 @@ import { cn } from '@/lib/utils';
 import { useIsDesktop, usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { Button } from '@/components/ui/Button';
 
-/** Sticky nav: blur-on-scroll, hide-on-scroll-down, active-section indicator, mobile drawer. */
+const FOCUSABLE = 'button, a[href], input, [tabindex]:not([tabindex="-1"])';
+
+/** Sticky nav: solid-on-scroll, hide-on-scroll-down, active-section indicator, mobile drawer. */
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -17,9 +20,13 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const isDesktop = useIsDesktop();
   const reduced = usePrefersReducedMotion();
+  // On subpages (/projects/[slug]) bare `#id` anchors are dead — route back to the homepage section.
+  const onHome = usePathname() === '/';
+  const anchor = (id: string) => (onHome ? `#${id}` : `/#${id}`);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
-  // Blur + hide-on-scroll-down.
+  // Solid-on-scroll + hide-on-scroll-down.
   useEffect(() => {
     let last = window.scrollY;
     const onScroll = () => {
@@ -52,19 +59,43 @@ export function Navbar() {
     if (isDesktop) setOpen(false);
   }, [isDesktop]);
 
-  // Lock body scroll + Esc-to-close (returning focus to the hamburger) while the drawer is open.
+  // Lock body scroll, trap focus, and Esc-to-close (returning focus to the hamburger) while the drawer is open.
   useEffect(() => {
     if (!open) return;
     document.body.style.overflow = 'hidden';
+
+    const focusables = () =>
+      drawerRef.current
+        ? Array.from(drawerRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+            (el) => !el.hasAttribute('disabled'),
+          )
+        : [];
+    const raf = requestAnimationFrame(() => focusables()[0]?.focus());
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setOpen(false);
         hamburgerRef.current?.focus();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const f = focusables();
+      if (!f.length) return;
+      const first = f[0]!;
+      const last = f[f.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     };
+
     document.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = '';
+      cancelAnimationFrame(raf);
       document.removeEventListener('keydown', onKey);
     };
   }, [open]);
@@ -76,11 +107,15 @@ export function Navbar() {
       transition={{ duration: 0.35, ease: EASE_SMOOTH }}
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-colors duration-300',
-        scrolled || open ? 'border-b border-border bg-bg/70 backdrop-blur-xl' : 'border-b border-transparent',
+        scrolled || open ? 'border-b border-border bg-bg/95' : 'border-b border-transparent',
       )}
     >
       <nav className="mx-auto flex h-16 max-w-container items-center justify-between px-6 md:px-8">
-        <a href="#top" onClick={() => setOpen(false)} className="font-heading text-lg font-bold text-content">
+        <a
+          href={onHome ? '#top' : '/'}
+          onClick={() => setOpen(false)}
+          className="font-display text-xl italic text-content transition-colors hover:text-accent-2"
+        >
           {profile.brandName}
         </a>
 
@@ -89,10 +124,10 @@ export function Navbar() {
           {NAV_LINKS.map((link) => (
             <li key={link.id}>
               <a
-                href={`#${link.id}`}
+                href={anchor(link.id)}
                 className={cn(
                   'relative rounded-md px-3 py-2 text-small transition-colors',
-                  active === link.id ? 'text-content' : 'text-content-muted hover:text-content',
+                  active === link.id ? 'text-accent-2' : 'text-content-muted hover:text-content',
                 )}
               >
                 {active === link.id && (
@@ -120,7 +155,7 @@ export function Navbar() {
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             aria-controls="mobile-drawer"
-            className="grid h-11 w-11 place-items-center rounded-md border border-border bg-surface/60 text-content-muted transition-colors hover:border-accent hover:text-accent md:hidden"
+            className="grid h-11 w-11 place-items-center rounded-md border border-border bg-surface text-content-muted transition-colors hover:border-border-glow hover:text-accent-2 md:hidden"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -131,22 +166,23 @@ export function Navbar() {
       <AnimatePresence>
         {open && (
           <m.div
+            ref={drawerRef}
             id="mobile-drawer"
             initial={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
             animate={reduced ? { opacity: 1 } : { opacity: 1, height: 'auto' }}
             exit={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: EASE_SMOOTH }}
-            className="overflow-hidden border-t border-border bg-bg/95 backdrop-blur-xl md:hidden"
+            className="overflow-hidden border-t border-border bg-bg md:hidden"
           >
             <ul className="flex flex-col gap-1 px-6 py-4">
               {NAV_LINKS.map((link) => (
                 <li key={link.id}>
                   <a
-                    href={`#${link.id}`}
+                    href={anchor(link.id)}
                     onClick={() => setOpen(false)}
                     className={cn(
                       'block rounded-md px-3 py-3 text-body transition-colors',
-                      active === link.id ? 'bg-surface-2 text-content' : 'text-content-muted hover:text-content',
+                      active === link.id ? 'bg-surface-2 text-accent-2' : 'text-content-muted hover:text-content',
                     )}
                   >
                     {link.label}
@@ -154,7 +190,13 @@ export function Navbar() {
                 </li>
               ))}
               <li className="mt-2">
-                <Button href={profile.resume} variant="ghost" size="sm" className="w-full" onClick={() => setOpen(false)}>
+                <Button
+                  href={profile.resume}
+                  variant="ghost"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => setOpen(false)}
+                >
                   Résumé
                 </Button>
               </li>

@@ -5,6 +5,8 @@ export interface IPlatform {
   label: string;
   url: string;
   color: string;
+  /** Optional standing note — the tier band or percentile the rating/label denotes. */
+  context?: string;
 }
 
 export interface IContest {
@@ -23,6 +25,7 @@ export const platforms: IPlatform[] = [
     label: 'Expert (max)',
     url: 'https://codeforces.com/profile/Jaman_khan',
     color: '#3B82F6',
+    context: 'Expert tier — the 1600–1899 rating band',
   },
   {
     // CodeChef 4★ (1800–1999) tier color is purple.
@@ -32,6 +35,7 @@ export const platforms: IPlatform[] = [
     label: '4★ (max)',
     url: 'https://www.codechef.com/users/jaman_12',
     color: '#A855F7',
+    context: '4★ tier — the 1800–1999 rating band',
   },
   {
     // LeetCode brand accent orange.
@@ -41,6 +45,7 @@ export const platforms: IPlatform[] = [
     label: 'Top 3.44%',
     url: 'https://leetcode.com/Jaman_khan/',
     color: '#FFA116',
+    context: 'Top 3.44% by contest rating',
   },
   {
     // AtCoder 6 Kyu tier color is green.
@@ -52,6 +57,9 @@ export const platforms: IPlatform[] = [
     color: '#3FBF5F',
   },
 ];
+
+/** Month the platform ratings above were last verified (YYYY-MM). */
+export const ratingsAsOf = '2026-07';
 
 export const cpStats = {
   problemsSolved: 3000,

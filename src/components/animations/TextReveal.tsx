@@ -23,7 +23,7 @@ export function TextReveal({
   by = 'word',
   className,
   delay = 0,
-  stagger = by === 'char' ? 0.04 : 0.07,
+  stagger = by === 'char' ? 0.025 : 0.07,
   onMount = false,
   as: Tag = 'span',
 }: TextRevealProps) {
@@ -38,8 +38,8 @@ export function TextReveal({
   // Slide-only mask reveal (the per-unit overflow-hidden wrapper does the hiding).
   // No opacity fade → the hero heading (LCP element) paints immediately.
   const child = {
-    hidden: { y: reduced ? '0%' : '100%' },
-    show: { y: '0%', transition: { duration: 0.9, ease: EASE_EXPO } },
+    hidden: { y: reduced ? '0%' : '110%' },
+    show: { y: '0%', transition: { duration: 0.8, ease: EASE_EXPO } },
   };
 
   const animateProps = onMount
@@ -60,9 +60,7 @@ export function TextReveal({
       <m.span className="inline" variants={container} {...animateProps}>
         {words.map((word, wi) => (
           <span key={wi} className="inline-flex whitespace-nowrap" aria-hidden>
-            {by === 'char'
-              ? Array.from(word).map((ch, ci) => unit(ch, `${wi}-${ci}`))
-              : unit(word, `${wi}`)}
+            {by === 'char' ? Array.from(word).map((ch, ci) => unit(ch, `${wi}-${ci}`)) : unit(word, `${wi}`)}
             {wi < words.length - 1 && <span className="inline-block">&nbsp;</span>}
           </span>
         ))}

@@ -22,7 +22,7 @@ export function Marquee({ items, speed = 30, reverse = false, className, pauseOn
     <div className={cn('group relative flex w-full overflow-hidden', className)}>
       <div
         className={cn(
-          'flex min-w-full shrink-0 items-center whitespace-nowrap animate-marquee',
+          'flex min-w-full shrink-0 animate-marquee items-center whitespace-nowrap',
           pauseOnHover && 'group-hover:[animation-play-state:paused]',
         )}
         style={{ animationDuration: `${speed}s`, animationDirection: reverse ? 'reverse' : 'normal' }}

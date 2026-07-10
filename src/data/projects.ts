@@ -26,7 +26,7 @@ export const projects: IProject[] = [
     blurb:
       'Japan used-vehicle & heavy-equipment export marketplace with a real-time online auction — proxy bidding, bidder wallets, Stripe payments & Persona KYC.',
     description:
-      'Flagship platform at Hedaya Global Solutions (SP Company Ltd) — a large modular-monolith marketplace (FastAPI, Clean Architecture / DDD; ~49 modules, 260+ migrations) for exporting Japanese used cars, heavy equipment and auto parts worldwide. Real-time online auction with proxy/auto-bidding, live Socket.IO bid updates, sniper-time outbid alerts and bidder wallets (top-ups & withdrawals). Deep faceted search, order lifecycle with PDF invoicing, RORO/container shipping calculators, buyer KYC, and multi-currency (live FX) with EN/JA localization. Next.js 16 / React 19 frontend on PostgreSQL + Redis.',
+      'A Japan used-vehicle, heavy-equipment and parts export marketplace I built from scratch at Hedaya Global Solutions — live in staging ahead of launch, with a server-authoritative real-time auction (eBay-style proxy bidding, bidder wallets, Stripe payments, Persona KYC) running end to end. Under the hood it is a FastAPI modular monolith on Clean Architecture / DDD: 49 domain modules and 276 PostgreSQL migrations, one ASGI process serving REST and Socket.IO with Redis fan-out across workers. Deep faceted search, WeasyPrint PDF invoicing, RORO/container shipping calculators, and multi-currency (live FX) behind a Next.js 16 / React 19 frontend — where I also cut monthly AWS cost by ~47% via CI-based builds and auto-stop scheduling.',
     tech: ['FastAPI', 'Next.js', 'PostgreSQL', 'Redis', 'Socket.IO', 'Stripe', 'Clerk', 'AWS'],
     links: { live: 'https://staging.spusedvehicles.com' },
     images: [
@@ -45,7 +45,7 @@ export const projects: IProject[] = [
       'Deep faceted search: make, model, registration, price, mileage, engine, transmission, steering',
       'Cars, heavy equipment & auto parts; order lifecycle with PDF invoicing',
       'RORO / container shipping calculators; multi-currency with live FX; EN/JA localization',
-      'Modular monolith — FastAPI, Clean Architecture / DDD, ~49 modules, 260+ migrations',
+      'Modular monolith — FastAPI, Clean Architecture / DDD, 49 modules, 276 migrations',
     ],
     integrations: [
       'Stripe (Visa/MC/Amex)',
@@ -62,7 +62,7 @@ export const projects: IProject[] = [
     blurb:
       'Multi-tenant hospital & doctor-appointment platform — one Spring Boot API behind 4 role-based React portals + native Android apps, with OTP auth, scheduling, prescriptions & hospital accounting.',
     description:
-      'A multi-tenant hospital and doctor-appointment platform for the Bangladesh market. A single Spring Boot 3 / Java 17 API (83 JPA entities, ~57 controllers; domain-partitioned modular monolith with 16 RBAC role types) powers four role-based React portals (patient, doctor, hospital, admin) plus native Kotlin / Jetpack Compose Android apps. End-to-end appointment lifecycle — doctor discovery, schedule & working-time management, slot booking with serials, consultation queue, and prescription authoring — alongside hospital-ERP depth: double-entry accounting (chart of accounts, journal, general ledger, reports), billing & collections, pharmacy, HRM and inventory. OTP auth, Bangladesh SMS gateways, and independent CI/CD per app.',
+      'A live, multi-tenant hospital platform for the Bangladesh market (shifahealthtech.com) where one Spring Boot 3 / Java 17 API — 82 JPA entities, 59 controllers, 16 RBAC roles — is the single source of truth behind four role-based React portals (patient, doctor, hospital, admin) and a native Kotlin / Jetpack Compose Android app. It carries the full appointment lifecycle (doctor discovery, schedules, server-assigned slot serials, consultation queue, structured prescriptions) and genuine hospital-ERP depth: double-entry accounting that refuses to post unbalanced entries, with a general ledger and financial reports, plus billing, collections and a pharmacy module. Bangladesh-localized OTP over real SSL Wireless / BulkSMSBD SMS integrations, RS256-signed JWTs, and per-app CI/CD.',
     tech: ['Java 17', 'Spring Boot 3', 'React 18', 'MySQL', 'JWT + OTP', 'Kotlin / Compose', 'AWS S3', 'JasperReports'],
     links: { live: 'https://shifahealthtech.com' },
     images: ['/images/al-shifa.jpg', '/images/preview-2.svg', '/images/preview-3.svg', '/images/preview-1.svg'],
@@ -71,7 +71,7 @@ export const projects: IProject[] = [
     status: 'Live',
     role: 'Full-stack engineer',
     highlights: [
-      'One Spring Boot 3 API (83 entities, ~57 controllers) serving 4 React portals + native Android apps',
+      'One Spring Boot 3 API (82 entities, 59 controllers) serving 4 React portals + a native Android app',
       '16 RBAC role types — patient, doctor, doctor assistant/attendant, hospital, diagnostic, pharmacy, admin',
       'End-to-end appointments: discovery, schedules, slot booking with serials, consultation queue, prescriptions',
       'Hospital ERP: double-entry accounting (chart of accounts, journal, ledger, reports), billing, HRM, inventory',
@@ -90,9 +90,10 @@ export const projects: IProject[] = [
   {
     slug: 'digital-brokerage',
     title: 'Digital Brokerage Platform',
-    blurb: 'Spring Boot hexagonal backend for a stock brokerage — PDF portfolios, automated email, e-KYC NID extraction.',
+    blurb:
+      'Spring Boot hexagonal backend for a stock brokerage — PDF portfolios, automated email, e-KYC NID extraction.',
     description:
-      'Backend systems for a digital stock-brokerage platform at BRAC EPL Stock Brokerage Ltd. Spring Boot with Hexagonal Architecture, automated PDF portfolio generation, scheduled email delivery pipelines, and Python-based NID (National ID) extraction for e-KYC verification. Internal enterprise service — no public link.',
+      'Backend systems at BRAC EPL Stock Brokerage that automated the two flows a brokerage cannot run by hand — client portfolio statements and new-client onboarding. I built automated PDF portfolio generation, scheduled email delivery pipelines, and a Python-based NID (National ID) extraction step feeding e-KYC verification, on a Spring Boot service structured with Hexagonal Architecture so the volatile edges (documents, mail, identity extraction) stay swappable without disturbing the core. Internal enterprise service — no public link.',
     tech: ['Java', 'Spring Boot', 'Python', 'MySQL'],
     links: {},
     images: ['/images/preview-3.svg', '/images/preview-1.svg', '/images/preview-2.svg'],
@@ -112,7 +113,7 @@ export const projects: IProject[] = [
     blurb:
       'Multi-company restaurant SaaS — QR table ordering, order & branch-level inventory, accounting, and role-based operations.',
     description:
-      'Multi-company restaurant management SaaS (Spring Boot 3 / React 18) where each company runs multiple branches. QR-code table ordering, order management with invoice & barcode printing, branch-level inventory (purchases, suppliers, stock, returns), integrated accounting (transactions, daily balance sheet, PDF vouchers), discounts/promotions, and role-based users (Admin / Owner / Employee / Customer) with JasperReports + Chart.js reporting.',
+      'A live multi-company restaurant SaaS (restaurant.boniksheba.com) that runs QR table ordering and full branch-level operations for many companies from one company-scoped Spring Boot 3 / React 18 service — 61 entities, tenants isolated by company foreign keys and composite constraints rather than a database per tenant. Guests scan a table QR to order; staff boards pick up new orders on a short poll (a deliberate choice — no realtime layer to keep the system stateless and simple). Branch-level inventory (purchases, suppliers, stock, returns), daily-balance accounting with printable vouchers, discount and reward-point campaigns, and role-based access, with JasperReports PDFs and Chart.js dashboards.',
     tech: ['Java 17', 'Spring Boot 3', 'React 18', 'MySQL', 'JWT / OAuth2', 'AWS S3', 'JasperReports'],
     links: { live: 'https://restaurant.boniksheba.com' },
     images: ['/images/restozen.jpg', '/images/preview-1.svg', '/images/preview-3.svg', '/images/preview-2.svg'],
@@ -127,7 +128,14 @@ export const projects: IProject[] = [
       'Integrated accounting: transactions, daily balance sheet, PDF vouchers',
       'JasperReports + Chart.js reporting & analytics',
     ],
-    integrations: ['AWS S3', 'Gmail SMTP', 'Google Maps', 'JWT / OAuth2 (self-issued)', 'JasperReports + react-pdf', 'QR & Barcode'],
+    integrations: [
+      'AWS S3',
+      'Gmail SMTP',
+      'Google Maps',
+      'JWT / OAuth2 (self-issued)',
+      'JasperReports + react-pdf',
+      'QR & Barcode',
+    ],
   },
   {
     slug: 'grocery',
@@ -135,7 +143,7 @@ export const projects: IProject[] = [
     blurb:
       'Multi-company POS, inventory & light-manufacturing ERP powering a live grocery chain — branch stock transfers, production/BOM, accounting & QR ordering.',
     description:
-      'A multi-company / multi-branch Point-of-Sale, inventory and light-manufacturing ERP (internally ZentoPOS) deployed live for a grocery retail operation. Full POS + inventory lifecycle (purchases → approvals → branch stock → sales → returns), a mini-MRP manufacturing module (Bill of Materials, production batches, quality control), integrated accounting, and a customer-facing QR ordering flow alongside the admin ERP. Spring Boot 3 / Java 17 backend (layered, company-scoped multi-tenancy, UUID keys) with a React admin dashboard.',
+      'A live POS, inventory and light-manufacturing ERP (internally ZentoPOS) deployed for a grocery chain that also makes its own goods — its defining property is that a Bill-of-Materials production run and a POS sale draw down the same stock inside one transaction boundary, so inventory can never disagree with itself. One Spring Boot 3 / Java 17 application (company-scoped multi-tenancy, UUID keys) carries the full retail lifecycle (purchases → approvals → warehouse-to-branch allocation → sales → returns/exchanges), a mini-MRP pipeline (BOM, production batches, quality control), daily-balance accounting with auto-printed vouchers, and customer-facing QR ordering — behind a React admin dashboard with RSA-signed JWT auth and scheduled alert/report jobs.',
     tech: ['Java 17', 'Spring Boot 3', 'React', 'MySQL', 'Spring Security (JWT)', 'JPA / Hibernate', 'AWS S3'],
     links: { live: 'https://grocery.boniksheba.com' },
     images: ['/images/grocery.jpg', '/images/preview-2.svg', '/images/preview-1.svg', '/images/preview-3.svg'],

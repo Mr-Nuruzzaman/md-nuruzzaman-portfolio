@@ -1,0 +1,45 @@
+---
+title: RestoZen — a multi-company restaurant SaaS with QR ordering
+summary: A Spring Boot 3 / React 18 restaurant platform where each company runs many branches — QR table ordering, branch-level inventory, and daily-balance accounting under one company-scoped database.
+role: Full-stack engineer
+stack:
+  - Java 17
+  - Spring Boot 3
+  - React 18
+  - MySQL
+  - JWT / OAuth2
+  - AWS S3
+  - JasperReports
+live: https://restaurant.boniksheba.com
+---
+
+## The problem & my role
+
+A restaurant chain isn't one restaurant repeated. Each branch has its own tables, stock, staff and takings, but the owner wants one view across all of them, and the same software has to serve completely different companies without their data ever touching. On top of that, the front-of-house reality is a diner scanning a QR code at a table and expecting an order to reach the kitchen. RestoZen had to hold both the multi-tenant back office and the guest-facing ordering flow.
+
+I built it full-stack — a Spring Boot 3 / Java 17 backend (61 entities) and a React 18 dashboard plus a customer ordering app.
+
+## Approach & key decisions
+
+**A shared, company-scoped database — not a database per tenant.** Every tenant-scoped record carries a company foreign key; 26 entities are scoped this way, with composite uniqueness constraints like `(company_id, name)` on branches and `(company_id, national_id)` on employees, and a further branch dimension on the operational tables. The alternative — a schema or database per company — would have isolated tenants more strongly but multiplied the operational cost of every migration and made cross-company administration painful. For this size of product, a single well-constrained schema with disciplined scoping was the right trade: one migration, one place to reason about, isolation enforced by the constraints rather than by infrastructure.
+
+**QR ordering over polling, not a real-time push layer.** A diner scans a table QR, which deep-links to an order keyed by company, branch and table; the order posts through a customer endpoint. Staff order boards then pull new orders on a fixed 30-second interval, using an `isNotified` flag on the order to surface what's new. This is a genuine design decision, not an omission: I deliberately did **not** add WebSockets/STOMP/SSE. A restaurant floor doesn't need sub-second latency to the kitchen screen, and polling on a short timer kept the system stateless (session policy is fully stateless) and dead-simple to deploy and reason about — no socket lifecycle, no sticky sessions, no reconnection edge cases. The cost is up to a 30-second delay on the board, which the workflow comfortably absorbs.
+
+**Self-issued JWTs validated as a resource server.** Auth mints RSA-signed tokens with an issuer of `self`, then validates them through Spring Security's OAuth2 resource-server machinery. That gave me the ergonomics and hardening of the OAuth2 stack without taking on a third-party identity provider the product didn't need.
+
+## What shipped
+
+- **Multi-company, multi-branch operations** with role-based access — system owner, admin, employee and customer, plus employee sub-roles (branch manager, billing, waiter, kitchen).
+- **QR-code table ordering** for guests, with orders routed by company/branch/table and a customer-facing ordering app.
+- **Order management** with client-side invoice and barcode printing (react-pdf, JsBarcode), discounts and reward-point campaigns applied at checkout.
+- **Branch-level inventory** — purchases, suppliers, stock and branch-stock, product returns and warehouse returns, and allocations from warehouse to branch.
+- **Daily accounting** — transactions with purposes, a daily balance sheet computed per branch (opening balance plus cash sales and credits, less debits), and printable transaction vouchers, with JasperReports for server-side PDFs and Chart.js dashboards.
+- **Integrations** kept deliberately light — AWS S3 for media, Gmail SMTP for mail, Google Places autocomplete on the frontend. Payment methods (cash, card, bKash) are internal billing labels only; there is no live payment gateway in the system, and I've been careful not to imply one.
+
+## Impact
+
+RestoZen is live at restaurant.boniksheba.com running multi-company, multi-branch restaurant operations. Without production metrics to cite, the honest measure of the design is operational simplicity: choosing company-scoped rows over per-tenant databases and polling over sockets means the whole platform is a single stateless service against a single schema — easy to deploy, easy to onboard a new company into, and with very few moving parts that can fail at 8pm on a Friday.
+
+## What I'd do differently
+
+The 30-second poll is the right call for the kitchen board but a blunt instrument everywhere it's reused — several dashboard lists poll on the same timer whether or not anything is likely to have changed. I'd move to a single lightweight "what changed since X" endpoint and back off the interval when a board is idle, to stop hammering the API for no reason. I'd also pull the hardcoded Google Maps key and SMTP credentials out of committed files into environment configuration — they're a footgun waiting to happen.

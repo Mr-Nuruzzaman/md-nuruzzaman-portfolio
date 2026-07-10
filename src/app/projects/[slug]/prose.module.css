@@ -1,0 +1,63 @@
+/* Styles the server-rendered markdown HTML (s.markdown() → dangerouslySetInnerHTML).
+   Token-only via @apply — no hardcoded hex, no @tailwindcss/typography. */
+
+.prose {
+  @apply font-sans text-body-lg text-content-muted;
+}
+
+.prose > :first-child {
+  @apply mt-0;
+}
+
+.prose h2 {
+  @apply mb-5 mt-16 font-display text-h3 font-normal leading-tight text-content;
+}
+
+.prose h3 {
+  @apply mb-3 mt-10 font-display text-[1.35rem] font-normal leading-snug text-content;
+}
+
+.prose p {
+  @apply my-5 leading-[1.85];
+}
+
+.prose strong {
+  @apply font-semibold text-content;
+}
+
+.prose em {
+  @apply italic text-content;
+}
+
+.prose a {
+  @apply text-accent-2 underline decoration-1 underline-offset-2 transition-colors hover:text-accent;
+}
+
+.prose ul {
+  @apply my-6 flex flex-col gap-3 pl-0;
+}
+
+.prose li {
+  @apply relative list-none pl-6 leading-[1.7];
+}
+
+.prose li::before {
+  content: '—';
+  @apply absolute left-0 text-accent;
+}
+
+.prose li strong {
+  @apply text-content;
+}
+
+.prose code {
+  @apply rounded-sm bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent-2;
+}
+
+.prose pre {
+  @apply my-6 overflow-x-auto rounded-md border border-border bg-surface p-4 font-mono text-small;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-content-muted;
+}

@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import { Section } from '@/components/ui/Section';
-import { Card } from '@/components/ui/Card';
 import { GradientText } from '@/components/ui/GradientText';
 import { Reveal } from '@/components/animations/Reveal';
+import { CountUp } from '@/components/animations/CountUp';
 import { ExperienceStat } from '@/components/ui/ExperienceStat';
 import { profile } from '@/data/profile';
 
@@ -13,6 +13,15 @@ const facts = [
 ] as const;
 
 export function About() {
+  // Split the positioning line so its closing clause carries the ember emphasis.
+  const [lead, emphasis] = profile.positioning.split(' — ');
+
+  const stats = [
+    { value: <ExperienceStat suffix="" />, label: 'yrs building' },
+    { value: <CountUp to={3000} suffix="+" />, label: 'problems solved' },
+    { value: <CountUp to={2} suffix="×" />, label: 'ICPC regionalist' },
+  ];
+
   return (
     <Section
       id="about"
@@ -22,54 +31,68 @@ export function About() {
           Builder &amp; <GradientText>competitive programmer</GradientText>
         </>
       }
+      className="py-20 md:py-40"
     >
-      <div className="grid gap-8 md:grid-cols-[1.4fr_1fr] md:gap-14 lg:gap-20">
-        {/* Left: bio narrative */}
-        <div className="min-w-0 space-y-6">
-          {profile.bio.map((paragraph, i) => (
-            <Reveal key={i} as="p" delay={i * 0.08}>
-              <span className="text-content-muted text-base leading-relaxed break-words sm:text-lg">
-                {paragraph}
-              </span>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Right: quick-facts glass card */}
-        <Reveal delay={0.12}>
-          <Card className="flex flex-col gap-6 p-6 sm:gap-8 sm:p-8">
+      <div className="grid gap-12 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
+        {/* Left rail: portrait, mono stat ledger, quick facts */}
+        <Reveal as="div" className="md:col-span-5 lg:col-span-4">
+          <div className="flex flex-col gap-8">
             {/* Headshot (cropped from an ICPC Asia Dhaka Regional Contest photo) */}
-            <div className="relative mx-auto aspect-square w-full max-w-[16rem] overflow-hidden rounded-2xl border border-border sm:max-w-none">
+            <div className="relative aspect-[4/5] w-full max-w-[20rem] overflow-hidden rounded-lg border border-border">
               <Image
                 src="/images/headshot.jpg"
                 alt={`${profile.name}, ${profile.title}`}
                 fill
-                sizes="(min-width: 768px) 20rem, 16rem"
+                sizes="(min-width: 768px) 20rem, 100vw"
                 className="object-cover"
               />
             </div>
 
-            <dl className="flex flex-col gap-5">
-              <div className="flex flex-col gap-1 border-b border-border pb-4">
-                <dt className="font-mono text-eyebrow uppercase tracking-widest text-accent">Experience</dt>
-                <dd className="text-content-muted break-words">
-                  <ExperienceStat />
-                </dd>
-              </div>
-              {facts.map((fact) => (
+            <dl className="flex flex-col">
+              {stats.map((stat, i) => (
                 <div
-                  key={fact.label}
-                  className="flex flex-col gap-1 border-b border-border pb-4 last:border-none last:pb-0"
+                  key={i}
+                  className="flex items-baseline justify-between gap-4 border-b border-border py-3 first:pt-0 last:border-b-0"
                 >
-                  <dt className="font-mono text-eyebrow uppercase tracking-widest text-accent">
-                    {fact.label}
-                  </dt>
-                  <dd className="text-content-muted break-words">{fact.value}</dd>
+                  <dt className="font-mono text-eyebrow uppercase tracking-[0.2em] text-content-dim">{stat.label}</dt>
+                  <dd className="font-mono text-xl tabular-nums text-content">{stat.value}</dd>
                 </div>
               ))}
             </dl>
-          </Card>
+
+            <dl className="flex flex-col gap-4">
+              {facts.map((fact) => (
+                <div key={fact.label} className="flex flex-col gap-1">
+                  <dt className="font-mono text-eyebrow uppercase tracking-[0.2em] text-content-dim">{fact.label}</dt>
+                  <dd className="break-words text-sm text-content-muted">{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </Reveal>
+
+        {/* Right: serif pull-quote from the positioning line, then the bio narrative */}
+        <div className="flex flex-col gap-10 md:col-span-7 lg:col-span-8">
+          <Reveal as="div">
+            <blockquote className="font-display text-[1.75rem] leading-[1.15] text-content sm:text-[2.25rem] lg:text-[2.6rem]">
+              {lead}
+              {emphasis && (
+                <>
+                  {' — '}
+                  <GradientText>{emphasis}</GradientText>
+                </>
+              )}
+            </blockquote>
+          </Reveal>
+
+          <div className="flex flex-col gap-6">
+            {profile.bio.map((paragraph, i) => (
+              <Reveal key={i} as="p" delay={i * 0.08}>
+                <span className="break-words text-base leading-relaxed text-content-muted sm:text-lg">{paragraph}</span>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </div>
     </Section>
   );

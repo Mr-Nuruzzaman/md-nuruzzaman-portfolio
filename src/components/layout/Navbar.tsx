@@ -121,7 +121,7 @@ export function Navbar() {
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-1 md:flex">
-          {NAV_LINKS.map((link) => (
+          {NAV_LINKS.map((link, i) => (
             <li key={link.id}>
               <a
                 href={anchor(link.id)}
@@ -137,6 +137,7 @@ export function Navbar() {
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
+                <span className="mr-1 font-mono text-[10px] text-content-dim">{String(i + 1).padStart(2, '0')}</span>
                 {link.label}
               </a>
             </li>
@@ -175,7 +176,7 @@ export function Navbar() {
             className="overflow-hidden border-t border-border bg-bg md:hidden"
           >
             <ul className="flex flex-col gap-1 px-6 py-4">
-              {NAV_LINKS.map((link) => (
+              {NAV_LINKS.map((link, i) => (
                 <li key={link.id}>
                   <a
                     href={anchor(link.id)}
@@ -185,6 +186,9 @@ export function Navbar() {
                       active === link.id ? 'bg-surface-2 text-accent-2' : 'text-content-muted hover:text-content',
                     )}
                   >
+                    <span className="mr-2 font-mono text-[10px] text-content-dim">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
                     {link.label}
                   </a>
                 </li>

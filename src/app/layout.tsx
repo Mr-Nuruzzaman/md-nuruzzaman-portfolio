@@ -7,6 +7,7 @@ import { MotionProvider } from '@/components/layout/MotionProvider';
 import { SmoothScroll } from '@/components/layout/SmoothScroll';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
 import { CursorGlow } from '@/components/layout/CursorGlow';
+import { SideRails } from '@/components/layout/SideRails';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import '@/styles/globals.css';
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MotionProvider>
           <ScrollProgress />
           <CursorGlow />
+          <SideRails />
           <Navbar />
           <SmoothScroll>
             {children}

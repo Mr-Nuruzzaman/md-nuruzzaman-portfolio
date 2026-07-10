@@ -25,6 +25,7 @@ export function Experience() {
   return (
     <Section
       id="experience"
+      index="02"
       eyebrow="Experience"
       heading={
         <>

@@ -1,6 +1,13 @@
 import { profile } from '@/data/profile';
 import { Container } from '@/components/ui/Container';
-import { AtCoderIcon, CodeChefIcon, CodeforcesIcon, GitHubIcon, LeetCodeIcon, LinkedInIcon } from '@/components/ui/BrandIcons';
+import {
+  AtCoderIcon,
+  CodeChefIcon,
+  CodeforcesIcon,
+  GitHubIcon,
+  LeetCodeIcon,
+  LinkedInIcon,
+} from '@/components/ui/BrandIcons';
 
 const SOCIALS = [
   { href: profile.socials.github, label: 'GitHub', Icon: GitHubIcon },

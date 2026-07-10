@@ -6,7 +6,7 @@ You are writing ONE section component for a Next.js 15 + Tailwind + Framer Motio
 
 ### UI primitives — `@/components/ui/*`
 - `<Container wide?={boolean} className? />` — centered max-width (1200 / 1440 wide).
-- `<Section id? wide? contained?={boolean} eyebrow?={string} heading?={ReactNode} className? >` — vertical-rhythm wrapper. `id` is the nav anchor. Renders eyebrow (mono accent) + `<h2>` heading automatically; put body as children. Use `contained={false}` for full-bleed.
+- `<Section id? wide? contained?={boolean} index?={string} eyebrow?={string} heading?={ReactNode} className? >` — vertical-rhythm wrapper. `id` is the nav anchor. Renders eyebrow (mono accent) + `<h2>` heading automatically; put body as children. Use `contained={false}` for full-bleed. `index` (e.g. `'01'`) prefixes the eyebrow as `01 — Eyebrow` (mono dim folio numeral); a growing hairline `RuleReveal` draws in under the header.
 - `<Button href?={string} variant?='primary'|'ghost'|'icon' size?='sm'|'md' >` — renders `<Link>` if `href` given (external auto opens new tab), else `<button>`. Gradient primary, ghost outline.
 - `<Card interactive?={boolean} className? />` — glass surface, hover lift + glow. Default interactive.
 - `<Chip glow?={boolean} className? />` — pill tag, mono. `glow` = accent border on hover.

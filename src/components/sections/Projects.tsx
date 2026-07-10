@@ -155,6 +155,7 @@ export function Projects() {
   return (
     <Section
       id="projects"
+      index="03"
       eyebrow="Selected work"
       heading={
         <>

@@ -3,6 +3,7 @@
 import { useActionState, useState } from 'react';
 import { Check, Copy, Mail, Send } from 'lucide-react';
 import { Section } from '@/components/ui/Section';
+import { RuleReveal } from '@/components/animations/RuleReveal';
 import { Button } from '@/components/ui/Button';
 import { GradientText } from '@/components/ui/GradientText';
 import {
@@ -53,10 +54,13 @@ export function Contact() {
         {/* Editorial column — heading + availability + direct affordances */}
         <div className="flex flex-col">
           <Reveal>
-            <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-accent">Contact</p>
+            <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-accent">
+              <span className="text-content-dim">06 — </span>Contact
+            </p>
             <h2 className="mt-5 max-w-lg font-heading text-h2 font-normal leading-[1.05] text-content md:text-display">
               Let&apos;s build something <GradientText>worthwhile</GradientText>.
             </h2>
+            <RuleReveal className="mt-6 md:mt-8" />
           </Reveal>
 
           <Reveal delay={0.08} className="mt-8 flex flex-col gap-3">

@@ -8,6 +8,7 @@ export function Skills() {
   return (
     <Section
       id="skills"
+      index="05"
       eyebrow="Toolkit"
       heading={
         <>

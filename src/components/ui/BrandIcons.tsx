@@ -64,13 +64,7 @@ export function GitHubIcon({ size, className, ...props }: IconProps) {
 /** LinkedIn — official blue rounded square with the white "in". Rest brightened so the square reads on dark. */
 export function LinkedInIcon({ size, className, ...props }: IconProps) {
   return (
-    <Base
-      box="0 0 256 256"
-      size={size}
-      className={className}
-      rest="[filter:grayscale(1)_brightness(1.5)]"
-      {...props}
-    >
+    <Base box="0 0 256 256" size={size} className={className} rest="[filter:grayscale(1)_brightness(1.5)]" {...props}>
       <path
         fill="#0A66C2"
         d="M0 18.338C0 8.216 8.474 0 18.92 0h218.16C247.53 0 256 8.216 256 18.338v219.327C256 247.79 247.53 256 237.08 256H18.92C8.475 256 0 247.791 0 237.668V18.335z"

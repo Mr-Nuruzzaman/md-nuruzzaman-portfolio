@@ -21,6 +21,7 @@ export function CompetitiveProgramming() {
   return (
     <Section
       id="cp"
+      index="04"
       eyebrow="Competitive programming"
       heading={
         <>

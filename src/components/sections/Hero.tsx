@@ -5,7 +5,7 @@ import { m } from 'framer-motion';
 import { ArrowRight, ChevronDown, FileDown } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
-import { GradientText } from '@/components/ui/GradientText';
+import { ResumeSeal } from '@/components/ui/ResumeSeal';
 import {
   AtCoderIcon,
   CodeChefIcon,
@@ -17,6 +17,7 @@ import {
 import { TextReveal } from '@/components/animations/TextReveal';
 import { CountUp } from '@/components/animations/CountUp';
 import { Magnetic } from '@/components/animations/Magnetic';
+import { SignatureName } from '@/components/animations/SignatureName';
 import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { profile } from '@/data/profile';
 import { platforms } from '@/data/competitive';
@@ -43,16 +44,6 @@ export function Hero() {
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.7, ease: EASE_EXPO, delay },
         };
-
-  // Signature headline reveal — masked per-word rise, staggered. No opacity so the name paints in place.
-  const nameContainer = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
-  };
-  const nameWord = {
-    hidden: { y: reduced ? '0%' : '110%' },
-    show: { y: '0%', transition: { duration: 0.7, ease: EASE_EXPO } },
-  };
 
   const socials = [
     { key: 'github', href: profile.socials.github, label: 'GitHub', icon: <GitHubIcon size={20} /> },
@@ -82,24 +73,10 @@ export function Hero() {
               {profile.title} · {profile.location}
             </m.p>
 
-            {/* Name — signature moment: masked rise per word, transform-only so the LCP text paints in place. */}
-            <m.h1
-              className="font-display text-display leading-[0.92] text-content"
-              variants={nameContainer}
-              initial="hidden"
-              animate="show"
-            >
-              <span className="inline-flex overflow-hidden whitespace-nowrap pb-[0.1em] align-bottom">
-                <m.span className="inline-block" variants={nameWord}>
-                  Md
-                </m.span>
-              </span>{' '}
-              <span className="inline-flex overflow-hidden whitespace-nowrap pb-[0.1em] align-bottom">
-                <m.span className="inline-block" variants={nameWord}>
-                  <GradientText>Nuruzzaman</GradientText>
-                </m.span>
-              </span>
-            </m.h1>
+            {/* Name — signature moment: serif glyphs stroke themselves in, then the fill fades up. */}
+            <h1 className="font-display text-display leading-[0.95] text-content">
+              <SignatureName />
+            </h1>
 
             {/* Positioning / tagline */}
             <TextReveal
@@ -111,10 +88,10 @@ export function Hero() {
               className="mt-8 max-w-2xl text-pretty text-body-lg text-content-muted"
             />
 
-            {/* Dual CTA */}
+            {/* Dual CTA — the wax-seal résumé badge stands in for the ghost button on sm+ */}
             <m.div
               {...fade(0.4)}
-              className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
+              className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
             >
               <Magnetic className="w-full sm:w-auto">
                 <Button href="#projects" className="w-full sm:w-auto">
@@ -122,10 +99,11 @@ export function Hero() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Magnetic>
-              <Button href={profile.resume} variant="ghost" className="w-full sm:w-auto">
+              <Button href={profile.resume} variant="ghost" className="w-full sm:hidden">
                 Résumé
                 <FileDown className="h-4 w-4" />
               </Button>
+              <ResumeSeal className="ml-1 hidden sm:grid" />
             </m.div>
           </div>
         </div>

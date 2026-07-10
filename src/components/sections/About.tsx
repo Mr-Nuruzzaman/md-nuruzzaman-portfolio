@@ -25,6 +25,7 @@ export function About() {
   return (
     <Section
       id="about"
+      index="01"
       eyebrow="About"
       heading={
         <>

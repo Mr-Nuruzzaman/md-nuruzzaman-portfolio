@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { RuleReveal } from '@/components/animations/RuleReveal';
 import { Container } from './Container';
 
 interface SectionProps extends React.HTMLAttributes<HTMLElement> {
@@ -6,6 +7,8 @@ interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   wide?: boolean;
   /** Set false to opt out of the centered Container (e.g. full-bleed marquee). */
   contained?: boolean;
+  /** Folio numeral (e.g. '01') rendered before the eyebrow as `01 — Eyebrow`. */
+  index?: string;
   eyebrow?: string;
   heading?: React.ReactNode;
 }
@@ -14,11 +17,27 @@ interface SectionProps extends React.HTMLAttributes<HTMLElement> {
  * Vertical-rhythm section with optional eyebrow + heading.
  * `id` doubles as the scroll anchor target for the navbar.
  */
-export function Section({ id, wide, contained = true, eyebrow, heading, className, children, ...props }: SectionProps) {
+export function Section({
+  id,
+  wide,
+  contained = true,
+  index,
+  eyebrow,
+  heading,
+  className,
+  children,
+  ...props
+}: SectionProps) {
   const header = (eyebrow || heading) && (
     <header className="mb-12 md:mb-16">
-      {eyebrow && <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-accent">{eyebrow}</p>}
+      {eyebrow && (
+        <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-accent">
+          {index && <span className="text-content-dim">{index} — </span>}
+          {eyebrow}
+        </p>
+      )}
       {heading && <h2 className="mt-3 font-heading text-h2 font-normal text-content">{heading}</h2>}
+      <RuleReveal className="mt-6 md:mt-8" />
     </header>
   );
 

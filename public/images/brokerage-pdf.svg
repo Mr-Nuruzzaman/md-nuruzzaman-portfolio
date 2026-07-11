@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Automated PDF portfolio statement pipeline from data to delivery">
+  <defs>
+    <radialGradient id="warm" cx="50%" cy="42%" r="62%">
+      <stop offset="0%" stop-color="#B4441F" stop-opacity="0.08"/>
+      <stop offset="55%" stop-color="#B4441F" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#0E0D0B" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="ember" markerWidth="9" markerHeight="9" refX="6.5" refY="3.2" orient="auto">
+      <path d="M0,0 L6.5,3.2 L0,6.4 Z" fill="#E8582C"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="1000" fill="#0E0D0B"/>
+  <rect x="0" y="0" width="1600" height="1000" fill="url(#warm)"/>
+
+  <!-- folio / title block -->
+  <text x="80" y="88" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="5" fill="#8A8375">DIGITAL BROKERAGE — 02</text>
+  <line x1="80" y1="104" x2="520" y2="104" stroke="#2B2822" stroke-width="1"/>
+  <text x="80" y="150" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="40" letter-spacing="2" fill="#EDE9E0">PDF PORTFOLIO PIPELINE</text>
+  <text x="80" y="182" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="3" fill="#6E685C">CLIENT STATEMENTS · GENERATED, NOT KEYED BY HAND</text>
+
+  <!-- pipeline rail -->
+  <line x1="210" y1="300" x2="1330" y2="300" stroke="#2B2822" stroke-width="1" stroke-dasharray="2 9"/>
+  <text x="1330" y="290" text-anchor="end" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="2" fill="#6E685C">AUTOMATED · NO MANUAL STEP</text>
+
+  <!-- stage 01: portfolio data -->
+  <text x="100" y="410" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#E8582C">01</text>
+  <rect x="100" y="430" width="220" height="150" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <ellipse cx="155" cy="478" rx="26" ry="9" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M129 478 v22 a26 9 0 0 0 52 0 v-22" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="129" y1="489" x2="129" y2="489" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M129 489 a26 9 0 0 0 52 0" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <text x="120" y="540" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">Portfolio data</text>
+  <text x="120" y="566" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">holdings · MySQL</text>
+
+  <!-- stage 02: template -->
+  <text x="380" y="410" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#E8582C">02</text>
+  <rect x="380" y="430" width="220" height="150" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <rect x="404" y="454" width="52" height="66" rx="4" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="414" y1="470" x2="446" y2="470" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="414" y1="484" x2="446" y2="484" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="414" y1="498" x2="436" y2="498" stroke="#3B372F" stroke-width="1.5"/>
+  <text x="400" y="548" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">Template</text>
+  <text x="400" y="574" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">statement layout</text>
+
+  <!-- stage 03: compose -->
+  <text x="660" y="410" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#E8582C">03</text>
+  <rect x="660" y="430" width="220" height="150" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <path d="M690 494 l16 -16 M690 494 l16 16" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M712 478 h26 M712 494 h26 M712 510 h26" stroke="#3B372F" stroke-width="1.5"/>
+  <text x="680" y="548" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">Compose</text>
+  <text x="680" y="574" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">data → template</text>
+
+  <!-- stage 04: render -->
+  <text x="940" y="410" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#E8582C">04</text>
+  <rect x="940" y="430" width="220" height="150" rx="14" fill="#191713" stroke="#E8582C" stroke-width="1.5"/>
+  <path d="M964 454 h40 l14 14 v52 h-54 z" fill="none" stroke="#E8582C" stroke-width="1.5"/>
+  <path d="M1004 454 v14 h14" fill="none" stroke="#E8582C" stroke-width="1.5"/>
+  <text x="974" y="508" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="16" letter-spacing="1" fill="#F2926B">PDF</text>
+  <text x="960" y="548" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">Render</text>
+  <text x="960" y="574" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">PDF document</text>
+
+  <!-- stage 05: delivery -->
+  <text x="1220" y="410" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#E8582C">05</text>
+  <rect x="1220" y="430" width="220" height="150" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <rect x="1244" y="458" width="56" height="40" rx="4" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M1244 462 l28 22 l28 -22" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <text x="1240" y="548" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">Delivery</text>
+  <text x="1240" y="574" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">to the client</text>
+
+  <!-- flow arrows -->
+  <line x1="320" y1="505" x2="380" y2="505" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+  <line x1="600" y1="505" x2="660" y2="505" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+  <line x1="880" y1="505" x2="940" y2="505" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+  <line x1="1160" y1="505" x2="1220" y2="505" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+
+  <!-- caption -->
+  <text x="80" y="700" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">Behind a document port on the hexagonal core — the render adapter can change without touching portfolio logic.</text>
+</svg>

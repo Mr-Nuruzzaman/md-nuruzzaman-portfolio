@@ -47,7 +47,7 @@ function ProjectCard({ project, feature, onOpen }: { project: IProject; feature?
               fill
               sizes={feature ? '(min-width: 1024px) 45vw, 100vw' : '(min-width: 768px) 50vw, 100vw'}
               onError={() => setErrored(true)}
-              className="object-cover transition-transform duration-500 ease-expo group-hover/poster:scale-[1.03]"
+              className="bg-surface-2 object-contain transition-transform duration-500 ease-expo group-hover/poster:scale-[1.03]"
             />
           ) : (
             <span className="absolute inset-0 grid place-items-center">
@@ -76,7 +76,7 @@ function ProjectCard({ project, feature, onOpen }: { project: IProject; feature?
                   className="relative -ml-4 h-9 w-14 overflow-hidden rounded-md border border-border-glow shadow-lg"
                   style={{ zIndex: 5 - i }}
                 >
-                  <Image src={src} alt="" fill sizes="80px" className="object-cover" />
+                  <Image src={src} alt="" fill sizes="80px" className="bg-surface-2 object-contain" />
                 </span>
               ))}
               <span className="z-10 ml-1.5 rounded-full bg-bg/85 px-2 py-0.5 font-mono text-xs text-content">

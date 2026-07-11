@@ -139,7 +139,7 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
                     alt={`${project.title} preview ${active + 1}`}
                     fill
                     sizes="672px"
-                    className="object-cover"
+                    className="bg-surface-2 object-contain"
                     onError={() => setErrored((s) => new Set(s).add(activeSrc))}
                   />
                 ) : (
@@ -176,7 +176,7 @@ export function ProjectModal({ project, onClose }: { project: IProject | null; o
                         i === active ? 'border-accent-2 opacity-100' : 'border-border opacity-60 hover:opacity-100',
                       )}
                     >
-                      <Image src={src} alt="" fill sizes="120px" className="object-cover" />
+                      <Image src={src} alt="" fill sizes="120px" className="bg-surface-2 object-contain" />
                     </button>
                   ))}
                 </div>

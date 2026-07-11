@@ -14,14 +14,12 @@ import {
   LeetCodeIcon,
   LinkedInIcon,
 } from '@/components/ui/BrandIcons';
-import { TextReveal } from '@/components/animations/TextReveal';
 import { CountUp } from '@/components/animations/CountUp';
 import { Magnetic } from '@/components/animations/Magnetic';
 import { SignatureName } from '@/components/animations/SignatureName';
 import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { profile } from '@/data/profile';
 import { platforms } from '@/data/competitive';
-import { EASE_EXPO } from '@/lib/constants';
 
 /** Editorial hero: monumental Instrument Serif name, left-aligned, quiet bottom metadata rail. */
 export function Hero() {
@@ -35,15 +33,6 @@ export function Hero() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  const fade = (delay: number) =>
-    reduced
-      ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.3, delay } }
-      : {
-          initial: { opacity: 0, y: 16 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.7, ease: EASE_EXPO, delay },
-        };
 
   const socials = [
     { key: 'github', href: profile.socials.github, label: 'GitHub', icon: <GitHubIcon size={20} /> },
@@ -68,10 +57,13 @@ export function Hero() {
         {/* Centered statement block */}
         <div className="flex flex-1 flex-col justify-center">
           <div className="max-w-4xl">
-            {/* Eyebrow — quiet mono metadata */}
-            <m.p {...fade(0.05)} className="mb-6 font-mono text-eyebrow uppercase tracking-[0.28em] text-content-dim">
+            {/* Eyebrow — quiet mono metadata. CSS entrance: visible from first paint, no hydration wait. */}
+            <p
+              className="rise-in mb-6 font-mono text-eyebrow uppercase tracking-[0.28em] text-content-dim"
+              style={{ '--rise-delay': '0.05s' } as React.CSSProperties}
+            >
               {profile.title} · {profile.location}
-            </m.p>
+            </p>
 
             {/* Name — signature moment: serif glyphs stroke themselves in, then the fill fades up. */}
             <h1 className="font-display text-display leading-[0.95] text-content">
@@ -79,19 +71,17 @@ export function Hero() {
             </h1>
 
             {/* Positioning / tagline */}
-            <TextReveal
-              text={profile.tagline}
-              by="word"
-              onMount
-              delay={0.25}
-              as="p"
-              className="mt-8 max-w-2xl text-pretty text-body-lg text-content-muted"
-            />
+            <p
+              className="rise-in mt-8 max-w-2xl text-pretty text-body-lg text-content-muted"
+              style={{ '--rise-delay': '0.25s' } as React.CSSProperties}
+            >
+              {profile.tagline}
+            </p>
 
             {/* Dual CTA — the wax-seal résumé badge stands in for the ghost button on sm+ */}
-            <m.div
-              {...fade(0.4)}
-              className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
+            <div
+              className="rise-in mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
+              style={{ '--rise-delay': '0.4s' } as React.CSSProperties}
             >
               <Magnetic className="w-full sm:w-auto">
                 <Button href="#projects" className="w-full sm:w-auto">
@@ -104,14 +94,14 @@ export function Hero() {
                 <FileDown className="h-4 w-4" />
               </Button>
               <ResumeSeal className="ml-1 hidden sm:grid" />
-            </m.div>
+            </div>
           </div>
         </div>
 
         {/* Bottom metadata rail — CP ratings + socials, quiet mono treatment */}
-        <m.div
-          {...fade(0.5)}
-          className="mt-16 flex flex-col gap-8 border-t border-border pt-8 sm:flex-row sm:items-end sm:justify-between"
+        <div
+          className="rise-in mt-16 flex flex-col gap-8 border-t border-border pt-8 sm:flex-row sm:items-end sm:justify-between"
+          style={{ '--rise-delay': '0.5s' } as React.CSSProperties}
         >
           <ul className="flex flex-wrap items-baseline gap-x-8 gap-y-3" aria-label="Competitive programming ratings">
             {platforms.map((p) => (
@@ -132,7 +122,7 @@ export function Hero() {
               </Magnetic>
             ))}
           </div>
-        </m.div>
+        </div>
       </Container>
 
       {/* Scroll cue */}

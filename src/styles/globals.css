@@ -182,6 +182,23 @@ html.lenis body {
     sig-fill 0.55s cubic-bezier(0.4, 0, 0.2, 1) calc(var(--sig-delay) + 0.7s) both;
 }
 
+/* Hero entrance — CSS-driven like .sig-word so the whole composition rises from first
+   paint instead of waiting for hydration (framer initial:opacity-0 left the page blank
+   around the name on slow connections). */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--rise-delay, 0s) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

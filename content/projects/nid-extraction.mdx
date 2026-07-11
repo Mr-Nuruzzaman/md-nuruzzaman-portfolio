@@ -1,35 +1,41 @@
 ---
-title: NID Extraction Service — automating e-KYC onboarding at a stock brokerage
-summary: A Python-based National ID extraction service feeding e-KYC verification at BRAC EPL Stock Brokerage — bounded behind a port in a Spring Boot hexagonal backend, alongside automated PDF portfolio statements and scheduled email delivery.
+title: NID Extraction & Verification Service — automated e-KYC for brokerage onboarding
+summary: A standalone Python service that extracts identity data from NID card images and verifies it against Election Commission registration data — one API call that turns manual identity checks into an automated verification status.
 role: Backend engineer — BRAC EPL Stock Brokerage Ltd.
 period: 2024 — 2025
 stack:
   - Python
-  - Java
-  - Spring Boot
+  - FastAPI
+  - EasyOCR
   - MySQL
 ---
 
 ## The problem & my role
 
-A brokerage cannot onboard a client until their identity is verified against a national ID — and doing that by hand means a person reading NID cards and retyping fields into the system, slow and error-prone at exactly the moment a new client is forming their first impression. As a backend engineer at BRAC EPL Stock Brokerage I built the NID extraction service that automates that step, feeding the e-KYC verification flow, as part of the internal backend systems behind client onboarding and portfolio reporting.
+A brokerage cannot legally open an account until the client's identity is verified against their National ID. Done by hand, that means someone reading NID cards, retyping fields, and eyeballing them against records — slow, error-prone, and sitting at the most compliance-critical point of the onboarding funnel. At BRAC EPL Stock Brokerage I built the service that automates the whole step end to end.
 
 This is an internal enterprise service with no public link, so this write-up stays at the level of what I actually built rather than screenshots or live numbers.
 
+## How it works
+
+The brokerage platform's onboarding service makes one call to this service with the **front and back images of the client's NID card**. From there the service owns the full verification flow:
+
+1. **Extraction** — an EasyOCR-based pipeline reads both card images and extracts the identity fields off the document.
+2. **Verification against the Election Commission** — the extracted data is sent to the EC's NID verification provider and matched against the Election Commission's real registration data, so verification is against the authoritative source rather than just what's printed on the card.
+3. **Persistence** — the extracted data and the verification outcome are stored.
+4. **Response** — the service returns a proper verification status to the onboarding service, which decides how the client's application proceeds.
+
 ## Approach & key decisions
 
-**Extraction is a Python problem, not a JVM problem.** Pulling structured data off a national ID is image-processing and extraction work, not business logic. The path of least resistance would have been to bolt a Java OCR library into the existing Spring Boot service and keep everything in one runtime. I took the other route: the extraction step lives as its own Python-based service, because Python is where the practical tooling for this class of problem is — and identity extraction is precisely the part of a KYC pipeline most likely to be reworked as documents, regulation, or accuracy demands change.
+**A standalone service, not a module.** Identity verification has its own dependencies (image processing, an external government-data provider), its own failure modes, and its own change cadence. Keeping it as a separate service the brokerage platform calls over REST means onboarding logic stays clean — it asks one question ("is this identity verified?") and gets one status back — and the extraction/verification internals can evolve without touching the platform.
 
-**Bounded behind a port.** The Spring Boot backend is structured on hexagonal architecture (ports and adapters), and the extraction service is exactly the kind of volatile edge that pattern exists for: the core onboarding logic talks to an identity-extraction port and does not care that a Python process answers it. Swapping or improving the extractor never touches the domain core.
+**Python + EasyOCR for the extraction, FastAPI at the edge.** Reading structured fields off card images is an image-processing problem, and Python is where the practical tooling for that lives — EasyOCR handles the recognition (including Bangla-script text on NID cards), and FastAPI serves the verification endpoint the platform calls. The alternative — forcing extraction into the JVM stack of the calling platform — would have coupled the hardest-to-change part of the pipeline to the codebase least suited to it.
 
-## What shipped
-
-- **Python-based NID extraction** feeding the e-KYC verification flow for client onboarding — the service this case study is about.
-- The surrounding backend work in the same system: **automated PDF portfolio generation** for client statements and **scheduled email delivery pipelines** so statements go out without manual intervention — Spring Boot / Java over MySQL, hexagonal throughout.
+**Verify against the source, not the card.** Extraction alone only proves what the card *says*. The service's job is the match against the Election Commission's registration data via the EC verification provider — that's what makes the returned status meaningful for e-KYC compliance.
 
 ## Impact
 
-Because this is an internal system, I don't have public metrics to point to, and I won't invent any. The substance is that identity capture during onboarding — a flow the brokerage cannot legally skip and previously the most manual step in the funnel — became automated extraction plus verification instead of human retyping, and it is structured so the extractor can evolve without disturbing the core.
+Because this is an internal system, I don't have public metrics to point to, and I won't invent any. The substance: identity verification — previously the most manual, compliance-sensitive step in opening a brokerage account — became a single automated API call that extracts, verifies against government records, stores, and answers with a status.
 
 ## What I'd do differently
 

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Service boundary poster: the Python NID extraction service sits between the Digital Brokerage onboarding caller and the external Election Commission NID verification provider, with a data store beneath it">
+  <defs>
+    <radialGradient id="warm" cx="50%" cy="44%" r="60%">
+      <stop offset="0%" stop-color="#B4441F" stop-opacity="0.07"/>
+      <stop offset="55%" stop-color="#B4441F" stop-opacity="0.025"/>
+      <stop offset="100%" stop-color="#0E0D0B" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="ember" markerWidth="9" markerHeight="9" refX="6.5" refY="3.2" orient="auto">
+      <path d="M0,0 L6.5,3.2 L0,6.4 Z" fill="#E8582C"/>
+    </marker>
+    <marker id="return" markerWidth="9" markerHeight="9" refX="6.5" refY="3.2" orient="auto">
+      <path d="M0,0 L6.5,3.2 L0,6.4 Z" fill="#8A8375"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="1000" fill="#0E0D0B"/>
+  <rect x="0" y="0" width="1600" height="1000" fill="url(#warm)"/>
+
+  <!-- folio / title block -->
+  <text x="80" y="88" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="5" fill="#8A8375">BRAC EPL · NID EXTRACTION SERVICE — 02</text>
+  <line x1="80" y1="104" x2="560" y2="104" stroke="#2B2822" stroke-width="1"/>
+  <text x="80" y="150" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="40" letter-spacing="2" fill="#EDE9E0">SERVICE BOUNDARY</text>
+  <text x="80" y="182" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="3" fill="#6E685C">PYTHON · FASTAPI · EASYOCR (BANGLA + EN) · MYSQL — CALLER, EXTERNAL, STORE</text>
+
+  <!-- ============ LEFT · CALLER ============ -->
+  <text x="90" y="400" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#8A8375">CALLER</text>
+  <rect x="90" y="424" width="300" height="212" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <text x="118" y="480" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="22" letter-spacing="1" fill="#EDE9E0">Digital Brokerage</text>
+  <text x="118" y="508" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="22" letter-spacing="1" fill="#EDE9E0">onboarding</text>
+  <line x1="118" y1="528" x2="362" y2="528" stroke="#2B2822" stroke-width="1"/>
+  <text x="118" y="564" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">REST — sends front + back</text>
+  <text x="118" y="588" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">NID images, reads status</text>
+  <text x="118" y="616" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="16" letter-spacing="1" fill="#6E685C">client onboarding platform</text>
+
+  <!-- ============ CENTER · PYTHON NID EXTRACTION SERVICE ============ -->
+  <text x="600" y="278" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#E8582C">NID EXTRACTION SERVICE · PYTHON</text>
+  <rect x="600" y="300" width="400" height="460" rx="16" fill="#191713" stroke="#E8582C" stroke-width="1.5"/>
+  <text x="632" y="352" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="26" letter-spacing="1" fill="#F2926B">Python · FastAPI</text>
+  <line x1="632" y1="372" x2="968" y2="372" stroke="#2B2822" stroke-width="1"/>
+
+  <!-- internal stages -->
+  <rect x="632" y="392" width="336" height="58" rx="8" fill="#0E0D0B" stroke="#3B372F" stroke-width="1"/>
+  <text x="654" y="420" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">01</text>
+  <text x="692" y="427" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="1" fill="#EDE9E0">FastAPI image intake</text>
+
+  <rect x="632" y="460" width="336" height="58" rx="8" fill="#0E0D0B" stroke="#3B372F" stroke-width="1"/>
+  <text x="654" y="488" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">02</text>
+  <text x="692" y="495" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="1" fill="#EDE9E0">EasyOCR extraction</text>
+
+  <rect x="632" y="528" width="336" height="58" rx="8" fill="#0E0D0B" stroke="#3B372F" stroke-width="1"/>
+  <text x="654" y="556" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">03</text>
+  <text x="692" y="563" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="1" fill="#EDE9E0">EC match — external call</text>
+
+  <rect x="632" y="596" width="336" height="58" rx="8" fill="#0E0D0B" stroke="#3B372F" stroke-width="1"/>
+  <text x="654" y="624" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">04</text>
+  <text x="692" y="631" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="1" fill="#EDE9E0">MySQL persistence</text>
+
+  <rect x="632" y="664" width="336" height="58" rx="8" fill="#0E0D0B" stroke="#3B372F" stroke-width="1"/>
+  <text x="654" y="692" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">05</text>
+  <text x="692" y="699" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="1" fill="#EDE9E0">Verification status</text>
+
+  <!-- ============ RIGHT · EC PROVIDER (external) ============ -->
+  <text x="1210" y="400" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#8A8375">EXTERNAL</text>
+  <text x="1400" y="400" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="3" fill="#E8582C">3RD PARTY</text>
+  <rect x="1210" y="424" width="300" height="212" rx="14" fill="#191713" stroke="#3B372F" stroke-width="1.5" stroke-dasharray="3 8"/>
+  <text x="1238" y="480" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">EC NID verification</text>
+  <text x="1238" y="508" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">provider</text>
+  <line x1="1238" y1="528" x2="1482" y2="528" stroke="#2B2822" stroke-width="1"/>
+  <text x="1238" y="564" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">gateway to Election</text>
+  <text x="1238" y="588" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">Commission registration data</text>
+  <text x="1238" y="616" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="16" letter-spacing="1" fill="#6E685C">authorised NID lookup</text>
+
+  <!-- ============ BOTTOM · DATA STORE ============ -->
+  <text x="650" y="836" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#8A8375">DATA STORE</text>
+  <rect x="600" y="858" width="400" height="96" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <ellipse cx="656" cy="894" rx="24" ry="8" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M632 894 v28 a24 8 0 0 0 48 0 v-28" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M632 908 a24 8 0 0 0 48 0" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <text x="700" y="900" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="20" letter-spacing="1" fill="#EDE9E0">MySQL — extracted data + result</text>
+  <text x="700" y="928" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="16" letter-spacing="1" fill="#6E685C">persisted for audit &amp; re-read</text>
+
+  <!-- ============ BOUNDARY ARROWS ============ -->
+  <!-- caller -> service (request) -->
+  <line x1="390" y1="512" x2="600" y2="512" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+  <text x="415" y="498" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">images</text>
+  <!-- service -> caller (response, back) -->
+  <line x1="600" y1="552" x2="390" y2="552" stroke="#8A8375" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#return)"/>
+  <text x="415" y="580" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">status</text>
+
+  <!-- service -> EC provider (external, dashed) -->
+  <line x1="1000" y1="512" x2="1210" y2="512" stroke="#E8582C" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#ember)"/>
+  <text x="1030" y="498" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">match</text>
+  <!-- EC -> service (result, back) -->
+  <line x1="1210" y1="552" x2="1000" y2="552" stroke="#8A8375" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#return)"/>
+  <text x="1030" y="580" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">result</text>
+
+  <!-- service -> store (write) -->
+  <line x1="800" y1="760" x2="800" y2="858" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+  <text x="816" y="815" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">write</text>
+
+  <!-- ============ CAPTION ============ -->
+  <text x="80" y="726" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="17" letter-spacing="1" fill="#6E685C">One clear boundary:</text>
+  <text x="80" y="750" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="17" letter-spacing="1" fill="#6E685C">the platform trusts a</text>
+  <text x="80" y="774" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="17" letter-spacing="1" fill="#6E685C">status, not the internals.</text>
+</svg>

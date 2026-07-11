@@ -89,27 +89,22 @@ export const projects: IProject[] = [
   },
   {
     slug: 'nid-extraction',
-    title: 'NID Extraction Service — e-KYC Onboarding',
+    title: 'NID Extraction & Verification Service',
     blurb:
-      'Python-based National ID extraction feeding e-KYC verification at a stock brokerage — bounded behind a port in a Spring Boot hexagonal backend.',
+      'Python service powering e-KYC at a stock brokerage — extracts data from NID card images and verifies it against Election Commission registration data, returning a verification status to onboarding.',
     description:
-      'The service that automated identity capture for client onboarding at BRAC EPL Stock Brokerage: a Python-based NID (National ID) extraction step feeding e-KYC verification, replacing manual retyping of ID fields at the most compliance-critical point of the funnel. It lives as its own Python service — extraction is an image-processing problem, not JVM business logic — called through an identity-extraction port in a Spring Boot backend structured with Hexagonal Architecture, so the extractor can evolve without touching the domain core. Built alongside automated PDF portfolio statements and scheduled email delivery pipelines in the same system. Internal enterprise service — no public link.',
-    tech: ['Python', 'Java', 'Spring Boot', 'MySQL'],
+      'The standalone identity-verification service behind client onboarding at BRAC EPL Stock Brokerage. The brokerage platform sends front and back images of a client’s National ID card; the Python service (FastAPI, EasyOCR) extracts the data fields from the images, calls the Election Commission’s NID verification provider to match them against the EC’s real registration data, stores the data and result, and returns a response with the proper verification status to the onboarding flow — turning the most compliance-critical step of opening a brokerage account into a single automated call. Internal enterprise service — no public link.',
+    tech: ['Python', 'FastAPI', 'EasyOCR', 'MySQL'],
     links: {},
-    images: [
-      '/images/brokerage-ekyc.svg',
-      '/images/brokerage-hexagonal.svg',
-      '/images/brokerage-pdf.svg',
-      '/images/brokerage-email.svg',
-    ],
+    images: ['/images/nid-flow.svg', '/images/nid-service.svg'],
     featured: true,
     status: 'Internal · BRAC EPL',
     role: 'Backend engineer',
     highlights: [
-      'Python-based NID extraction for e-KYC verification — automated identity capture for onboarding',
-      'Bounded behind an identity-extraction port: Hexagonal (ports & adapters) Spring Boot backend',
-      'Automated PDF portfolio generation for client statements',
-      'Scheduled automated email delivery pipelines',
+      'Accepts NID front + back images from the brokerage onboarding service over a single API call',
+      'EasyOCR-based extraction pulls the identity fields off both sides of the card (incl. Bangla script)',
+      'Verifies extracted data against Election Commission registration records via the EC NID verification provider',
+      'Stores extracted data + verification result and returns a proper verification status to onboarding',
     ],
   },
   {

@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="NID verification sequence: brokerage onboarding calls the Python NID extraction service, which extracts fields, matches them against the Election Commission verification provider, stores the result, and returns a verification status">
+  <defs>
+    <radialGradient id="warm" cx="50%" cy="40%" r="64%">
+      <stop offset="0%" stop-color="#B4441F" stop-opacity="0.08"/>
+      <stop offset="55%" stop-color="#B4441F" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#0E0D0B" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="ember" markerWidth="9" markerHeight="9" refX="6.5" refY="3.2" orient="auto">
+      <path d="M0,0 L6.5,3.2 L0,6.4 Z" fill="#E8582C"/>
+    </marker>
+    <marker id="ink" markerWidth="9" markerHeight="9" refX="6.5" refY="3.2" orient="auto">
+      <path d="M0,0 L6.5,3.2 L0,6.4 Z" fill="#3B372F"/>
+    </marker>
+    <marker id="return" markerWidth="9" markerHeight="9" refX="6.5" refY="3.2" orient="auto">
+      <path d="M0,0 L6.5,3.2 L0,6.4 Z" fill="#8A8375"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="1000" fill="#0E0D0B"/>
+  <rect x="0" y="0" width="1600" height="1000" fill="url(#warm)"/>
+
+  <!-- folio / title block -->
+  <text x="80" y="88" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="5" fill="#8A8375">BRAC EPL · NID EXTRACTION SERVICE — 01</text>
+  <line x1="80" y1="104" x2="560" y2="104" stroke="#2B2822" stroke-width="1"/>
+  <text x="80" y="150" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="40" letter-spacing="2" fill="#EDE9E0">NID VERIFICATION FLOW</text>
+  <text x="80" y="182" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="19" letter-spacing="3" fill="#6E685C">FRONT + BACK NID → EXTRACT → MATCH VS ELECTION COMMISSION → STATUS</text>
+
+  <!-- ============ STEP 01 · CLIENT SCAN ============ -->
+  <text x="90" y="290" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#8A8375">01 · CLIENT</text>
+  <rect x="90" y="312" width="300" height="230" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <!-- front card -->
+  <rect x="118" y="346" width="140" height="88" rx="6" fill="#0E0D0B" stroke="#3B372F" stroke-width="1.5"/>
+  <rect x="132" y="362" width="36" height="42" rx="3" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <circle cx="150" cy="376" r="8" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M139 400 a11 11 0 0 1 22 0" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="182" y1="368" x2="242" y2="368" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="182" y1="384" x2="242" y2="384" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="182" y1="400" x2="224" y2="400" stroke="#3B372F" stroke-width="1.5"/>
+  <!-- back card -->
+  <rect x="222" y="346" width="140" height="88" rx="6" fill="#0E0D0B" stroke="#3B372F" stroke-width="1.5"/>
+  <rect x="236" y="362" width="112" height="14" rx="2" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="236" y1="392" x2="348" y2="392" stroke="#3B372F" stroke-width="1.5"/>
+  <line x1="236" y1="408" x2="348" y2="408" stroke="#3B372F" stroke-width="1.5"/>
+  <text x="118" y="470" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">Scan NID card</text>
+  <text x="118" y="500" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#8A8375">front + back images</text>
+  <text x="118" y="524" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">during onboarding</text>
+
+  <!-- ============ STEP 02 · BROKERAGE ONBOARDING ============ -->
+  <text x="440" y="290" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#8A8375">02 · CALLER</text>
+  <rect x="440" y="312" width="300" height="230" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <text x="468" y="368" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="22" letter-spacing="1" fill="#EDE9E0">Digital Brokerage</text>
+  <text x="468" y="396" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="22" letter-spacing="1" fill="#EDE9E0">onboarding</text>
+  <line x1="468" y1="416" x2="712" y2="416" stroke="#2B2822" stroke-width="1"/>
+  <text x="468" y="452" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">POST both images to</text>
+  <text x="468" y="476" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">the extraction service</text>
+  <text x="468" y="516" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">awaits verification status</text>
+
+  <!-- ============ STEP 03 · PYTHON EXTRACTION SERVICE (key node) ============ -->
+  <text x="790" y="290" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#E8582C">03 · EXTRACTION SERVICE</text>
+  <rect x="790" y="312" width="300" height="230" rx="14" fill="#191713" stroke="#E8582C" stroke-width="1.5"/>
+  <text x="818" y="366" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="24" letter-spacing="1" fill="#F2926B">Python · FastAPI</text>
+  <line x1="818" y1="384" x2="1062" y2="384" stroke="#2B2822" stroke-width="1"/>
+  <text x="818" y="420" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">EasyOCR extraction —</text>
+  <text x="818" y="448" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#EDE9E0">Name · Date of birth</text>
+  <text x="818" y="476" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#EDE9E0">NID number · Address</text>
+  <text x="818" y="516" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">then calls out to verify</text>
+
+  <!-- ============ STEP 04 · EC VERIFICATION PROVIDER (external) ============ -->
+  <text x="1140" y="290" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#8A8375">04 · VERIFY</text>
+  <text x="1300" y="290" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="3" fill="#E8582C">EXTERNAL</text>
+  <rect x="1140" y="312" width="330" height="230" rx="14" fill="#191713" stroke="#3B372F" stroke-width="1.5" stroke-dasharray="3 8"/>
+  <text x="1168" y="368" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">EC NID verification</text>
+  <text x="1168" y="396" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="21" letter-spacing="1" fill="#EDE9E0">provider</text>
+  <line x1="1168" y1="416" x2="1442" y2="416" stroke="#2B2822" stroke-width="1"/>
+  <text x="1168" y="452" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">match extracted fields</text>
+  <text x="1168" y="476" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">against Election Commission</text>
+  <text x="1168" y="500" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#B8B0A0">registration data</text>
+  <text x="1168" y="528" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="16" letter-spacing="1" fill="#6E685C">returns match / no-match</text>
+
+  <!-- ============ FORWARD FLOW ARROWS ============ -->
+  <line x1="390" y1="418" x2="440" y2="418" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+  <line x1="740" y1="418" x2="790" y2="418" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+  <!-- external call is dashed -->
+  <line x1="1090" y1="418" x2="1140" y2="418" stroke="#E8582C" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#ember)"/>
+
+  <!-- ============ STEP 05 · STORE ============ -->
+  <text x="790" y="628" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#8A8375">05 · PERSIST</text>
+  <rect x="790" y="650" width="300" height="150" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <!-- cylinder store glyph -->
+  <ellipse cx="850" cy="700" rx="26" ry="9" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M824 700 v34 a26 9 0 0 0 52 0 v-34" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <path d="M824 717 a26 9 0 0 0 52 0" fill="none" stroke="#3B372F" stroke-width="1.5"/>
+  <text x="896" y="694" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="20" letter-spacing="1" fill="#EDE9E0">MySQL — store</text>
+  <text x="896" y="720" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="20" letter-spacing="1" fill="#EDE9E0">data + result</text>
+  <text x="896" y="758" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="16" letter-spacing="1" fill="#6E685C">audit trail for onboarding</text>
+
+  <!-- extraction service -> store -->
+  <line x1="940" y1="542" x2="940" y2="650" stroke="#E8582C" stroke-width="2.5" marker-end="url(#ember)"/>
+  <text x="956" y="600" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375">verified result</text>
+
+  <!-- ============ STEP 06 · RETURN STATUS ============ -->
+  <text x="90" y="628" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="3" fill="#8A8375">06 · RESPONSE</text>
+  <rect x="90" y="650" width="620" height="150" rx="14" fill="#191713" stroke="#2B2822" stroke-width="1"/>
+  <circle cx="146" cy="712" r="20" fill="none" stroke="#E8582C" stroke-width="2"/>
+  <path d="M136 712 l7 8 l14 -17" fill="none" stroke="#E8582C" stroke-width="2.5"/>
+  <text x="184" y="702" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="22" letter-spacing="1" fill="#EDE9E0">Verification status returned</text>
+  <text x="184" y="732" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#8A8375">to the brokerage onboarding service</text>
+  <text x="184" y="764" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="17" letter-spacing="1" fill="#6E685C">verified · not verified · needs review</text>
+
+  <!-- response arrow flowing BACK: store/service down to response -->
+  <path d="M790 725 L710 725" fill="none" stroke="#8A8375" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#return)"/>
+  <text x="726" y="682" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="15" letter-spacing="2" fill="#8A8375" text-anchor="end">status</text>
+
+  <!-- ============ CAPTION ============ -->
+  <text x="80" y="872" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">A standalone Python/FastAPI service owns extraction + verification — EasyOCR reads the Bangla + English NID text, results land in MySQL.</text>
+  <text x="80" y="900" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" letter-spacing="1" fill="#6E685C">The Election Commission match runs through an authorised NID verification provider — the one external hop, drawn dashed.</text>
+</svg>

@@ -1,10 +1,3 @@
-'use client';
-
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-
-// useLayoutEffect on the client, useEffect on the server (avoids the SSR warning).
-const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
-
 // SVG user-space metrics shared by every word so their baselines line up exactly.
 const FONT = 100; // internal glyph size in user units
 const BASELINE = 100; // baseline y within the viewBox
@@ -17,14 +10,16 @@ const PAD_X = 8; // horizontal room for italic overhang + stroke
 const HEIGHT_EM = VB_HEIGHT / FONT; // 1.10em
 const BASELINE_SHIFT_EM = (VB_TOP + VB_HEIGHT - BASELINE) / FONT; // 0.30em below baseline
 
-// Generous per-character outline length for the dash animation. Overshooting the real
-// outline just means the draw completes a touch early inside its duration — what it buys
-// is a pure-CSS animation that starts at first paint instead of waiting for hydration
-// and a JS measurement (which used to hold the finished name on screen, then replay).
+// Generous per-character outline length for the dash animation (overshoot only means the
+// draw completes a touch early inside its duration; keeps the animation pure CSS).
 const LEN_PER_CHAR = 170;
 
 interface SignatureWordProps {
   text: string;
+  /** Exact advance width at FONT size, measured once with the shipped Instrument Serif.
+   *  Hardcoded so the viewBox never changes after hydration — a runtime re-measure used
+   *  to snap the layout (two lines → one line) once JS loaded. */
+  width: number;
   /** tailwind fill-* + stroke-* pair for the ink colour */
   colorClass: string;
   italic?: boolean;
@@ -33,25 +28,9 @@ interface SignatureWordProps {
 
 /**
  * One word of the signature. The stroke draw + fill fade run as CSS keyframes (`.sig-word`
- * in globals.css) from the very first paint — no hydration dependency. A hidden twin still
- * measures the advance width, but only to tighten the viewBox after mount.
+ * in globals.css) from the very first paint — no hydration dependency, no layout shift.
  */
-function SignatureWord({ text, colorClass, italic, delay }: SignatureWordProps) {
-  const measureRef = useRef<SVGTextElement>(null);
-  const [length, setLength] = useState<number | null>(null);
-
-  useIsoLayoutEffect(() => {
-    if (measureRef.current) setLength(measureRef.current.getComputedTextLength());
-  }, [text]);
-
-  // Estimated width keeps layout stable until the (optional) measurement refines it.
-  const width = length ?? text.length * 58;
-  const glyphStyle = {
-    fontFamily: 'var(--font-display)',
-    fontStyle: italic ? ('italic' as const) : ('normal' as const),
-    fontSize: FONT,
-  };
-
+function SignatureWord({ text, width, colorClass, italic, delay }: SignatureWordProps) {
   return (
     <svg
       viewBox={`0 ${VB_TOP} ${width + PAD_X * 2} ${VB_HEIGHT}`}
@@ -64,18 +43,15 @@ function SignatureWord({ text, colorClass, italic, delay }: SignatureWordProps) 
       }}
       aria-hidden
     >
-      {/* invisible twin — refines the viewBox width once mounted */}
-      <text ref={measureRef} x={PAD_X} y={BASELINE} className={colorClass} style={glyphStyle} visibility="hidden">
-        {text}
-      </text>
-
       <text
         x={PAD_X}
         y={BASELINE}
         className={`sig-word ${colorClass}`}
         style={
           {
-            ...glyphStyle,
+            fontFamily: 'var(--font-display)',
+            fontStyle: italic ? 'italic' : 'normal',
+            fontSize: FONT,
             strokeWidth: 1.1,
             paintOrder: 'stroke',
             '--sig-len': text.length * LEN_PER_CHAR,
@@ -93,14 +69,16 @@ function SignatureWord({ text, colorClass, italic, delay }: SignatureWordProps) 
  * Editorial hero name that writes itself: the serif glyphs stroke in left→right, then the
  * fill fades up ("Md" in content ink, italic "Nuruzzaman" in ember). Renders real text for
  * assistive tech; the visible glyphs are in the first-paint DOM and animate via CSS only.
+ * Word widths are compile-time constants measured from the shipped font (Instrument Serif
+ * 400 at 100 user units): "Md" 111.2, italic "Nuruzzaman" 491.
  */
 export function SignatureName() {
   return (
     <>
       <span className="sr-only">Md Nuruzzaman</span>
       <span aria-hidden>
-        <SignatureWord text="Md" colorClass="fill-content stroke-content" delay={0.15} />{' '}
-        <SignatureWord text="Nuruzzaman" italic colorClass="fill-accent-2 stroke-accent-2" delay={0.5} />
+        <SignatureWord text="Md" width={111.2} colorClass="fill-content stroke-content" delay={0.15} />{' '}
+        <SignatureWord text="Nuruzzaman" width={491} italic colorClass="fill-accent-2 stroke-accent-2" delay={0.5} />
       </span>
     </>
   );

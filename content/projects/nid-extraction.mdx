@@ -1,0 +1,36 @@
+---
+title: NID Extraction Service — automating e-KYC onboarding at a stock brokerage
+summary: A Python-based National ID extraction service feeding e-KYC verification at BRAC EPL Stock Brokerage — bounded behind a port in a Spring Boot hexagonal backend, alongside automated PDF portfolio statements and scheduled email delivery.
+role: Backend engineer — BRAC EPL Stock Brokerage Ltd.
+period: 2024 — 2025
+stack:
+  - Python
+  - Java
+  - Spring Boot
+  - MySQL
+---
+
+## The problem & my role
+
+A brokerage cannot onboard a client until their identity is verified against a national ID — and doing that by hand means a person reading NID cards and retyping fields into the system, slow and error-prone at exactly the moment a new client is forming their first impression. As a backend engineer at BRAC EPL Stock Brokerage I built the NID extraction service that automates that step, feeding the e-KYC verification flow, as part of the internal backend systems behind client onboarding and portfolio reporting.
+
+This is an internal enterprise service with no public link, so this write-up stays at the level of what I actually built rather than screenshots or live numbers.
+
+## Approach & key decisions
+
+**Extraction is a Python problem, not a JVM problem.** Pulling structured data off a national ID is image-processing and extraction work, not business logic. The path of least resistance would have been to bolt a Java OCR library into the existing Spring Boot service and keep everything in one runtime. I took the other route: the extraction step lives as its own Python-based service, because Python is where the practical tooling for this class of problem is — and identity extraction is precisely the part of a KYC pipeline most likely to be reworked as documents, regulation, or accuracy demands change.
+
+**Bounded behind a port.** The Spring Boot backend is structured on hexagonal architecture (ports and adapters), and the extraction service is exactly the kind of volatile edge that pattern exists for: the core onboarding logic talks to an identity-extraction port and does not care that a Python process answers it. Swapping or improving the extractor never touches the domain core.
+
+## What shipped
+
+- **Python-based NID extraction** feeding the e-KYC verification flow for client onboarding — the service this case study is about.
+- The surrounding backend work in the same system: **automated PDF portfolio generation** for client statements and **scheduled email delivery pipelines** so statements go out without manual intervention — Spring Boot / Java over MySQL, hexagonal throughout.
+
+## Impact
+
+Because this is an internal system, I don't have public metrics to point to, and I won't invent any. The substance is that identity capture during onboarding — a flow the brokerage cannot legally skip and previously the most manual step in the funnel — became automated extraction plus verification instead of human retyping, and it is structured so the extractor can evolve without disturbing the core.
+
+## What I'd do differently
+
+I'd invest earlier in a labelled evaluation set for the extractor — a corpus of NID samples with ground-truth fields — so extraction changes could be scored against a benchmark instead of spot-checked. For a component whose whole job is accuracy, a regression harness is the difference between "seems better" and "is better."

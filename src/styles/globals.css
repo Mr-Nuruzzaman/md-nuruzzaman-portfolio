@@ -217,3 +217,34 @@ html.lenis body {
   mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
 }
+
+/* ── Skeleton shimmer (Facebook-canonical) ──────────────────────────────────
+   Position-sweep of a wide gradient (the original FB technique), adapted to
+   the navy theme: base is a faint lift over the surface, the band lifts
+   further. background-attachment: fixed paints ONE viewport-wide sweep so
+   every skeleton on screen shimmers in phase, exactly like Facebook. */
+:root {
+  --sk-base: rgba(255, 255, 255, 0.04);
+  --sk-hi: rgba(255, 255, 255, 0.1);
+}
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -100vw 0;
+  }
+  100% {
+    background-position: 100vw 0;
+  }
+}
+.skeleton {
+  background-color: var(--sk-base);
+  background-image: linear-gradient(to right, var(--sk-base) 8%, var(--sk-hi) 18%, var(--sk-base) 33%);
+  background-size: 200vw 100%;
+  background-attachment: fixed;
+  animation: skeleton-shimmer 1.2s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background-image: none;
+  }
+}

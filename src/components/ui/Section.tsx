@@ -49,7 +49,7 @@ export function Section({
   );
 
   return (
-    <section id={id} className={cn('relative scroll-mt-4 py-12 md:py-20', className)} {...props}>
+    <section id={id} className={cn('relative scroll-mt-4 py-10 md:py-16', className)} {...props}>
       {contained ? <Container wide={wide}>{inner}</Container> : inner}
     </section>
   );

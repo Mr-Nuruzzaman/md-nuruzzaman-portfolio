@@ -22,7 +22,6 @@ export function Skills() {
           Skills &amp; <GradientText>stack</GradientText>
         </>
       }
-      className="py-16 md:py-24"
     >
       {/* Union-find motif: each row is a "set"; chips scatter in from a deterministic offset and settle into their cluster. */}
       <m.ul

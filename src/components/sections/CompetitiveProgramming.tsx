@@ -107,6 +107,7 @@ export function CompetitiveProgramming() {
                     className={cn('shrink-0 whitespace-nowrap font-medium', headline ? 'text-accent' : 'text-content')}
                   >
                     {c.result}
+                    {c.teams && <span className="font-normal text-content-dim"> of {c.teams} teams</span>}
                   </span>
                 </RevealItem>
               );

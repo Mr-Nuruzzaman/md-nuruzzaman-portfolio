@@ -13,6 +13,8 @@ export interface IContest {
   result: string;
   name: string;
   year: number;
+  /** Total participating teams, when known — renders as "50th of 224 teams". */
+  teams?: number;
   highlight?: boolean;
 }
 
@@ -68,13 +70,17 @@ export const cpStats = {
 };
 
 export const contests: IContest[] = [
-  { result: '50th', name: 'ICPC Asia Dhaka Regional Contest', year: 2023, highlight: true },
-  { result: '80th', name: 'ICPC Asia Dhaka Regional Contest', year: 2024, highlight: true },
+  { result: '50th', name: 'ICPC Asia Dhaka Regional Contest', year: 2023, teams: 224, highlight: true },
+  { result: '80th', name: 'ICPC Asia Dhaka Regional Contest — DIU', year: 2024, teams: 309, highlight: true },
+  { result: '224th', name: 'ICPC Asia Dhaka Regional Preliminary Contest', year: 2022, teams: 1648 },
   { result: 'Champion', name: 'IST Battle of Brains', year: 2023, highlight: true },
   { result: '1st Runner-up', name: 'Intra IST Programming Contest', year: 2022 },
   { result: '18th', name: 'CUET Inter-University Programming Contest', year: 2024 },
   { result: '22nd', name: '7th DRMC International Tech Carnival', year: 2024 },
-  { result: '25th', name: 'CoU-BRACNet Inter-University Programming Contest', year: 2023 },
+  { result: '25th', name: 'CoU-BRACNet Inter-University Programming Contest', year: 2023, teams: 59 },
   { result: '47th', name: 'IUT 11th National ICT Fest', year: 2024 },
   { result: '56th', name: 'BUET Inter-University Programming Contest', year: 2023 },
+  { result: '59th', name: 'AUST Inter-University Programming Contest', year: 2025, teams: 130 },
+  { result: '73rd', name: 'SUST Inter-University Programming Contest', year: 2024, teams: 120 },
+  { result: '115th', name: 'National Collegiate Programming Contest', year: 2024, teams: 196 },
 ];

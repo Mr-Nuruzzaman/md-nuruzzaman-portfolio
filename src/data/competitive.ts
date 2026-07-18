@@ -76,6 +76,7 @@ export const contests: IContest[] = [
   { result: 'Champion', name: 'IST Battle of Brains', year: 2023, teams: 30, highlight: true },
   { result: '1st Runner-up', name: 'Intra IST Programming Contest', year: 2022, teams: 44 },
   { result: '18th', name: 'CUET Inter-University Programming Contest', year: 2024, teams: 98 },
+  { result: '22nd', name: '7th DRMC International Tech Carnival — Final', year: 2024, teams: 28 },
   { result: '26th', name: '7th DRMC International Tech Carnival — Preliminary', year: 2024, teams: 197 },
   { result: '25th', name: 'CoU-BRACNet Inter-University Programming Contest', year: 2023, teams: 59 },
   { result: '47th', name: 'IUT 11th National ICT Fest', year: 2024 },

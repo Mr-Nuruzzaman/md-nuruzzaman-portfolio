@@ -23,6 +23,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Reserve the scrollbar's width on BOTH edges so the layout centre is the visual
+     centre of the display — without this the content sits 10px left of true centre. */
+  scrollbar-gutter: stable both-edges;
   /* Small cushion for anchor jumps — sections carry their own top padding,
      which also absorbs the fixed navbar when it is visible. */
   scroll-padding-top: 16px;

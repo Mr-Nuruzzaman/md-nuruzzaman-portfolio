@@ -44,14 +44,14 @@ export function Experience() {
         {experience.map((role, i) => (
           <li key={`${role.company}-${role.start}`} className="border-t border-border first:border-t-0">
             <Reveal as="div" delay={i * 0.06}>
-              <article className="grid gap-6 py-8 first:pt-0 md:grid-cols-[11rem_1.5rem_1fr] md:gap-8">
+              <article className="grid gap-6 py-8 first:pt-0 md:grid-cols-[13.5rem_1.5rem_1fr] md:gap-8">
                 {/* Meta rail — dates and context in mono, no colored strip */}
                 <div className="flex flex-col gap-2 md:sticky md:top-28 md:self-start">
                   <p className="font-mono text-sm text-content">
                     <span className="text-content-dim">[{i}]</span> {role.start} <span aria-hidden="true">–</span>{' '}
                     {role.end}
                   </p>
-                  <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-content-dim">
+                  <p className="whitespace-nowrap font-mono text-eyebrow uppercase tracking-[0.14em] text-content-dim">
                     {role.type} · {role.mode}
                   </p>
                   <p className="break-words text-sm text-content-dim">{role.location}</p>

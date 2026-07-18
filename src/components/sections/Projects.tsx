@@ -78,7 +78,7 @@ function ProjectCard({
             fill
             sizes={large ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'}
             onError={() => setErrored(true)}
-            className="object-cover transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
+            className="object-cover object-top transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
           />
         ) : (
           <VoronoiPoster
@@ -111,7 +111,9 @@ function ProjectCard({
           />
         </div>
 
-        <p className="line-clamp-2 text-small text-content-muted">{blurb}</p>
+        {/* Compact md cells keep only title + chips — the blurb lives in the modal (and stays on
+            mobile + flagship, where the cell has room). Guarantees the image a real share of the cell. */}
+        <p className={cn('line-clamp-2 text-small text-content-muted', !large && 'md:hidden')}>{blurb}</p>
 
         <div className="mt-1 flex flex-wrap items-center gap-2">
           {tech.slice(0, MAX_CHIPS).map((t) => (
@@ -170,7 +172,7 @@ export function Projects() {
       }
     >
       {/* Bento: flagship 4×2 cell, two 2-col cells stacked beside it, a 3-col pair below. */}
-      <RevealGroup className="grid grid-cols-1 gap-4 md:grid-cols-6 md:grid-rows-[260px_260px_260px] md:gap-5">
+      <RevealGroup className="grid grid-cols-1 gap-4 md:grid-cols-6 md:grid-rows-[repeat(3,290px)] md:gap-5">
         {featured.map((project, i) => (
           <RevealItem key={project.slug} className={cn('h-full min-w-0', cellSpan(i, featured.length))}>
             <ProjectCard

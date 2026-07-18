@@ -41,7 +41,9 @@ function BinarySearchBrackets() {
   };
 
   return (
-    <div aria-hidden className="pointer-events-none absolute -inset-x-4 inset-y-0 hidden md:block">
+    // lg+ only: at md the text column meets the viewport edge and the -inset-x-4 rules + labels
+    // overflowed the page horizontally (38px of sideways scroll on tablets).
+    <div aria-hidden className="pointer-events-none absolute -inset-x-4 inset-y-0 hidden lg:block">
       {(['lo', 'hi'] as const).map((dir) => {
         const b = bound(dir);
         return (
@@ -93,7 +95,7 @@ export function About() {
           Builder &amp; <GradientText>competitive programmer</GradientText>
         </>
       }
-      className="py-14 md:py-24"
+      className="overflow-x-clip py-14 md:py-24"
     >
       <div className="grid gap-12 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
         {/* Left rail: portrait, mono stat ledger, quick facts */}

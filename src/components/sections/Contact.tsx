@@ -219,7 +219,9 @@ export function Contact() {
             <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-accent">
               <span className="text-content-dim">06 — </span>Contact
             </p>
-            <h2 className="mt-5 max-w-lg font-heading text-h2 font-normal leading-[1.05] text-content md:text-display">
+            {/* text-h1 (not text-display) — the display clamp is wider than this 5fr column
+                and ran the heading underneath the form card. */}
+            <h2 className="mt-5 min-w-0 max-w-lg font-heading text-h1 font-normal leading-[1.05] text-content">
               Let&apos;s build something <span className="text-accent">worthwhile</span>.
             </h2>
             <RuleReveal className="mt-6 md:mt-8" />

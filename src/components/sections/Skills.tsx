@@ -37,7 +37,7 @@ export function Skills() {
             key={category.label}
             variants={{ hidden: {}, show: {} }}
             className={cn(
-              'group/row grid gap-x-6 gap-y-3 py-6 transition-opacity duration-300 ease-smooth md:grid-cols-[11rem_1fr]',
+              'group/row grid gap-x-6 gap-y-3 py-6 transition-opacity duration-300 ease-smooth md:grid-cols-[14rem_1fr]',
               'hover:!opacity-100 group-has-[:hover]/skills:opacity-70 motion-reduce:transition-none',
               index > 0 && 'border-t border-border',
             )}

@@ -51,8 +51,8 @@ const config: Config = {
         eyebrow: ['0.8125rem', { lineHeight: '1', letterSpacing: '0.2em' }],
       },
       maxWidth: {
-        container: '1200px',
-        wide: '1440px',
+        container: '1320px',
+        wide: '1536px',
       },
       borderRadius: {
         sm: '6px',

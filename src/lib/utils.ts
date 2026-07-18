@@ -1,6 +1,18 @@
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
 import type { IProject } from '@/data/projects';
+
+// tailwind-merge must be taught this project's custom `text-*` font-size tokens
+// (tailwind.config.ts fontSize). Without this it can't tell `text-body` (a size)
+// from `text-bg` (a color), assumes they conflict, and silently drops the color —
+// which is how the primary Button lost its `text-bg` and rendered unreadable.
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      'font-size': [{ text: ['display', 'h1', 'h2', 'h3', 'body-lg', 'body', 'small', 'eyebrow'] }],
+    },
+  },
+});
 
 /** Merge Tailwind classes safely. */
 export function cn(...inputs: ClassValue[]): string {

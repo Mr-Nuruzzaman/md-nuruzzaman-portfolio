@@ -21,7 +21,7 @@
 - Update old portfolio link or 301 once new site is live.
 
 ## Environment variables
-- **`RESEND_API_KEY`** — required for the Contact form to actually deliver mail. The `submitContact` server action (`src/app/actions/contact.ts`) POSTs to the Resend REST API and sends to `dev@hgspro.com` (from `Portfolio <onboarding@resend.dev>`, `reply_to` = submitter). When the key is **unset**, the action returns `{ ok: false, reason: 'unconfigured' }` and the form degrades gracefully to a `mailto:` fallback shown in the live-region message — no crash, no lost UX. Set it in the Vercel project env (and `.env.local` for local testing).
+- **`RESEND_API_KEY`** — required for the Contact form to actually deliver mail. The `submitContact` server action (`src/app/actions/contact.ts`) POSTs to the Resend REST API and sends to `profile.email` (`nuruzzaman.prog@gmail.com`, from `Portfolio <onboarding@resend.dev>`, `reply_to` = submitter). When the key is **unset**, the action returns `{ ok: false, reason: 'unconfigured' }` and the form degrades gracefully to a `mailto:` fallback shown in the live-region message — no crash, no lost UX. Set it in the Vercel project env (and `.env.local` for local testing).
 
 ## Separate track (requested) — LinkedIn revamp for remote US roles
 After this scaffold, a dedicated effort: research senior/remote-US LinkedIn architecture, then rewrite headline, About, experience bullets, featured, skills, and keyword strategy for recruiter discoverability. Md Nuruzzaman to supply: current full LinkedIn export, target job titles, target companies/locations, and any salary/role preferences. Tracked separately from the portfolio build.

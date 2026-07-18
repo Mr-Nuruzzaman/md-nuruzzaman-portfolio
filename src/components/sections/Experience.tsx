@@ -37,9 +37,9 @@ export function Experience() {
         {experience.map((role, i) => (
           <li key={`${role.company}-${role.start}`} className="border-t border-border first:border-t-0">
             <Reveal as="div" delay={i * 0.06}>
-              <article className="grid gap-6 py-10 first:pt-0 md:grid-cols-[13rem_1fr] md:gap-10">
+              <article className="grid gap-6 py-8 first:pt-0 md:grid-cols-[11rem_1fr] md:gap-8">
                 {/* Meta rail — dates and context in mono, no colored strip */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 md:sticky md:top-28 md:self-start">
                   <p className="font-mono text-sm text-content">
                     {role.start} <span aria-hidden="true">–</span> {role.end}
                   </p>
@@ -55,11 +55,11 @@ export function Experience() {
                     <GradientText>{role.company}</GradientText>
                   </h3>
 
-                  <ul className="flex flex-col gap-3">
+                  <ul className="flex flex-col gap-2.5">
                     {role.bullets.map((bullet) => (
                       <li
                         key={bullet}
-                        className="grid grid-cols-[auto_1fr] gap-3 break-words text-base leading-relaxed text-content-muted"
+                        className="grid grid-cols-[auto_1fr] gap-3 break-words text-[0.9375rem] leading-relaxed text-content-muted"
                       >
                         <span aria-hidden="true" className="mt-[0.7em] h-px w-4 shrink-0 bg-border" />
                         <span>{highlightMetrics(bullet)}</span>
@@ -68,11 +68,16 @@ export function Experience() {
                   </ul>
 
                   <ul className="flex flex-wrap gap-2 pt-1">
-                    {role.tech.map((t) => (
+                    {role.tech.slice(0, 5).map((t) => (
                       <li key={t}>
                         <Chip glow>{t}</Chip>
                       </li>
                     ))}
+                    {role.tech.length > 5 && (
+                      <li>
+                        <Chip>+{role.tech.length - 5}</Chip>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </article>

@@ -139,7 +139,14 @@ export function Navbar() {
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
-                <span className="mr-1 font-mono text-[10px] text-content-dim">{String(i + 1).padStart(2, '0')}</span>
+                <span
+                  className={cn(
+                    'mr-1 font-mono text-[0.625rem]',
+                    active === link.id ? 'text-accent' : 'text-content-dim',
+                  )}
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
                 {link.label}
               </a>
             </li>
@@ -188,7 +195,12 @@ export function Navbar() {
                       active === link.id ? 'bg-surface-2 text-accent-2' : 'text-content-muted hover:text-content',
                     )}
                   >
-                    <span className="mr-2 font-mono text-[10px] text-content-dim">
+                    <span
+                      className={cn(
+                        'mr-2 font-mono text-[0.625rem]',
+                        active === link.id ? 'text-accent' : 'text-content-dim',
+                      )}
+                    >
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     {link.label}

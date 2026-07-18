@@ -11,6 +11,7 @@
   --accent-rgb: 232 88 44;
   --accent-2: #f2926b;
   --accent-3: #b4441f;
+  --ember-smoke: #4a3527; /* warm mesh-blob brown — gradient-mesh only */
   --grad-primary: linear-gradient(135deg, #e8582c 0%, #f2926b 100%);
   --r-lg: 14px;
   --r-md: 10px;
@@ -116,7 +117,7 @@ html.lenis body {
 .grad-mesh::after {
   bottom: -18%;
   left: -10%;
-  background: #4a3527;
+  background: var(--ember-smoke);
   opacity: 0.14;
   animation: drift 22s ease-in-out infinite reverse;
 }
@@ -208,4 +209,50 @@ html.lenis body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ── Hero focal visual — "ink meridian" (HeroVisual.tsx) ─────────────────────
+   Concentric hairline rings rotate at different slow rates in opposite
+   directions; the centre monogram breathes. transform/opacity only, so it
+   stays on the compositor. The reduced-motion block above freezes all three
+   into a static plate (iteration-count:1 + ~0ms duration reverts to base). */
+@keyframes meridian-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes meridian-spin-rev {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes meridian-breathe {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+/* view-box origin so 50% resolves to the viewBox centre regardless of each
+   ring's own bounding box (arcs are not symmetric about the centre). */
+.meridian-ring {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+.meridian-spin-a {
+  animation: meridian-spin 90s linear infinite;
+}
+.meridian-spin-b {
+  animation: meridian-spin-rev 60s linear infinite;
+}
+.meridian-breathe {
+  animation: meridian-breathe 6s ease-in-out infinite;
 }

@@ -1,9 +1,10 @@
 'use server';
 
 import type { ContactState } from './contact-state';
+import { profile } from '@/data/profile';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CONTACT_TO = 'dev@hgspro.com';
+const CONTACT_TO = profile.email;
 
 function validate(name: string, email: string, message: string): ContactState['errors'] {
   const errors: NonNullable<ContactState['errors']> = {};

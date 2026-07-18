@@ -1,6 +1,10 @@
 'use client';
 
-import { ArrowUpRight } from 'lucide-react';
+import { useState } from 'react';
+import { m } from 'framer-motion';
+import { ArrowUpRight, ChevronDown } from 'lucide-react';
+import { EASE_EXPO } from '@/lib/constants';
+import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { Section } from '@/components/ui/Section';
 import { Card } from '@/components/ui/Card';
 import { GradientText } from '@/components/ui/GradientText';
@@ -39,7 +43,13 @@ function isHeadline(c: IContest) {
   return Boolean(c.highlight);
 }
 
+/** Log rows shown before the "see all" toggle — keeps the panel phone-height. */
+const LOG_PREVIEW = 10;
+
 export function CompetitiveProgramming() {
+  const [showAll, setShowAll] = useState(false);
+  const reduced = usePrefersReducedMotion();
+
   return (
     <Section
       id="cp"
@@ -86,33 +96,77 @@ export function CompetitiveProgramming() {
             </span>
             <span className="font-mono text-small text-content-dim">contest-log — zsh</span>
           </div>
-          <RevealGroup stagger={0.06} className="flex flex-col gap-1.5 p-4 sm:p-6">
-            {contests.map((c) => {
+          <RevealGroup stagger={0.06} className="flex flex-col gap-2.5 p-4 sm:gap-1.5 sm:p-6">
+            {(showAll ? contests : contests.slice(0, LOG_PREVIEW)).map((c, idx) => {
               const headline = isHeadline(c);
-              return (
-                <RevealItem
-                  key={`${c.name}-${c.year}`}
-                  y={8}
-                  className="flex items-baseline gap-3 font-mono text-small leading-relaxed"
-                >
+              // flex-wrap: on phones the result line breaks below the name (ml-auto keeps it
+              // right-aligned) instead of colliding with wrapped contest names.
+              const rowClass = 'flex flex-wrap items-baseline gap-x-3 gap-y-0.5 font-mono text-small leading-relaxed';
+              const row = (
+                <>
                   <span className="select-none text-accent/50" aria-hidden>
                     &gt;
                   </span>
                   <span className="shrink-0 tabular-nums text-content-dim">{c.year}</span>
-                  <span className="min-w-0 flex-1 text-content-muted">{c.name}</span>
+                  <span className="min-w-0 flex-1 basis-52 text-content-muted">{c.name}</span>
                   <span className="hidden text-content-dim sm:inline" aria-hidden>
                     —
                   </span>
                   <span
-                    className={cn('shrink-0 whitespace-nowrap font-medium', headline ? 'text-accent' : 'text-content')}
+                    className={cn(
+                      'ml-auto shrink-0 whitespace-nowrap font-medium',
+                      headline ? 'text-accent' : 'text-content',
+                    )}
                   >
                     {c.result}
-                    {c.teams && <span className="font-normal text-content-dim"> of {c.teams} teams</span>}
+                    {c.teams && (
+                      <>
+                        <span className="font-normal text-content-dim"> of </span>
+                        {c.teams}
+                        <span className="font-normal text-content-dim"> teams</span>
+                      </>
+                    )}
                   </span>
+                </>
+              );
+              // Rows past the preview mount AFTER the scroll-reveal has fired — RevealItem
+              // would leave them stuck at opacity 0, so they animate on mount instead.
+              return idx < LOG_PREVIEW ? (
+                <RevealItem key={`${c.name}-${c.year}`} y={8} className={rowClass}>
+                  {row}
                 </RevealItem>
+              ) : (
+                <m.div
+                  key={`${c.name}-${c.year}`}
+                  className={rowClass}
+                  initial={reduced ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: EASE_EXPO, delay: (idx - LOG_PREVIEW) * 0.05 }}
+                >
+                  {row}
+                </m.div>
               );
             })}
           </RevealGroup>
+          {contests.length > LOG_PREVIEW && (
+            <div className="border-t border-border px-4 py-3 sm:px-6">
+              <button
+                type="button"
+                onClick={() => setShowAll((v) => !v)}
+                aria-expanded={showAll}
+                className="flex items-center gap-2 font-mono text-small text-content-muted transition-colors hover:text-accent"
+              >
+                <span className="select-none text-accent/50" aria-hidden>
+                  &gt;
+                </span>
+                {showAll ? 'show less' : `see all ${contests.length} contests`}
+                <ChevronDown
+                  className={cn('h-4 w-4 transition-transform duration-300 ease-smooth', showAll && 'rotate-180')}
+                  aria-hidden
+                />
+              </button>
+            </div>
+          )}
         </div>
       </Reveal>
 

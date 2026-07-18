@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { m } from 'framer-motion';
-import { ArrowRight, ChevronDown, FileDown } from 'lucide-react';
+import { ArrowRight, FileDown } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import {
@@ -160,18 +160,25 @@ export function Hero() {
         </div>
       </Container>
 
-      {/* Scroll cue */}
-      <m.a
+      {/* Scroll cue — refined mouse-wheel outline with a drifting accent dot */}
+      <a
         href="#about"
         aria-label="Scroll to content"
-        className="absolute inset-x-0 bottom-4 z-10 mx-auto flex w-fit flex-col items-center gap-1.5 text-content-dim transition-opacity duration-500 hover:text-accent"
+        className="absolute inset-x-0 bottom-4 z-10 mx-auto flex w-fit flex-col items-center gap-2.5 text-content-dim transition-opacity duration-500 hover:text-accent"
         style={{ opacity: scrolled ? 0 : 1, pointerEvents: scrolled ? 'none' : 'auto' }}
-        animate={reduced ? undefined : { y: [0, 8, 0] }}
-        transition={reduced ? undefined : { duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
       >
         <span className="font-mono text-eyebrow uppercase tracking-[0.2em]">Scroll</span>
-        <ChevronDown className="h-5 w-5" aria-hidden />
-      </m.a>
+        <span
+          aria-hidden
+          className="flex h-[34px] w-[22px] items-start justify-center rounded-full border border-border-glow pt-2"
+        >
+          <m.span
+            className="h-[6px] w-[1.5px] rounded-full bg-accent"
+            animate={reduced ? undefined : { y: [0, 10], opacity: [1, 0] }}
+            transition={reduced ? undefined : { duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </span>
+      </a>
     </section>
   );
 }

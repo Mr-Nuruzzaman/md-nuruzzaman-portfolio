@@ -70,20 +70,22 @@ export const cpStats = {
 };
 
 export const contests: IContest[] = [
-  { result: '50th', name: 'ICPC Asia Dhaka Regional Contest', year: 2023, teams: 224, highlight: true },
-  { result: '80th', name: 'ICPC Asia Dhaka Regional Contest', year: 2024, teams: 309, highlight: true },
-  { result: '224th', name: 'ICPC Asia Dhaka Regional Preliminary Contest', year: 2022, teams: 1648 },
+  // Ordered by contest position: titles first, then raw rank ascending.
+  // The see-all toggle shows the first 10.
   { result: 'Champion', name: 'IST Battle of Brains', year: 2023, teams: 30, highlight: true },
   { result: '1st Runner-up', name: 'Intra IST Programming Contest', year: 2022, teams: 44 },
   { result: '18th', name: 'CUET Inter-University Programming Contest', year: 2024, teams: 98 },
   { result: '22nd', name: '7th DRMC International Tech Carnival — Final', year: 2024, teams: 28 },
-  { result: '26th', name: '7th DRMC International Tech Carnival — Preliminary', year: 2024, teams: 197 },
   { result: '25th', name: 'CoU-BRACNet Inter-University Programming Contest', year: 2023, teams: 59 },
+  { result: '26th', name: '7th DRMC International Tech Carnival — Preliminary', year: 2024, teams: 197 },
   { result: '47th', name: 'IUT 11th National ICT Fest', year: 2024, teams: 108 },
+  { result: '50th', name: 'ICPC Asia Dhaka Regional Contest', year: 2023, teams: 224, highlight: true },
   { result: '56th', name: 'BUET Inter-University Programming Contest', year: 2023, teams: 100 },
   { result: '59th', name: 'AUST Inter-University Programming Contest', year: 2025, teams: 130 },
   { result: '73rd', name: 'SUST Inter-University Programming Contest', year: 2024, teams: 120 },
+  { result: '80th', name: 'ICPC Asia Dhaka Regional Contest', year: 2024, teams: 309, highlight: true },
   { result: '93rd', name: 'BUET CSE Fest Programming Contest', year: 2024, teams: 113 },
   { result: '108th', name: 'KUET Inter-University Programming Contest', year: 2025, teams: 168 },
   { result: '115th', name: 'National Collegiate Programming Contest', year: 2024, teams: 196 },
+  { result: '224th', name: 'ICPC Asia Dhaka Regional Preliminary Contest', year: 2022, teams: 1648 },
 ];

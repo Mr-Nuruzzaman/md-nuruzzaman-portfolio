@@ -27,17 +27,38 @@ export function Navbar() {
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
 
-  // Shadow-on-scroll + hide-on-scroll-down.
+  // Shadow-on-scroll + hide-on-scroll-down. Anchor navigation (nav/footer links) smooth-scrolls
+  // a long way DOWN, which read as "scrolling down" and hid the pill right as the user landed —
+  // so any in-page anchor click suppresses the auto-hide until the programmatic scroll settles.
   useEffect(() => {
     let last = window.scrollY;
+    let suppressUntil = 0;
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 24);
-      setHidden(y > last && y > 400 && !open);
+      const now = Date.now();
+      if (now < suppressUntil) {
+        setHidden(false);
+        // Keep suppressing while the programmatic scroll is still emitting events;
+        // it ends ~300ms after the animation settles, however long Lenis takes.
+        suppressUntil = Math.max(suppressUntil, now + 300);
+      } else {
+        setHidden(y > last && y > 400 && !open);
+      }
       last = y;
     };
+    const onAnchorClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement)?.closest('a[href^="#"], a[href^="/#"]');
+      if (!a) return;
+      suppressUntil = Date.now() + 1000;
+      setHidden(false);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    document.addEventListener('click', onAnchorClick, true);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('click', onAnchorClick, true);
+    };
   }, [open]);
 
   // Active-section tracking via IntersectionObserver.

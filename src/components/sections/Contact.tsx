@@ -4,7 +4,6 @@ import { useActionState, useEffect, useState } from 'react';
 import { m } from 'framer-motion';
 import { Check, Copy, Mail, Send } from 'lucide-react';
 import { Section } from '@/components/ui/Section';
-import { RuleReveal } from '@/components/animations/RuleReveal';
 import { Button } from '@/components/ui/Button';
 import {
   AtCoderIcon,
@@ -211,23 +210,20 @@ export function Contact() {
   const errors = state.errors ?? {};
 
   return (
-    <Section id="contact">
+    <Section
+      id="contact"
+      index="06"
+      eyebrow="Contact"
+      heading={
+        <>
+          Let&apos;s build something <span className="text-accent">worthwhile</span>.
+        </>
+      }
+    >
       <div className="grid gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20">
-        {/* Editorial column — heading + availability + direct affordances */}
+        {/* Editorial column — availability + direct affordances */}
         <div className="flex flex-col">
-          <Reveal>
-            <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-accent">
-              <span className="text-content-dim">06 — </span>Contact
-            </p>
-            {/* text-h1 (not text-display) — the display clamp is wider than this 5fr column
-                and ran the heading underneath the form card. */}
-            <h2 className="mt-5 min-w-0 max-w-lg font-heading text-h1 font-normal leading-[1.05] text-content">
-              Let&apos;s build something <span className="text-accent">worthwhile</span>.
-            </h2>
-            <RuleReveal className="mt-6 md:mt-8" />
-          </Reveal>
-
-          <Reveal delay={0.08} className="mt-8 flex flex-col gap-3">
+          <Reveal delay={0.08} className="flex flex-col gap-3">
             <p className="flex items-center gap-2.5 text-body text-content-muted">
               <span aria-hidden className="relative grid h-2.5 w-2.5 place-items-center">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success/60 motion-reduce:hidden" />

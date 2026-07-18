@@ -115,15 +115,10 @@ function ProjectRow({ project, flip, onOpen }: { project: IProject; flip: boolea
             <ArrowUpRight className="h-4 w-4" aria-hidden />
           </Button>
           {links.live && (
-            <a
-              href={links.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Open ${title} live site`}
-              className="grid h-10 w-10 place-items-center rounded-md border border-border bg-surface text-content-muted transition-colors hover:border-accent hover:text-accent-2"
-            >
+            <Button href={links.live} size="sm" aria-label={`Open ${title} live site`}>
+              Live
               <ExternalLink className="h-4 w-4" aria-hidden />
-            </a>
+            </Button>
           )}
           {links.repo && (
             <a

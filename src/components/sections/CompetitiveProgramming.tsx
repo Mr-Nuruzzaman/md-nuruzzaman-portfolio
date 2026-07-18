@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowUpRight } from 'lucide-react';
 import { Section } from '@/components/ui/Section';
 import { Card } from '@/components/ui/Card';
 import { GradientText } from '@/components/ui/GradientText';
@@ -136,10 +137,10 @@ export function CompetitiveProgramming() {
                       </span>
                     </span>
                     <span
-                      className="font-mono text-small text-content-dim transition-colors duration-200 ease-smooth group-hover:text-content-muted"
                       aria-hidden
+                      className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border text-content-dim transition-all duration-200 ease-smooth group-hover:border-accent group-hover:text-accent group-hover:shadow-glow-cyan"
                     >
-                      ↗
+                      <ArrowUpRight className="h-4 w-4 transition-transform duration-200 ease-smooth group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </span>
                   </div>
                   <div className="flex items-end justify-between gap-3">

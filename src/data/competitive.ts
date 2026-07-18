@@ -71,7 +71,7 @@ export const cpStats = {
 
 export const contests: IContest[] = [
   { result: '50th', name: 'ICPC Asia Dhaka Regional Contest', year: 2023, teams: 224, highlight: true },
-  { result: '80th', name: 'ICPC Asia Dhaka Regional Contest — DIU', year: 2024, teams: 309, highlight: true },
+  { result: '80th', name: 'ICPC Asia Dhaka Regional Contest', year: 2024, teams: 309, highlight: true },
   { result: '224th', name: 'ICPC Asia Dhaka Regional Preliminary Contest', year: 2022, teams: 1648 },
   { result: 'Champion', name: 'IST Battle of Brains', year: 2023, teams: 30, highlight: true },
   { result: '1st Runner-up', name: 'Intra IST Programming Contest', year: 2022, teams: 44 },

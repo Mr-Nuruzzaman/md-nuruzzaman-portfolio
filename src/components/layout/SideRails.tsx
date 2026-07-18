@@ -14,11 +14,11 @@ const socialLinks = [
 ];
 
 /**
- * Fixed dual side rails framing the page on xl+ — a bottom-anchored editorial device.
- * Left: quiet social icon column; right: vertical email wordmark. Both sit on a 96px
- * hairline running to the viewport bottom, sit below the navbar (z-40), and fade in
- * after load. Static under reduced motion; hidden below xl to avoid overlap on narrow
- * viewports. Fixed positioning with positive offsets only — never induces overflow.
+ * Fixed dual side rails framing the page on lg+ — a bottom-anchored editorial device
+ * (brittanychiang-style corner rails). Left: quiet social icon column; right: vertical
+ * email wordmark. Both sit above a hairline running to the viewport bottom, below the
+ * navbar (z-40), and fade in after mount. Static under reduced motion; hidden below lg
+ * to avoid overlap on narrow viewports. Fixed with positive offsets only — no overflow.
  */
 export function SideRails() {
   const reduced = usePrefersReducedMotion();
@@ -33,11 +33,11 @@ export function SideRails() {
 
   return (
     <>
-      {/* Left rail — social icon column */}
+      {/* Left rail — social icon column above a hairline to the bottom edge */}
       <m.aside
         {...fade}
         aria-label="Social links"
-        className="fixed bottom-0 left-7 z-40 hidden flex-col items-center gap-6 xl:flex"
+        className="pointer-events-none fixed bottom-0 left-7 z-40 hidden flex-col items-center gap-6 lg:flex"
       >
         <ul className="flex flex-col items-center gap-5">
           {socialLinks.map(({ label, href, Icon }) => (
@@ -47,29 +47,29 @@ export function SideRails() {
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label={label}
-                className="group grid size-11 place-items-center text-content-dim transition-transform duration-200 ease-smooth hover:-translate-y-0.5"
+                className="pointer-events-auto grid size-9 place-items-center text-content-dim transition duration-200 ease-smooth hover:-translate-y-0.5 hover:text-accent"
               >
-                <Icon size={16} />
+                <Icon size={18} />
               </a>
             </li>
           ))}
         </ul>
-        <span aria-hidden className="h-24 w-px bg-border" />
+        <span aria-hidden className="h-20 w-px bg-border" />
       </m.aside>
 
-      {/* Right rail — vertical email */}
+      {/* Right rail — vertical email above the same hairline */}
       <m.aside
         {...fade}
         aria-label="Email"
-        className="fixed bottom-0 right-7 z-40 hidden flex-col items-center gap-6 xl:flex"
+        className="pointer-events-none fixed bottom-0 right-7 z-40 hidden flex-col items-center gap-6 lg:flex"
       >
         <a
           href={`mailto:${profile.email}`}
-          className="font-mono text-xs tracking-[0.2em] text-content-dim transition-colors duration-200 [writing-mode:vertical-rl] hover:text-accent-2"
+          className="pointer-events-auto font-mono text-xs tracking-[0.2em] text-content-dim transition-colors duration-200 [writing-mode:vertical-rl] hover:text-accent"
         >
           {profile.email}
         </a>
-        <span aria-hidden className="h-24 w-px bg-border" />
+        <span aria-hidden className="h-20 w-px bg-border" />
       </m.aside>
     </>
   );

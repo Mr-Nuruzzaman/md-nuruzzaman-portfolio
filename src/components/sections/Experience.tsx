@@ -104,16 +104,11 @@ export function Experience() {
                   </ul>
 
                   <ul className="flex flex-wrap gap-2 pt-1">
-                    {role.tech.slice(0, 7).map((t) => (
+                    {role.tech.map((t) => (
                       <li key={t}>
                         <Chip glow>{t}</Chip>
                       </li>
                     ))}
-                    {role.tech.length > 7 && (
-                      <li>
-                        <Chip>+{role.tech.length - 7}</Chip>
-                      </li>
-                    )}
                   </ul>
                 </div>
               </article>

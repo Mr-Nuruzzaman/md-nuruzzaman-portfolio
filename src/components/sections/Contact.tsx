@@ -1,11 +1,11 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
+import { m } from 'framer-motion';
 import { Check, Copy, Mail, Send } from 'lucide-react';
 import { Section } from '@/components/ui/Section';
 import { RuleReveal } from '@/components/animations/RuleReveal';
 import { Button } from '@/components/ui/Button';
-import { GradientText } from '@/components/ui/GradientText';
 import {
   AtCoderIcon,
   CodeChefIcon,
@@ -18,7 +18,160 @@ import { Reveal } from '@/components/animations/Reveal';
 import { submitContact } from '@/app/actions/contact';
 import { initialContactState } from '@/app/actions/contact-state';
 import { profile } from '@/data/profile';
+import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
+
+/* ── A* submit-path ornament ──────────────────────────────────────────────
+ * A real 4-directional A* search over a 7×5 dot lattice with deterministic
+ * obstacles. The computed route (bottom-left `msg` → top-right `sent`) is the
+ * polyline that draws while the form submits. Search runs once at module load. */
+type Cell = readonly [number, number];
+type PathStatus = 'idle' | 'drawing' | 'done' | 'error';
+
+const A_COLS = 7;
+const A_ROWS = 5;
+const A_START: Cell = [0, 4];
+const A_GOAL: Cell = [6, 0];
+const A_OBSTACLES: ReadonlyArray<Cell> = [
+  [2, 2],
+  [2, 3],
+  [2, 4],
+  [4, 0],
+  [4, 1],
+  [4, 2],
+];
+
+function computeAStarPath(): Cell[] {
+  const idx = (c: number, r: number) => r * A_COLS + c;
+  const blocked = new Set(A_OBSTACLES.map(([c, r]) => idx(c, r)));
+  const [gc, gr] = A_GOAL;
+  const heuristic = (c: number, r: number) => Math.abs(c - gc) + Math.abs(r - gr);
+  const startKey = idx(A_START[0], A_START[1]);
+  const goalKey = idx(gc, gr);
+
+  const open: number[] = [startKey];
+  const cameFrom = new Map<number, number>();
+  const g = new Map<number, number>([[startKey, 0]]);
+  const f = new Map<number, number>([[startKey, heuristic(A_START[0], A_START[1])]]);
+
+  while (open.length) {
+    // Lowest-f node — linear scan is ample for a 35-cell grid.
+    let best = 0;
+    for (let i = 1; i < open.length; i++) {
+      if ((f.get(open[i]) ?? Infinity) < (f.get(open[best]) ?? Infinity)) best = i;
+    }
+    const current = open.splice(best, 1)[0];
+    if (current === goalKey) {
+      const path: Cell[] = [];
+      let step: number | undefined = current;
+      while (step !== undefined) {
+        path.unshift([step % A_COLS, Math.floor(step / A_COLS)]);
+        step = cameFrom.get(step);
+      }
+      return path;
+    }
+    const cc = current % A_COLS;
+    const cr = Math.floor(current / A_COLS);
+    const neighbours: Cell[] = [
+      [cc + 1, cr],
+      [cc - 1, cr],
+      [cc, cr + 1],
+      [cc, cr - 1],
+    ];
+    for (const [nc, nr] of neighbours) {
+      if (nc < 0 || nc >= A_COLS || nr < 0 || nr >= A_ROWS) continue;
+      const nk = idx(nc, nr);
+      if (blocked.has(nk)) continue;
+      const tentative = (g.get(current) ?? Infinity) + 1;
+      if (tentative < (g.get(nk) ?? Infinity)) {
+        cameFrom.set(nk, current);
+        g.set(nk, tentative);
+        f.set(nk, tentative + heuristic(nc, nr));
+        if (!open.includes(nk)) open.push(nk);
+      }
+    }
+  }
+  return [A_START, A_GOAL];
+}
+
+const A_CELL = 44;
+const A_PAD = 22;
+const A_W = (A_COLS - 1) * A_CELL + A_PAD * 2;
+const A_H = (A_ROWS - 1) * A_CELL + A_PAD * 2;
+const ax = (c: number) => A_PAD + c * A_CELL;
+const ay = (r: number) => A_PAD + r * A_CELL;
+
+const A_DOTS: Cell[] = Array.from({ length: A_COLS * A_ROWS }, (_, i) => [i % A_COLS, Math.floor(i / A_COLS)] as Cell);
+const A_PATH = computeAStarPath();
+const A_POINTS = A_PATH.map(([c, r]) => `${ax(c)},${ay(r)}`).join(' ');
+
+function AStarSubmitPath({
+  status,
+  reducedMotion,
+  blinkKey,
+}: {
+  status: PathStatus;
+  reducedMotion: boolean;
+  blinkKey: number;
+}) {
+  const drawn = status === 'done';
+  const drawing = status === 'drawing';
+  const offset = reducedMotion ? (drawn ? 0 : 1) : drawn || drawing ? 0 : 1;
+  const transition =
+    !reducedMotion && (drawing || drawn) ? 'stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1)' : 'none';
+
+  return (
+    <svg
+      viewBox={`0 0 ${A_W} ${A_H}`}
+      className="pointer-events-none w-full max-w-[300px] select-none overflow-visible"
+      role="presentation"
+    >
+      {A_DOTS.map(([c, r]) => (
+        <circle key={`${c}-${r}`} cx={ax(c)} cy={ay(r)} r={1} className="fill-accent/[0.12]" />
+      ))}
+
+      <polyline
+        points={A_POINTS}
+        fill="none"
+        pathLength={1}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="stroke-accent"
+        style={{ strokeDasharray: 1, strokeDashoffset: offset, transition, opacity: 0.75 }}
+      />
+
+      <circle cx={ax(A_START[0])} cy={ay(A_START[1])} r={2.5} className="fill-accent/[0.35]" />
+      {status === 'error' && !reducedMotion && (
+        <m.circle
+          key={blinkKey}
+          cx={ax(A_START[0])}
+          cy={ay(A_START[1])}
+          r={3.5}
+          className="fill-warning"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        />
+      )}
+
+      <circle
+        cx={ax(A_GOAL[0])}
+        cy={ay(A_GOAL[1])}
+        r={drawn ? 3.5 : 2.5}
+        className={drawn ? 'fill-accent' : 'fill-accent/[0.35]'}
+        style={{ transition: reducedMotion ? 'none' : 'fill 0.3s ease' }}
+      />
+
+      <text x={ax(A_START[0])} y={ay(A_START[1]) + 15} textAnchor="middle" className="fill-content-dim font-mono">
+        <tspan style={{ fontSize: 9, letterSpacing: '0.1em' }}>msg</tspan>
+      </text>
+      <text x={ax(A_GOAL[0])} y={ay(A_GOAL[1]) - 9} textAnchor="middle" className="fill-content-dim font-mono">
+        <tspan style={{ fontSize: 9, letterSpacing: '0.1em' }}>sent</tspan>
+      </text>
+    </svg>
+  );
+}
 
 const socialLinks = [
   { site: 'GitHub', href: profile.socials.github, Icon: GitHubIcon },
@@ -35,6 +188,15 @@ const fieldClass =
 export function Contact() {
   const [state, formAction, isPending] = useActionState(submitContact, initialContactState);
   const [copied, setCopied] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
+
+  // Retrigger the one-shot error blink on every failed submit (each action returns a fresh state).
+  const [signalTick, setSignalTick] = useState(0);
+  useEffect(() => {
+    if (state.message) setSignalTick((n) => n + 1);
+  }, [state]);
+
+  const pathStatus: PathStatus = isPending ? 'drawing' : state.ok ? 'done' : state.message ? 'error' : 'idle';
 
   const handleCopy = async () => {
     try {
@@ -58,7 +220,7 @@ export function Contact() {
               <span className="text-content-dim">06 — </span>Contact
             </p>
             <h2 className="mt-5 max-w-lg font-heading text-h2 font-normal leading-[1.05] text-content md:text-display">
-              Let&apos;s build something <GradientText>worthwhile</GradientText>.
+              Let&apos;s build something <span className="text-accent">worthwhile</span>.
             </h2>
             <RuleReveal className="mt-6 md:mt-8" />
           </Reveal>
@@ -129,6 +291,11 @@ export function Contact() {
               ))}
             </ul>
           </Reveal>
+
+          {/* A* submit path — real pathfinding ornament, drawn while the form sends. Desktop only. */}
+          <div aria-hidden className="mt-auto hidden pt-14 lg:block">
+            <AStarSubmitPath status={pathStatus} reducedMotion={reducedMotion} blinkKey={signalTick} />
+          </div>
         </div>
 
         {/* Form column */}

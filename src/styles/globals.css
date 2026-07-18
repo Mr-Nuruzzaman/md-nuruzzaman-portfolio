@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0e0d0b;
-  --content: #ede9e0;
-  --border: #2b2822;
-  --border-glow: #3b372f;
-  --accent: #e8582c;
-  --accent-rgb: 232 88 44;
-  --accent-2: #f2926b;
-  --accent-3: #b4441f;
-  --ember-smoke: #4a3527; /* warm mesh-blob brown — gradient-mesh only */
-  --grad-primary: linear-gradient(135deg, #e8582c 0%, #f2926b 100%);
+  --bg: #0a1628;
+  --content: #e6eefb;
+  --border: #22344d;
+  --border-glow: #2f4b6e;
+  --accent: #5eead4;
+  --accent-rgb: 94 234 212;
+  --accent-2: #2dd4bf;
+  --accent-3: #0f766e;
+  --ember-smoke: #16354f; /* legacy var name — now the navy mesh-blob blue, gradient-mesh only */
+  --grad-primary: linear-gradient(135deg, #5eead4 0%, #2dd4bf 100%);
   --r-lg: 14px;
   --r-md: 10px;
 }
@@ -66,7 +66,7 @@ html.lenis body {
 
 /* Legacy utility — glass retired; solid elevated surface, no backdrop blur (mobile FPS). */
 .glass {
-  background: rgba(25, 23, 19, 0.97);
+  background: rgba(19, 40, 64, 0.97);
   border: 1px solid var(--border);
 }
 
@@ -90,7 +90,7 @@ html.lenis body {
   opacity: 1;
 }
 
-/* Hero atmosphere: one faint ember bloom + deep shade — barely-there, not neon. */
+/* Hero atmosphere: one faint teal bloom + deep navy shade — barely-there, not neon. */
 .grad-mesh {
   position: absolute;
   inset: 0;
@@ -155,36 +155,25 @@ html.lenis body {
   background: var(--border-glow);
 }
 
-/* Hero signature draw-on — pure CSS so it starts at first paint, before hydration.
-   Base state is the finished name; fill-mode:both applies the `from` frame during the
-   delay, and the global reduced-motion rule collapses it straight to the final state. */
-@keyframes sig-draw {
-  from {
-    stroke-dashoffset: var(--sig-len);
+/* Hero terminal caret — one slow steady blink beside the shell-prompt eyebrow.
+   steps(1) so it snaps on/off (no fade); the global reduced-motion rule freezes
+   it to its base state (solid, visible). */
+@keyframes caret-blink {
+  0%,
+  50% {
+    opacity: 1;
   }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes sig-fill {
-  from {
-    fill-opacity: 0;
-  }
-  to {
-    fill-opacity: 1;
+  50.01%,
+  100% {
+    opacity: 0;
   }
 }
-.sig-word {
-  stroke-dasharray: var(--sig-len);
-  stroke-dashoffset: 0;
-  fill-opacity: 1;
-  animation:
-    sig-draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--sig-delay) both,
-    sig-fill 0.55s cubic-bezier(0.4, 0, 0.2, 1) calc(var(--sig-delay) + 0.7s) both;
+.caret-blink {
+  animation: caret-blink 1s steps(1) infinite;
 }
 
-/* Hero entrance — CSS-driven like .sig-word so the whole composition rises from first
-   paint instead of waiting for hydration (framer initial:opacity-0 left the page blank
+/* Hero entrance — CSS-driven so the whole composition rises from first paint
+   instead of waiting for hydration (framer initial:opacity-0 left the page blank
    around the name on slow connections). */
 @keyframes rise-in {
   from {
@@ -211,48 +200,17 @@ html.lenis body {
   }
 }
 
-/* ── Hero focal visual — "ink meridian" (HeroVisual.tsx) ─────────────────────
-   Concentric hairline rings rotate at different slow rates in opposite
-   directions; the centre monogram breathes. transform/opacity only, so it
-   stays on the compositor. The reduced-motion block above freezes all three
-   into a static plate (iteration-count:1 + ~0ms duration reverts to base). */
-@keyframes meridian-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes meridian-spin-rev {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
-  }
-}
-@keyframes meridian-breathe {
-  0%,
-  100% {
-    opacity: 0.72;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-/* view-box origin so 50% resolves to the viewBox centre regardless of each
-   ring's own bounding box (arcs are not symmetric about the centre). */
-.meridian-ring {
-  transform-box: view-box;
-  transform-origin: 50% 50%;
-}
-.meridian-spin-a {
-  animation: meridian-spin 90s linear infinite;
-}
-.meridian-spin-b {
-  animation: meridian-spin-rev 60s linear infinite;
-}
-.meridian-breathe {
-  animation: meridian-breathe 6s ease-in-out infinite;
+/* ── Blueprint grid overlay ─────────────────────────────────────────────────
+   Faint 1px graph-paper lines behind hero/interstitials (algo-blueprint motif).
+   Radial mask fades it toward the edges so it never competes with text. */
+.blueprint-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgb(var(--accent-rgb) / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--accent-rgb) / 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
 }

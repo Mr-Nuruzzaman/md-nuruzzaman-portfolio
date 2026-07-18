@@ -6,132 +6,157 @@ import { ArrowUpRight, ExternalLink, Github } from 'lucide-react';
 
 import { Section } from '@/components/ui/Section';
 import { Chip } from '@/components/ui/Chip';
-import { Button } from '@/components/ui/Button';
 import { GradientText } from '@/components/ui/GradientText';
 import { RevealGroup, RevealItem } from '@/components/animations/Reveal';
+import { VoronoiPoster } from '@/components/animations/VoronoiPoster';
 import { ProjectModal } from './ProjectModal';
 import { projects } from '@/data/projects';
 import type { IProject } from '@/data/projects';
-import { cn, galleryOf, initials } from '@/lib/utils';
+import { cn, galleryOf } from '@/lib/utils';
 
-const MAX_CHIPS = 4;
+const MAX_CHIPS = 3;
 
-function ProjectRow({ project, flip, onOpen }: { project: IProject; flip: boolean; onOpen: () => void }) {
-  const { title, blurb, tech, links, badge } = project;
+/**
+ * Bento cell span for card `i` of `total`: a flagship 4×2 hero, two 2-col cells stacked
+ * beside it, then the remainder fills the bottom row (2 → 3-col pair, 3 → 2-col trio).
+ */
+function cellSpan(i: number, total: number): string {
+  if (i === 0) return 'md:col-span-4 md:row-span-2';
+  if (i === 1 || i === 2) return 'md:col-span-2';
+  const bottom = total - 3;
+  if (bottom === 1) return 'md:col-span-6';
+  if (bottom === 2) return 'md:col-span-3';
+  return 'md:col-span-2';
+}
+
+function ProjectCard({
+  project,
+  large,
+  dimmed,
+  onOpen,
+  onHoverStart,
+  onHoverEnd,
+}: {
+  project: IProject;
+  large: boolean;
+  dimmed: boolean;
+  onOpen: () => void;
+  onHoverStart: () => void;
+  onHoverEnd: () => void;
+}) {
+  const { title, blurb, tech, links } = project;
   const gallery = galleryOf(project);
   const [errored, setErrored] = useState(false);
-  const primary = !errored ? gallery[0] : undefined;
+  const poster = !errored ? gallery[0] : undefined;
+  const extra = tech.length - MAX_CHIPS;
 
   return (
-    <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-12">
-      {/* Imagery — spans 7 cols, whole frame opens the detail modal */}
+    <article
+      onMouseEnter={onHoverStart}
+      onMouseLeave={onHoverEnd}
+      className={cn(
+        'group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface',
+        'transition-[transform,opacity,border-color,box-shadow] duration-500 ease-expo',
+        'hover:border-border-glow hover:shadow-glow-cyan',
+        dimmed && 'opacity-60',
+      )}
+    >
+      {/* Whole-card click target → detail modal. Sits above the image, below the body links. */}
       <button
         type="button"
         onClick={onOpen}
         aria-label={`View ${title} details`}
-        className={cn(
-          'group relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border bg-surface-2 text-left md:row-start-1',
-          flip ? 'md:col-span-7 md:col-start-6' : 'md:col-span-7 md:col-start-1',
-        )}
-      >
-        {primary ? (
+        className="absolute inset-0 z-10 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      />
+
+      {/* Image / poster */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-bg-elev md:aspect-auto md:min-h-0 md:flex-1">
+        {poster ? (
           <Image
-            src={primary}
+            src={poster}
             alt={`${title} preview`}
             fill
-            sizes="(min-width: 768px) 58vw, 100vw"
+            sizes={large ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'}
             onError={() => setErrored(true)}
-            className="object-contain transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
+            className="object-cover transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
           />
         ) : (
-          <span className="absolute inset-0 grid place-items-center">
-            <span className="absolute inset-0 bg-gradient-to-br from-accent-3/25 via-surface-2 to-bg" aria-hidden />
-            <span
-              className="relative select-none font-mono text-6xl tracking-tighter text-content/50 sm:text-7xl"
-              aria-hidden
-            >
-              {initials(title)}
-            </span>
-          </span>
+          <VoronoiPoster
+            slug={project.slug}
+            title={title}
+            className="transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
+          />
         )}
-
-        {/* gallery photo-stack — quiet signal that a detail view exists */}
         {gallery.length > 1 && (
-          <span className="absolute bottom-3 right-3 z-10 flex items-center" aria-hidden>
-            {gallery.slice(1, 3).map((src, i) => (
-              <span
-                key={src + i}
-                className="relative -ml-4 h-9 w-14 overflow-hidden rounded-md border border-border-glow shadow-lg"
-                style={{ zIndex: 5 - i }}
-              >
-                <Image src={src} alt="" fill sizes="80px" className="bg-surface-2 object-contain" />
-              </span>
-            ))}
-            <span className="z-10 ml-1.5 rounded-full bg-bg/85 px-2 py-0.5 font-mono text-xs text-content">
-              {gallery.length}
-            </span>
+          <span className="pointer-events-none absolute right-3 top-3 z-20 rounded-full border border-border-glow bg-bg/80 px-2 py-0.5 font-mono text-xs text-content-muted">
+            {gallery.length}
           </span>
         )}
-      </button>
+      </div>
 
-      {/* Copy — spans 6 cols, overlaps the imagery by one column via col-start + z-index */}
-      <div
-        className={cn(
-          'flex min-w-0 flex-col gap-4 md:z-10 md:row-start-1',
-          flip
-            ? 'md:col-span-6 md:col-start-1 md:items-start md:text-left'
-            : 'md:col-span-6 md:col-start-7 md:items-end md:text-right',
-        )}
-      >
-        <div className={cn('flex items-center gap-3', !flip && 'md:flex-row-reverse')}>
-          <span className="font-mono text-eyebrow uppercase tracking-widest text-content-dim">Featured project</span>
-          {badge && <Chip className="border-accent/40 bg-bg/80 text-accent-2">{badge}</Chip>}
+      {/* Body — pointer-events-none so clicks fall through to the overlay button; links opt back in. */}
+      <div className="pointer-events-none relative z-20 flex flex-col gap-2.5 p-5">
+        <div className="flex items-start justify-between gap-3">
+          <h3
+            className={cn(
+              'line-clamp-2 min-w-0 font-heading leading-tight text-content',
+              large ? 'text-xl sm:text-2xl' : 'text-lg',
+            )}
+          >
+            {title}
+          </h3>
+          <ArrowUpRight
+            className="mt-0.5 h-5 w-5 shrink-0 text-content-dim transition-colors duration-300 group-hover:text-accent"
+            aria-hidden
+          />
         </div>
 
-        <h3 className="break-words font-heading text-3xl leading-tight text-content sm:text-4xl">{title}</h3>
+        <p className="line-clamp-2 text-small text-content-muted">{blurb}</p>
 
-        {/* Overlap panel — opaque surface floating over the imagery edge on md+ */}
-        <p className="max-w-prose break-words rounded-xl border border-border bg-bg-elev p-5 text-left text-content-muted">
-          {blurb}
-        </p>
-
-        <ul className={cn('flex flex-wrap gap-2', !flip && 'md:justify-end')} aria-label="Technologies used">
+        <div className="mt-1 flex flex-wrap items-center gap-2">
           {tech.slice(0, MAX_CHIPS).map((t) => (
-            <li key={t}>
-              <Chip>{t}</Chip>
-            </li>
+            <Chip key={t}>{t}</Chip>
           ))}
-          {tech.length > MAX_CHIPS && (
-            <li>
-              <Chip>+{tech.length - MAX_CHIPS}</Chip>
-            </li>
-          )}
-        </ul>
+          {extra > 0 && <Chip>+{extra}</Chip>}
 
-        <div className={cn('flex flex-wrap items-center gap-3 pt-1', !flip && 'md:justify-end')}>
-          <Button variant="ghost" size="sm" onClick={onOpen}>
-            Case study
-            <ArrowUpRight className="h-4 w-4" aria-hidden />
-          </Button>
-          {links.live && (
-            <Button href={links.live} variant="icon" aria-label={`Open ${title} live site`}>
-              <ExternalLink className="h-4 w-4" aria-hidden />
-            </Button>
-          )}
-          {links.repo && (
-            <Button href={links.repo} variant="icon" aria-label={`View ${title} source on GitHub`}>
-              <Github className="h-4 w-4" aria-hidden />
-            </Button>
+          {(links.live || links.repo) && (
+            <span className="pointer-events-auto ml-auto flex items-center gap-1.5">
+              {links.live && (
+                <a
+                  href={links.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`Open ${title} live site`}
+                  className="grid h-8 w-8 place-items-center rounded-md border border-border bg-surface-2 text-content-muted transition-colors hover:border-accent hover:text-accent-2"
+                >
+                  <ExternalLink className="h-4 w-4" aria-hidden />
+                </a>
+              )}
+              {links.repo && (
+                <a
+                  href={links.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`View ${title} source on GitHub`}
+                  className="grid h-8 w-8 place-items-center rounded-md border border-border bg-surface-2 text-content-muted transition-colors hover:border-accent hover:text-accent-2"
+                >
+                  <Github className="h-4 w-4" aria-hidden />
+                </a>
+              )}
+            </span>
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
 export function Projects() {
   const featured = projects.filter((p) => p.featured);
   const [selected, setSelected] = useState<IProject | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <Section
@@ -144,10 +169,18 @@ export function Projects() {
         </>
       }
     >
-      <RevealGroup className="flex flex-col gap-y-20 md:gap-y-28">
+      {/* Bento: flagship 4×2 cell, two 2-col cells stacked beside it, a 3-col pair below. */}
+      <RevealGroup className="grid grid-cols-1 gap-4 md:grid-cols-6 md:grid-rows-[260px_260px_260px] md:gap-5">
         {featured.map((project, i) => (
-          <RevealItem key={project.slug}>
-            <ProjectRow project={project} flip={i % 2 === 1} onOpen={() => setSelected(project)} />
+          <RevealItem key={project.slug} className={cn('h-full min-w-0', cellSpan(i, featured.length))}>
+            <ProjectCard
+              project={project}
+              large={i === 0}
+              dimmed={hovered !== null && hovered !== i}
+              onOpen={() => setSelected(project)}
+              onHoverStart={() => setHovered(i)}
+              onHoverEnd={() => setHovered(null)}
+            />
           </RevealItem>
         ))}
       </RevealGroup>

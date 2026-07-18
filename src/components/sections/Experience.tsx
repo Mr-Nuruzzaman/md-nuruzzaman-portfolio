@@ -1,8 +1,13 @@
+'use client';
+
 import type { ReactNode } from 'react';
+import { m } from 'framer-motion';
 import { Section } from '@/components/ui/Section';
 import { Chip } from '@/components/ui/Chip';
 import { GradientText } from '@/components/ui/GradientText';
 import { Reveal } from '@/components/animations/Reveal';
+import { EASE_EXPO } from '@/lib/constants';
+import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { experience } from '@/data/experience';
 
 // Percentages and currency amounts get the ember treatment so quantified wins read first.
@@ -22,6 +27,8 @@ function highlightMetrics(text: string): ReactNode[] {
 }
 
 export function Experience() {
+  const reduced = usePrefersReducedMotion();
+
   return (
     <Section
       id="experience"
@@ -37,11 +44,12 @@ export function Experience() {
         {experience.map((role, i) => (
           <li key={`${role.company}-${role.start}`} className="border-t border-border first:border-t-0">
             <Reveal as="div" delay={i * 0.06}>
-              <article className="grid gap-6 py-8 first:pt-0 md:grid-cols-[11rem_1fr] md:gap-8">
+              <article className="grid gap-6 py-8 first:pt-0 md:grid-cols-[11rem_1.5rem_1fr] md:gap-8">
                 {/* Meta rail — dates and context in mono, no colored strip */}
                 <div className="flex flex-col gap-2 md:sticky md:top-28 md:self-start">
                   <p className="font-mono text-sm text-content">
-                    {role.start} <span aria-hidden="true">–</span> {role.end}
+                    <span className="text-content-dim">[{i}]</span> {role.start} <span aria-hidden="true">–</span>{' '}
+                    {role.end}
                   </p>
                   <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-content-dim">
                     {role.type} · {role.mode}
@@ -49,10 +57,31 @@ export function Experience() {
                   <p className="break-words text-sm text-content-dim">{role.location}</p>
                 </div>
 
+                {/* Topo-sort rail — edge draws in dependency order, then the node lights */}
+                <div className="relative hidden md:block" aria-hidden="true">
+                  <span className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-border" />
+                  <m.span
+                    className="absolute left-1/2 top-0 h-full w-px origin-top -translate-x-1/2 bg-accent/40"
+                    initial={{ scaleY: reduced ? 1 : 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true, margin: '-10% 0px' }}
+                    transition={{ duration: 0.7, ease: EASE_EXPO, delay: i * 0.12 + 0.06 }}
+                  />
+                  <span className="absolute left-1/2 top-[0.6rem] flex h-2 w-2 -translate-x-1/2 items-center justify-center border border-border-glow bg-bg">
+                    <m.span
+                      className="h-full w-full bg-accent shadow-glow-cyan"
+                      initial={{ opacity: reduced ? 1 : 0, scale: reduced ? 1 : 0.4 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, margin: '-10% 0px' }}
+                      transition={{ duration: 0.5, ease: EASE_EXPO, delay: i * 0.12 }}
+                    />
+                  </span>
+                </div>
+
                 <div className="flex min-w-0 flex-col gap-4">
                   <h3 className="break-words font-heading text-h3 text-content">
-                    {role.title} <span className="font-display italic text-content-dim">at</span>{' '}
-                    <GradientText>{role.company}</GradientText>
+                    {role.title} <span className="font-normal text-content-dim">at</span>{' '}
+                    <span className="text-accent">{role.company}</span>
                   </h3>
 
                   <ul className="flex flex-col gap-2.5">

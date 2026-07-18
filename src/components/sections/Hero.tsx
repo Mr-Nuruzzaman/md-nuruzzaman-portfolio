@@ -15,13 +15,24 @@ import {
 } from '@/components/ui/BrandIcons';
 import { CountUp } from '@/components/animations/CountUp';
 import { Magnetic } from '@/components/animations/Magnetic';
-import { SignatureName } from '@/components/animations/SignatureName';
-import { HeroVisual } from '@/components/animations/HeroVisual';
+import { PathfinderCanvas } from '@/components/animations/PathfinderCanvas';
 import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { profile } from '@/data/profile';
 import { platforms } from '@/data/competitive';
 
-/** Editorial hero: monumental Instrument Serif name, left-aligned, quiet bottom metadata rail. */
+// Shell-prompt path from the real location: "Dhaka, Bangladesh" → "~/dhaka/bangladesh".
+const shellPath = `~/${profile.location
+  .toLowerCase()
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
+  .join('/')}`;
+
+// Accent a key identity phrase in the tagline only when it genuinely appears — never forced.
+const KEY_PHRASE = 'competitive programmer';
+const taglineIdx = profile.tagline.toLowerCase().indexOf(KEY_PHRASE);
+
+/** Hero: A* pathfinder canvas behind a left-aligned, terminal-flavoured statement block. */
 export function Hero() {
   const reduced = usePrefersReducedMotion();
   const [scrolled, setScrolled] = useState(false);
@@ -45,62 +56,79 @@ export function Hero() {
 
   return (
     <section id="top" className="relative min-h-screen overflow-hidden">
-      {/* Toned-down gradient-mesh backdrop */}
-      <div className="grad-mesh" aria-hidden />
+      {/* A* pathfinder — ambient background layer, behind everything, non-interactive */}
+      <PathfinderCanvas className="pointer-events-none absolute inset-0 z-0 h-full w-full" />
+      {/* Faint blueprint graph-paper behind the words */}
+      <div className="blueprint-grid z-0" aria-hidden />
+      {/* One quiet teal bloom for atmosphere */}
+      <div className="grad-mesh z-0" aria-hidden />
       {/* Fade the base into the next section */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-bg"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-32 bg-gradient-to-b from-transparent to-bg"
         aria-hidden
       />
 
       <Container className="relative z-10 flex min-h-screen flex-col py-28 sm:py-32">
-        {/* Statement block — single column on mobile, two-column composition from lg up */}
+        {/* Statement block — single left-aligned column */}
         <div className="flex flex-1 flex-col justify-center">
-          <div className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-12">
-            {/* Left — the words (~58% at lg) */}
-            <div className="max-w-4xl lg:col-span-7">
-              {/* Eyebrow — quiet mono metadata. CSS entrance: visible from first paint, no hydration wait. */}
-              <p
-                className="rise-in mb-6 font-mono text-eyebrow uppercase tracking-[0.28em] text-content-dim"
-                style={{ '--rise-delay': '0.05s' } as React.CSSProperties}
-              >
-                {profile.title} · {profile.location}
-              </p>
+          <div className="max-w-4xl">
+            {/* Eyebrow — shell prompt in mono, one slow-blinking block caret */}
+            <p
+              className="rise-in mb-7 flex items-center font-mono text-small tracking-tight"
+              style={{ '--rise-delay': '0.05s' } as React.CSSProperties}
+            >
+              <span className="text-content-dim">{shellPath}</span>
+              <span className="mx-2 text-accent-2">$</span>
+              <span className="text-content-muted">whoami</span>
+              <span
+                aria-hidden
+                className="caret-blink ml-2 inline-block h-[1.05em] w-[0.5em] translate-y-[0.08em] bg-accent"
+              />
+            </p>
 
-              {/* Name — signature moment: serif glyphs stroke themselves in, then the fill fades up. */}
-              <h1 className="font-display text-display leading-[0.95] text-content">
-                <SignatureName />
-              </h1>
+            {/* Name — plain display text, CSS rise-in from first paint (no hydration gating).
+                Custom clamp (not text-display) so the long single word "Nuruzzaman" clears
+                narrow phones; the 8.5rem cap keeps the same monumental size on desktop. */}
+            <h1
+              className="rise-in font-display text-[clamp(2.9rem,10vw,8.5rem)] font-bold leading-[0.92] tracking-[-0.015em] text-content"
+              style={{ '--rise-delay': '0.12s' } as React.CSSProperties}
+            >
+              {profile.name}
+            </h1>
 
-              {/* Positioning / tagline */}
-              <p
-                className="rise-in mt-8 max-w-2xl text-pretty text-body-lg text-content-muted"
-                style={{ '--rise-delay': '0.25s' } as React.CSSProperties}
-              >
-                {profile.tagline}
-              </p>
+            {/* Positioning / tagline — key phrase accented only if naturally present */}
+            <p
+              className="rise-in mt-8 max-w-2xl text-pretty text-body-lg text-content-muted"
+              style={{ '--rise-delay': '0.25s' } as React.CSSProperties}
+            >
+              {taglineIdx === -1 ? (
+                profile.tagline
+              ) : (
+                <>
+                  {profile.tagline.slice(0, taglineIdx)}
+                  <span className="text-accent">
+                    {profile.tagline.slice(taglineIdx, taglineIdx + KEY_PHRASE.length)}
+                  </span>
+                  {profile.tagline.slice(taglineIdx + KEY_PHRASE.length)}
+                </>
+              )}
+            </p>
 
-              {/* Dual CTA — primary work link + ghost résumé, both on every breakpoint */}
-              <div
-                className="rise-in mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
-                style={{ '--rise-delay': '0.4s' } as React.CSSProperties}
-              >
-                <Magnetic className="w-full sm:w-auto">
-                  <Button href="#projects" className="w-full sm:w-auto">
-                    View work
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Magnetic>
-                <Button href={profile.resume} variant="ghost" className="w-full sm:w-auto">
-                  Résumé
-                  <FileDown className="h-4 w-4" />
+            {/* Dual CTA — primary work link + ghost résumé */}
+            <div
+              className="rise-in mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5"
+              style={{ '--rise-delay': '0.4s' } as React.CSSProperties}
+            >
+              <Magnetic className="w-full sm:w-auto">
+                <Button href="#projects" className="w-full sm:w-auto">
+                  View work
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
-              </div>
-            </div>
-
-            {/* Right — focal visual (~42% at lg), centred; absent below lg so mobile is unchanged */}
-            <div className="hidden lg:col-span-5 lg:flex lg:justify-center">
-              <HeroVisual />
+              </Magnetic>
+              <Button href={profile.resume} variant="ghost" className="w-full sm:w-auto">
+                Résumé
+                <FileDown className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>

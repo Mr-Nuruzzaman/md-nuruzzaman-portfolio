@@ -32,7 +32,12 @@ export function TrustMarquee() {
               key={label}
               className="flex items-center gap-8 whitespace-nowrap font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-content-dim"
             >
-              {label}
+              <span className="flex items-center gap-2">
+                <span aria-hidden className="text-accent/60">
+                  [ok]
+                </span>
+                {label}
+              </span>
               <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-border" />
             </span>
           ))}

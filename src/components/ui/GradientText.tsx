@@ -4,10 +4,10 @@ interface GradientTextProps extends React.HTMLAttributes<HTMLSpanElement> {
   as?: React.ElementType;
 }
 
-/** Signature emphasis: ember italic serif. (Name kept for legacy imports — gradient retired.) */
+/** Signature emphasis: teal accent, inheriting the surrounding font + weight. (Name kept for legacy imports.) */
 export function GradientText({ as: Tag = 'span', className, children, ...props }: GradientTextProps) {
   return (
-    <Tag className={cn('font-display italic text-accent-2', className)} {...props}>
+    <Tag className={cn('text-accent', className)} {...props}>
       {children}
     </Tag>
   );

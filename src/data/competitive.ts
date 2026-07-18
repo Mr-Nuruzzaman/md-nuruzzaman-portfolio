@@ -75,7 +75,7 @@ export const contests: IContest[] = [
   { result: '224th', name: 'ICPC Asia Dhaka Regional Preliminary Contest', year: 2022, teams: 1648 },
   { result: 'Champion', name: 'IST Battle of Brains', year: 2023, teams: 30, highlight: true },
   { result: '1st Runner-up', name: 'Intra IST Programming Contest', year: 2022, teams: 44 },
-  { result: '18th', name: 'CUET Inter-University Programming Contest', year: 2024 },
+  { result: '18th', name: 'CUET Inter-University Programming Contest', year: 2024, teams: 98 },
   { result: '22nd', name: '7th DRMC International Tech Carnival', year: 2024 },
   { result: '25th', name: 'CoU-BRACNet Inter-University Programming Contest', year: 2023, teams: 59 },
   { result: '47th', name: 'IUT 11th National ICT Fest', year: 2024 },

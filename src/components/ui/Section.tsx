@@ -29,7 +29,7 @@ export function Section({
   ...props
 }: SectionProps) {
   const header = (eyebrow || heading) && (
-    <header className="mb-12 md:mb-16">
+    <header className="mb-10 md:mb-12">
       {eyebrow && (
         <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-accent">
           {index && <span className="text-content-dim">{index} — </span>}
@@ -49,7 +49,7 @@ export function Section({
   );
 
   return (
-    <section id={id} className={cn('relative scroll-mt-4 py-16 md:py-32', className)} {...props}>
+    <section id={id} className={cn('relative scroll-mt-4 py-12 md:py-20', className)} {...props}>
       {contained ? <Container wide={wide}>{inner}</Container> : inner}
     </section>
   );

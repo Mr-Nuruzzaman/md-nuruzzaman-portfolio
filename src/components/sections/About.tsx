@@ -93,7 +93,7 @@ export function About() {
           Builder &amp; <GradientText>competitive programmer</GradientText>
         </>
       }
-      className="py-20 md:py-40"
+      className="py-14 md:py-24"
     >
       <div className="grid gap-12 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
         {/* Left rail: portrait, mono stat ledger, quick facts */}

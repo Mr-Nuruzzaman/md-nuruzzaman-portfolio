@@ -29,7 +29,7 @@ export function Section({
   ...props
 }: SectionProps) {
   const header = (eyebrow || heading) && (
-    <header className="mb-10 md:mb-12">
+    <header className="mb-10 text-center md:mb-12">
       {eyebrow && (
         <p className="font-mono text-eyebrow uppercase tracking-[0.2em] text-accent">
           {index && <span className="text-content-dim">{index} — </span>}
@@ -37,7 +37,7 @@ export function Section({
         </p>
       )}
       {heading && <h2 className="mt-3 font-heading text-h2 font-normal text-content">{heading}</h2>}
-      <RuleReveal className="mt-6 md:mt-8" />
+      <RuleReveal className="mx-auto mt-6 max-w-24 origin-center md:mt-8" />
     </header>
   );
 

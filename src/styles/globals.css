@@ -3,15 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0e0d0b;
-  --content: #ede9e0;
-  --border: #2b2822;
-  --border-glow: #3b372f;
-  --accent: #e8582c;
-  --accent-rgb: 232 88 44;
-  --accent-2: #f2926b;
-  --accent-3: #b4441f;
-  --grad-primary: linear-gradient(135deg, #e8582c 0%, #f2926b 100%);
+  --bg: #0a1628;
+  --content: #e6eefb;
+  --border: #22344d;
+  --border-glow: #2f4b6e;
+  --accent: #5eead4;
+  --accent-rgb: 94 234 212;
+  --accent-2: #2dd4bf;
+  --accent-3: #0f766e;
+  --ember-smoke: #16354f; /* legacy var name — now the navy mesh-blob blue, gradient-mesh only */
+  --grad-primary: linear-gradient(135deg, #5eead4 0%, #2dd4bf 100%);
   --r-lg: 14px;
   --r-md: 10px;
 }
@@ -22,6 +23,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Reserve the scrollbar's width on BOTH edges so the layout centre is the visual
+     centre of the display — without this the content sits 10px left of true centre. */
+  scrollbar-gutter: stable both-edges;
   /* Small cushion for anchor jumps — sections carry their own top padding,
      which also absorbs the fixed navbar when it is visible. */
   scroll-padding-top: 16px;
@@ -65,7 +69,7 @@ html.lenis body {
 
 /* Legacy utility — glass retired; solid elevated surface, no backdrop blur (mobile FPS). */
 .glass {
-  background: rgba(25, 23, 19, 0.97);
+  background: rgba(19, 40, 64, 0.97);
   border: 1px solid var(--border);
 }
 
@@ -89,7 +93,7 @@ html.lenis body {
   opacity: 1;
 }
 
-/* Hero atmosphere: one faint ember bloom + deep shade — barely-there, not neon. */
+/* Hero atmosphere: one faint teal bloom + deep navy shade — barely-there, not neon. */
 .grad-mesh {
   position: absolute;
   inset: 0;
@@ -116,7 +120,7 @@ html.lenis body {
 .grad-mesh::after {
   bottom: -18%;
   left: -10%;
-  background: #4a3527;
+  background: var(--ember-smoke);
   opacity: 0.14;
   animation: drift 22s ease-in-out infinite reverse;
 }
@@ -154,36 +158,25 @@ html.lenis body {
   background: var(--border-glow);
 }
 
-/* Hero signature draw-on — pure CSS so it starts at first paint, before hydration.
-   Base state is the finished name; fill-mode:both applies the `from` frame during the
-   delay, and the global reduced-motion rule collapses it straight to the final state. */
-@keyframes sig-draw {
-  from {
-    stroke-dashoffset: var(--sig-len);
+/* Hero terminal caret — one slow steady blink beside the shell-prompt eyebrow.
+   steps(1) so it snaps on/off (no fade); the global reduced-motion rule freezes
+   it to its base state (solid, visible). */
+@keyframes caret-blink {
+  0%,
+  50% {
+    opacity: 1;
   }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes sig-fill {
-  from {
-    fill-opacity: 0;
-  }
-  to {
-    fill-opacity: 1;
+  50.01%,
+  100% {
+    opacity: 0;
   }
 }
-.sig-word {
-  stroke-dasharray: var(--sig-len);
-  stroke-dashoffset: 0;
-  fill-opacity: 1;
-  animation:
-    sig-draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--sig-delay) both,
-    sig-fill 0.55s cubic-bezier(0.4, 0, 0.2, 1) calc(var(--sig-delay) + 0.7s) both;
+.caret-blink {
+  animation: caret-blink 1s steps(1) infinite;
 }
 
-/* Hero entrance — CSS-driven like .sig-word so the whole composition rises from first
-   paint instead of waiting for hydration (framer initial:opacity-0 left the page blank
+/* Hero entrance — CSS-driven so the whole composition rises from first paint
+   instead of waiting for hydration (framer initial:opacity-0 left the page blank
    around the name on slow connections). */
 @keyframes rise-in {
   from {
@@ -208,4 +201,19 @@ html.lenis body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ── Blueprint grid overlay ─────────────────────────────────────────────────
+   Faint 1px graph-paper lines behind hero/interstitials (algo-blueprint motif).
+   Radial mask fades it toward the edges so it never competes with text. */
+.blueprint-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgb(var(--accent-rgb) / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--accent-rgb) / 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
 }

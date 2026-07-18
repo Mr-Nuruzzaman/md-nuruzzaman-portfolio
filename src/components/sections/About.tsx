@@ -1,9 +1,15 @@
+'use client';
+
 import Image from 'next/image';
+import { m } from 'framer-motion';
 import { Section } from '@/components/ui/Section';
 import { GradientText } from '@/components/ui/GradientText';
 import { Reveal } from '@/components/animations/Reveal';
 import { CountUp } from '@/components/animations/CountUp';
 import { ExperienceStat } from '@/components/ui/ExperienceStat';
+import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
+import { EASE_EXPO } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 import { profile } from '@/data/profile';
 
 const facts = [
@@ -12,8 +18,63 @@ const facts = [
   { label: 'Focus', value: profile.remoteFocus },
 ] as const;
 
+/**
+ * Ambient binary-search motif: two hairline bounds (`lo`/`hi`) slide inward in
+ * discrete halving steps and settle tight against the lead statement, then an
+ * accent `mid` tick lands — the interval collapsing onto its answer. Decorative,
+ * aria-hidden, md+ only, transform/opacity only; instant + settled under reduced motion.
+ */
+function BinarySearchBrackets() {
+  const reduced = usePrefersReducedMotion();
+
+  // Stepped keyframes (value held between jumps) read as discrete search steps rather than a slide.
+  const times = [0, 0.12, 0.25, 0.45, 0.55, 0.78, 1];
+  const bound = (dir: 'lo' | 'hi') => {
+    const sign = dir === 'lo' ? -1 : 1;
+    const x = [56, 56, 28, 28, 14, 14, 0].map((v) => sign * v);
+    return {
+      initial: { x: reduced ? 0 : sign * 56, opacity: reduced ? 1 : 0 },
+      whileInView: reduced
+        ? { x: 0, opacity: 1 }
+        : { x, opacity: [0, 1, 1, 1, 1, 1, 1], transition: { duration: 1.1, times, ease: 'linear' } },
+    };
+  };
+
+  return (
+    <div aria-hidden className="pointer-events-none absolute -inset-x-4 inset-y-0 hidden md:block">
+      {(['lo', 'hi'] as const).map((dir) => {
+        const b = bound(dir);
+        return (
+          <m.div
+            key={dir}
+            initial={b.initial}
+            whileInView={b.whileInView}
+            viewport={{ once: true, margin: '-15% 0px' }}
+            className={cn('absolute inset-y-0 w-px bg-content-dim/40', dir === 'lo' ? 'left-0' : 'right-0')}
+          >
+            <span className="absolute -top-5 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.2em] text-content-dim">
+              {dir}
+            </span>
+          </m.div>
+        );
+      })}
+      <m.div
+        initial={{ opacity: reduced ? 1 : 0, scaleY: reduced ? 1 : 0 }}
+        whileInView={{ opacity: 1, scaleY: 1 }}
+        viewport={{ once: true, margin: '-15% 0px' }}
+        transition={{ duration: 0.3, delay: reduced ? 0 : 1.05, ease: EASE_EXPO }}
+        className="absolute left-1/2 top-0 h-3 w-px origin-top -translate-x-1/2 bg-accent shadow-glow-cyan"
+      >
+        <span className="absolute -top-5 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+          mid
+        </span>
+      </m.div>
+    </div>
+  );
+}
+
 export function About() {
-  // Split the positioning line so its closing clause carries the ember emphasis.
+  // Split the positioning line so its closing clause carries the accent emphasis.
   const [lead, emphasis] = profile.positioning.split(' — ');
 
   const stats = [
@@ -32,7 +93,7 @@ export function About() {
           Builder &amp; <GradientText>competitive programmer</GradientText>
         </>
       }
-      className="py-20 md:py-40"
+      className="py-14 md:py-24"
     >
       <div className="grid gap-12 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
         {/* Left rail: portrait, mono stat ledger, quick facts */}
@@ -72,9 +133,10 @@ export function About() {
           </div>
         </Reveal>
 
-        {/* Right: serif pull-quote from the positioning line, then the bio narrative */}
+        {/* Right: lead pull-quote from the positioning line, then the bio narrative */}
         <div className="flex flex-col gap-10 md:col-span-7 lg:col-span-8">
-          <Reveal as="div">
+          <Reveal as="div" className="relative">
+            <BinarySearchBrackets />
             <blockquote className="font-display text-[1.75rem] leading-[1.15] text-content sm:text-[2.25rem] lg:text-[2.6rem]">
               {lead}
               {emphasis && (

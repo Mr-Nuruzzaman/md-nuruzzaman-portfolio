@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { Instrument_Serif, Inter, JetBrains_Mono } from 'next/font/google';
+import { Geist_Mono, Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { siteMetadata, personJsonLd, projectsJsonLd } from '@/lib/metadata';
@@ -7,27 +8,28 @@ import { MotionProvider } from '@/components/layout/MotionProvider';
 import { SmoothScroll } from '@/components/layout/SmoothScroll';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
 import { CursorGlow } from '@/components/layout/CursorGlow';
-import { SideRails } from '@/components/layout/SideRails';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import '@/styles/globals.css';
 
-// Instrument Serif serves both display and heading — one weight, editorial voice.
+// Clash Display serves both display and heading — sharp technical voice.
 // Tailwind's font-heading token points at --font-display too (see tailwind.config.ts).
-const serif = Instrument_Serif({
-  subsets: ['latin'],
+const display = localFont({
+  src: [
+    { path: '../fonts/ClashDisplay-Semibold.woff2', weight: '600', style: 'normal' },
+    { path: '../fonts/ClashDisplay-Bold.woff2', weight: '700', style: 'normal' },
+  ],
   variable: '--font-display',
-  weight: '400',
-  style: ['normal', 'italic'],
+  display: 'swap',
 });
 const sans = Inter({ subsets: ['latin'], variable: '--font-sans' });
-const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
+const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', weight: ['400', '500'] });
 
 export const metadata: Metadata = siteMetadata;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`dark ${serif.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`dark ${display.variable} ${sans.variable} ${mono.variable}`}>
       <body className="bg-bg font-sans text-content antialiased">
         {/* Recruiter/SEO schema */}
         <script
@@ -49,7 +51,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MotionProvider>
           <ScrollProgress />
           <CursorGlow />
-          <SideRails />
           <Navbar />
           <SmoothScroll>
             {children}

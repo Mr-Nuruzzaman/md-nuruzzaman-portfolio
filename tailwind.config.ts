@@ -6,39 +6,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Warm ink monochrome — depth comes from lightness shifts, not hue or glow.
+        // "Midnight Signal" — deep navy monochrome; depth comes from lightness shifts.
         bg: {
-          DEFAULT: '#0E0D0B',
-          elev: '#14120F',
+          DEFAULT: '#0A1628',
+          elev: '#0F1E33',
         },
         surface: {
-          DEFAULT: '#191713',
-          2: '#201D18',
+          DEFAULT: '#132840',
+          2: '#1B3350',
         },
         border: {
-          DEFAULT: '#2B2822',
-          glow: '#3B372F',
+          DEFAULT: '#22344D',
+          glow: '#2F4B6E',
         },
         content: {
-          DEFAULT: '#EDE9E0',
-          muted: '#A9A296',
-          dim: '#8C8578', // ≥4.5:1 on bg for AA text contrast
+          DEFAULT: '#E6EEFB',
+          muted: '#9FB2CC',
+          dim: '#7B8CA6', // ≥4.5:1 on bg for AA text contrast
         },
-        // Single ember accent family — tints/shades of one hue, never a second hue.
+        // Single teal accent family — tints/shades of one hue, never a second hue.
         accent: {
-          DEFAULT: '#E8582C', // ember
-          2: '#F2926B', // clay tint (accent text on dark)
-          3: '#B4441F', // deep ember
-          pink: '#C86A4A', // muted clay (legacy key)
+          DEFAULT: '#5EEAD4', // teal signal
+          2: '#2DD4BF', // pressed / lower-emphasis teal
+          3: '#0F766E', // deep teal (filled backgrounds)
+          pink: '#99F6E4', // pale teal tint (legacy key)
         },
-        success: '#86B378',
-        warning: '#D9A03F',
+        success: '#4ADE80',
+        warning: '#FBBF24',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Georgia', 'serif'],
-        heading: ['var(--font-display)', 'Georgia', 'serif'],
+        display: ['var(--font-display)', 'sans-serif'],
+        heading: ['var(--font-display)', 'sans-serif'],
         sans: ['var(--font-sans)', 'Inter', 'sans-serif'],
-        mono: ['var(--font-mono)', 'JetBrains Mono', 'monospace'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
       fontSize: {
         display: ['clamp(3.5rem, 9vw, 8.5rem)', { lineHeight: '0.92', letterSpacing: '-0.015em' }],
@@ -51,8 +51,8 @@ const config: Config = {
         eyebrow: ['0.8125rem', { lineHeight: '1', letterSpacing: '0.2em' }],
       },
       maxWidth: {
-        container: '1200px',
-        wide: '1440px',
+        container: '1320px',
+        wide: '1536px',
       },
       borderRadius: {
         sm: '6px',
@@ -60,11 +60,11 @@ const config: Config = {
         lg: '14px',
       },
       backgroundImage: {
-        'grad-primary': 'linear-gradient(135deg, #E8582C 0%, #F2926B 100%)',
+        'grad-primary': 'linear-gradient(135deg, #5EEAD4 0%, #2DD4BF 100%)',
       },
       boxShadow: {
-        // Legacy keys kept; values are now quiet elevation, not neon glow.
-        'glow-cyan': '0 1px 0 0 rgba(237,233,224,.04) inset, 0 12px 32px -12px rgba(0,0,0,.6)',
+        // Legacy keys kept; cyan = subtle teal signal glow (accent elements only), violet = quiet elevation.
+        'glow-cyan': '0 0 24px -6px rgba(94,234,212,.35)',
         'glow-violet': '0 16px 48px -16px rgba(0,0,0,.55)',
       },
       transitionTimingFunction: {

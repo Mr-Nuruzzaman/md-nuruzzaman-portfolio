@@ -83,5 +83,6 @@ export const contests: IContest[] = [
   { result: '56th', name: 'BUET Inter-University Programming Contest', year: 2023, teams: 100 },
   { result: '59th', name: 'AUST Inter-University Programming Contest', year: 2025, teams: 130 },
   { result: '73rd', name: 'SUST Inter-University Programming Contest', year: 2024, teams: 120 },
+  { result: '108th', name: 'Miaki Presents Inter-University Programming Contest', year: 2025, teams: 168 },
   { result: '115th', name: 'National Collegiate Programming Contest', year: 2024, teams: 196 },
 ];

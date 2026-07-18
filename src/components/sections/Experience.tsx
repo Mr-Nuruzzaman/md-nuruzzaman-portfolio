@@ -9,6 +9,7 @@ import { Reveal } from '@/components/animations/Reveal';
 import { EASE_EXPO } from '@/lib/constants';
 import { usePrefersReducedMotion } from '@/hooks/useMediaQuery';
 import { experience } from '@/data/experience';
+import { cn } from '@/lib/utils';
 
 // Percentages and currency amounts get the ember treatment so quantified wins read first.
 const METRIC_SPLIT = /(\$\d[\d.,]*(?:\/mo)?|~?\d+(?:\.\d+)?%)/g;
@@ -44,12 +45,18 @@ export function Experience() {
         {experience.map((role, i) => (
           <li key={`${role.company}-${role.start}`} className="border-t border-border first:border-t-0">
             <Reveal as="div" delay={i * 0.06}>
-              <article className="grid gap-6 py-8 first:pt-0 md:grid-cols-[13.5rem_1.5rem_1fr] md:gap-8">
+              {/* `first:pt-0` matched every article (each is the first child of its own li),
+                  flattening the gap under every divider — only the first ENTRY drops its top pad. */}
+              <article
+                className={cn('grid gap-6 pb-8 md:grid-cols-[13.5rem_1.5rem_1fr] md:gap-8', i === 0 ? 'pt-0' : 'pt-8')}
+              >
                 {/* Meta rail — dates and context in mono, no colored strip */}
                 <div className="flex flex-col gap-2 md:sticky md:top-28 md:self-start">
                   <p className="font-mono text-sm text-content">
-                    <span className="text-content-dim">[{i}]</span> {role.start} <span aria-hidden="true">–</span>{' '}
-                    {role.end}
+                    {/* Execution-order index: the career ran oldest→newest, so the earliest role is [0]
+                        even though the list displays newest first. */}
+                    <span className="text-content-dim">[{experience.length - 1 - i}]</span> {role.start}{' '}
+                    <span aria-hidden="true">–</span> {role.end}
                   </p>
                   <p className="whitespace-nowrap font-mono text-eyebrow uppercase tracking-[0.14em] text-content-dim">
                     {role.type} · {role.mode}
@@ -97,14 +104,14 @@ export function Experience() {
                   </ul>
 
                   <ul className="flex flex-wrap gap-2 pt-1">
-                    {role.tech.slice(0, 5).map((t) => (
+                    {role.tech.slice(0, 7).map((t) => (
                       <li key={t}>
                         <Chip glow>{t}</Chip>
                       </li>
                     ))}
-                    {role.tech.length > 5 && (
+                    {role.tech.length > 7 && (
                       <li>
-                        <Chip>+{role.tech.length - 5}</Chip>
+                        <Chip>+{role.tech.length - 7}</Chip>
                       </li>
                     )}
                   </ul>

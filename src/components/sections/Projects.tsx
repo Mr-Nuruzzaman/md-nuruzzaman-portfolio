@@ -93,7 +93,18 @@ function ProjectRow({ project, flip, onOpen }: { project: IProject; flip: boolea
           ))}
           {extra > 0 && (
             <li>
-              <Chip>+{extra}</Chip>
+              {/* The +N chip is a real control: it opens the case-study modal where the full stack lists. */}
+              <button
+                type="button"
+                onClick={onOpen}
+                title={tech.slice(MAX_CHIPS).join(' · ')}
+                aria-label={`Show all ${tech.length} technologies for ${title}`}
+                className="rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                <Chip className="cursor-pointer transition-colors hover:border-accent hover:text-accent-2">
+                  +{extra}
+                </Chip>
+              </button>
             </li>
           )}
         </ul>

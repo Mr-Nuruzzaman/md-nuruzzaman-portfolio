@@ -54,6 +54,6 @@ export const experience: IExperience[] = [
     bullets: [
       'Contributed to a Doctor & Hospital Management System: patient accounts, doctor/hospital profiles, diagnostics integration, and scheduling modules.',
     ],
-    tech: ['Java', 'Spring Boot', 'MySQL'],
+    tech: ['Java', 'Spring Boot', 'MySQL', 'React', 'AWS EC2', 'S3', 'CloudFront'],
   },
 ];

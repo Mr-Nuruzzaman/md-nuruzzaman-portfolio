@@ -40,7 +40,7 @@ export function BackToTop() {
           {...anim}
           href="#top"
           aria-label="Back to top"
-          className="fixed bottom-6 right-6 z-40 grid size-11 place-items-center rounded-full border border-border bg-bg-elev/90 text-content-dim shadow-lg backdrop-blur-sm transition-colors duration-200 hover:border-accent hover:text-accent lg:bottom-28"
+          className="fixed bottom-6 right-6 z-40 grid size-11 place-items-center rounded-full border border-border bg-bg-elev text-content-dim shadow-lg transition-colors duration-200 hover:border-accent hover:text-accent lg:right-16"
         >
           <ArrowUp size={18} aria-hidden />
         </m.a>

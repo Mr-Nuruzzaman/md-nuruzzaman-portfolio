@@ -79,7 +79,7 @@ export const contests: IContest[] = [
   { result: '22nd', name: '7th DRMC International Tech Carnival — Final', year: 2024, teams: 28 },
   { result: '26th', name: '7th DRMC International Tech Carnival — Preliminary', year: 2024, teams: 197 },
   { result: '25th', name: 'CoU-BRACNet Inter-University Programming Contest', year: 2023, teams: 59 },
-  { result: '47th', name: 'IUT 11th National ICT Fest', year: 2024 },
+  { result: '47th', name: 'IUT 11th National ICT Fest', year: 2024, teams: 108 },
   { result: '56th', name: 'BUET Inter-University Programming Contest', year: 2023, teams: 100 },
   { result: '59th', name: 'AUST Inter-University Programming Contest', year: 2025, teams: 130 },
   { result: '73rd', name: 'SUST Inter-University Programming Contest', year: 2024, teams: 120 },
